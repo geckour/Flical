@@ -7,6 +7,8 @@
 
         <import type="com.geckour.paincalcmate.Buttons.Button.Area" />
 
+        <import type="android.support.v4.content.ContextCompat" />
+
         <variable
             name="buttons"
             type="com.geckour.paincalcmate.Buttons" />
@@ -129,6 +131,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/guide_h_t" />
 
+        <ImageView
+            android:id="@+id/bg00"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(0).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(0).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:src="@drawable/bg_button_highlight_right" />
+
         <TextView
             android:id="@+id/main00"
             android:layout_width="wrap_content"
@@ -136,7 +150,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(0).get(0).mainText : null}"
+            android:text="@{buttons.list.get(0).get(0).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -153,7 +167,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(0).leftText : null"
+            android:text="@{buttons.list.get(0).get(0).leftText"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -169,7 +183,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(0).topText : null}"
+            android:text="@{buttons.list.get(0).get(0).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main00"
@@ -186,7 +200,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(0).rightText : null}"
+            android:text="@{buttons.list.get(0).get(0).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -202,7 +216,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(0).bottomText : null}"
+            android:text="@{buttons.list.get(0).get(0).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -211,14 +225,14 @@
             app:layout_constraintTop_toBottomOf="@id/main00"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover00"
+        <ImageView
+            android:id="@+id/bg10"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(0).get(0).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(1).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(0).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
 
         <TextView
@@ -228,7 +242,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(1).get(0).mainText : null}"
+            android:text="@{buttons.list.get(1).get(0).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -245,7 +259,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(0).leftText : null}"
+            android:text="@{buttons.list.get(1).get(0).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -261,7 +275,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(0).topText : null}"
+            android:text="@{buttons.list.get(1).get(0).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main10"
@@ -278,7 +292,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(0).rightText : null}"
+            android:text="@{buttons.list.get(1).get(0).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -294,7 +308,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(0).bottomText : null}"
+            android:text="@{buttons.list.get(1).get(0).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -303,14 +317,14 @@
             app:layout_constraintTop_toBottomOf="@id/main10"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover10"
+        <ImageView
+            android:id="@+id/bg20"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(1).get(0).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(2).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(0).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
-            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
 
         <TextView
@@ -320,7 +334,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(2).get(0).mainText : null}"
+            android:text="@{buttons.list.get(2).get(0).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -337,7 +351,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(0).leftText : null}"
+            android:text="@{buttons.list.get(2).get(0).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -353,7 +367,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(0).topText : null}"
+            android:text="@{buttons.list.get(2).get(0).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main20"
@@ -370,7 +384,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(0).rightText : null}"
+            android:text="@{buttons.list.get(2).get(0).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -386,7 +400,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(0).bottomText : null}"
+            android:text="@{buttons.list.get(2).get(0).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -395,14 +409,14 @@
             app:layout_constraintTop_toBottomOf="@id/main20"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover20"
+        <ImageView
+            android:id="@+id/bg30"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(2).get(0).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(3).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(0).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
-            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
 
         <TextView
@@ -412,7 +426,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(3).get(0).mainText : null}"
+            android:text="@{buttons.list.get(3).get(0).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -429,7 +443,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(0).leftText : null}"
+            android:text="@{buttons.list.get(3).get(0).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -445,7 +459,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(0).topText : null}"
+            android:text="@{buttons.list.get(3).get(0).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main30"
@@ -462,7 +476,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(0).rightText : null}"
+            android:text="@{buttons.list.get(3).get(0).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -478,7 +492,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(0).bottomText : null}"
+            android:text="@{buttons.list.get(3).get(0).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
@@ -487,15 +501,15 @@
             app:layout_constraintTop_toBottomOf="@id/main30"
             tools:text="▼" />
 
-        <View
-            android:id="@+id/cover30"
+        <ImageView
+            android:id="@+id/bg01"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(3).get(0).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
-            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
+            android:src="@{buttons.list.get(0).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(1).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
 
         <TextView
             android:id="@+id/main01"
@@ -504,7 +518,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(0).get(1).mainText : null}"
+            android:text="@{buttons.list.get(0).get(1).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -521,11 +535,11 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(1).leftText : null}"
+            android:text="@{buttons.list.get(0).get(1).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
-            app:layout_constraintEnd_toStartOf="@id/main00"
+            app:layout_constraintEnd_toStartOf="@id/main01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
             tools:text="" />
@@ -537,10 +551,10 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(1).topText : null}"
+            android:text="@{buttons.list.get(0).get(1).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
-            app:layout_constraintBottom_toTopOf="@id/main00"
+            app:layout_constraintBottom_toTopOf="@id/main01"
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
@@ -554,12 +568,12 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(1).rightText : null}"
+            android:text="@{buttons.list.get(0).get(1).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
             app:layout_constraintEnd_toEndOf="@id/guide_v_01"
-            app:layout_constraintStart_toEndOf="@id/main00"
+            app:layout_constraintStart_toEndOf="@id/main01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
             tools:text="" />
 
@@ -570,23 +584,23 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(1).bottomText : null}"
+            android:text="@{buttons.list.get(0).get(1).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/main00"
+            app:layout_constraintTop_toBottomOf="@id/main01"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover01"
+        <ImageView
+            android:id="@+id/bg11"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(0).get(1).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(1).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(1).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
 
         <TextView
@@ -596,7 +610,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(1).get(1).mainText : null}"
+            android:text="@{buttons.list.get(1).get(1).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -613,7 +627,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(1).leftText : null}"
+            android:text="@{buttons.list.get(1).get(1).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -629,7 +643,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(1).topText : null}"
+            android:text="@{buttons.list.get(1).get(1).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main11"
@@ -646,7 +660,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(1).rightText : null}"
+            android:text="@{buttons.list.get(1).get(1).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -662,7 +676,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(1).bottomText : null}"
+            android:text="@{buttons.list.get(1).get(1).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -671,14 +685,14 @@
             app:layout_constraintTop_toBottomOf="@id/main11"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover11"
+        <ImageView
+            android:id="@+id/bg21"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(1).get(1).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(2).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(1).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
-            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
 
         <TextView
@@ -688,7 +702,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(2).get(1).mainText : null}"
+            android:text="@{buttons.list.get(2).get(1).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -705,7 +719,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(1).leftText : null}"
+            android:text="@{buttons.list.get(2).get(1).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -721,7 +735,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(1).topText : null}"
+            android:text="@{buttons.list.get(2).get(1).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main21"
@@ -738,7 +752,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(1).rightText : null}"
+            android:text="@{buttons.list.get(2).get(1).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -754,7 +768,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(1).bottomText : null}"
+            android:text="@{buttons.list.get(2).get(1).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -763,14 +777,14 @@
             app:layout_constraintTop_toBottomOf="@id/main21"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover21"
+        <ImageView
+            android:id="@+id/bg31"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(2).get(1).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(3).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(1).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
-            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
 
         <TextView
@@ -780,7 +794,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(3).get(1).mainText : null}"
+            android:text="@{buttons.list.get(3).get(1).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -797,7 +811,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(1).leftText : null}"
+            android:text="@{buttons.list.get(3).get(1).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -813,7 +827,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(1).topText : null}"
+            android:text="@{buttons.list.get(3).get(1).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main31"
@@ -830,7 +844,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(1).rightText : null}"
+            android:text="@{buttons.list.get(3).get(1).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -846,7 +860,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(1).bottomText : null}"
+            android:text="@{buttons.list.get(3).get(1).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
@@ -855,15 +869,15 @@
             app:layout_constraintTop_toBottomOf="@id/main31"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover31"
+        <ImageView
+            android:id="@+id/bg02"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(3).get(1).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
-            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+            android:src="@{buttons.list.get(0).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(2).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
 
         <TextView
             android:id="@+id/main02"
@@ -872,7 +886,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(0).get(2).mainText : null}"
+            android:text="@{buttons.list.get(0).get(2).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -889,7 +903,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(2).leftText : null}"
+            android:text="@{buttons.list.get(0).get(2).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -905,7 +919,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(2).topText : null}"
+            android:text="@{buttons.list.get(0).get(2).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main02"
@@ -922,7 +936,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(2).rightText : null}"
+            android:text="@{buttons.list.get(0).get(2).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -938,7 +952,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(2).bottomText : null}"
+            android:text="@{buttons.list.get(0).get(2).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -947,14 +961,14 @@
             app:layout_constraintTop_toBottomOf="@id/main02"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover02"
+        <ImageView
+            android:id="@+id/bg12"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(0).get(2).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(1).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(2).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
 
         <TextView
@@ -964,7 +978,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(1).get(2).mainText : null}"
+            android:text="@{buttons.list.get(1).get(2).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -981,7 +995,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(2).leftText : null}"
+            android:text="@{buttons.list.get(1).get(2).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -997,7 +1011,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(2).topText : null}"
+            android:text="@{buttons.list.get(1).get(2).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main12"
@@ -1014,7 +1028,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(2).rightText : null}"
+            android:text="@{buttons.list.get(1).get(2).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1030,7 +1044,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(2).bottomText : null}"
+            android:text="@{buttons.list.get(1).get(2).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1039,14 +1053,14 @@
             app:layout_constraintTop_toBottomOf="@id/main12"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover12"
+        <ImageView
+            android:id="@+id/bg22"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(1).get(2).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(2).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(2).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
-            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
 
         <TextView
@@ -1056,7 +1070,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(2).get(2).mainText : null}"
+            android:text="@{buttons.list.get(2).get(2).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1073,7 +1087,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(2).leftText : null}"
+            android:text="@{buttons.list.get(2).get(2).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1089,7 +1103,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(2).topText : null}"
+            android:text="@{buttons.list.get(2).get(2).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main22"
@@ -1106,7 +1120,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(2).rightText : null}"
+            android:text="@{buttons.list.get(2).get(2).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1123,7 +1137,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(2).bottomText : null}"
+            android:text="@{buttons.list.get(2).get(2).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1132,14 +1146,14 @@
             app:layout_constraintTop_toBottomOf="@id/main22"
             tools:text="ln" />
 
-        <View
-            android:id="@+id/cover22"
+        <ImageView
+            android:id="@+id/bg32"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(2).get(2).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(3).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(2).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
-            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
 
         <TextView
@@ -1149,7 +1163,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(3).get(2).mainText : null}"
+            android:text="@{buttons.list.get(3).get(2).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1166,7 +1180,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(2).leftText : null}"
+            android:text="@{buttons.list.get(3).get(2).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1182,7 +1196,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(2).topText : null}"
+            android:text="@{buttons.list.get(3).get(2).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main32"
@@ -1199,7 +1213,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(2).rightText : null}"
+            android:text="@{buttons.list.get(3).get(2).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1215,7 +1229,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(2).bottomText : null}"
+            android:text="@{buttons.list.get(3).get(2).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
@@ -1224,15 +1238,15 @@
             app:layout_constraintTop_toBottomOf="@id/main32"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover32"
+        <ImageView
+            android:id="@+id/bg03"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(3).get(2).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
-            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+            android:src="@{buttons.list.get(0).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(3).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
 
         <TextView
             android:id="@+id/main03"
@@ -1241,7 +1255,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(0).get(3).mainText : null}"
+            android:text="@{buttons.list.get(0).get(3).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1258,7 +1272,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(3).leftText : null}"
+            android:text="@{buttons.list.get(0).get(3).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1274,7 +1288,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(3).topText : null}"
+            android:text="@{buttons.list.get(0).get(3).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main03"
@@ -1291,7 +1305,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(3).rightText : null}"
+            android:text="@{buttons.list.get(0).get(3).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1307,7 +1321,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(3).bottomText : null}"
+            android:text="@{buttons.list.get(0).get(3).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1316,14 +1330,14 @@
             app:layout_constraintTop_toBottomOf="@id/main03"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover03"
+        <ImageView
+            android:id="@+id/bg13"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(0).get(3).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(1).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(3).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
 
         <TextView
@@ -1333,7 +1347,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(1).get(3).mainText : null}"
+            android:text="@{buttons.list.get(1).get(3).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1350,7 +1364,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(3).leftText : null}"
+            android:text="@{buttons.list.get(1).get(3).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1366,7 +1380,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(3).topText : null}"
+            android:text="@{buttons.list.get(1).get(3).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main13"
@@ -1383,7 +1397,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(3).rightText : null}"
+            android:text="@{buttons.list.get(1).get(3).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1399,7 +1413,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(3).bottomText : null}"
+            android:text="@{buttons.list.get(1).get(3).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1408,14 +1422,14 @@
             app:layout_constraintTop_toBottomOf="@id/main13"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover13"
+        <ImageView
+            android:id="@+id/bg23"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(1).get(3).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(2).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(3).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
-            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
 
         <TextView
@@ -1425,7 +1439,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(2).get(3).mainText : null}"
+            android:text="@{buttons.list.get(2).get(3).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1442,7 +1456,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(3).leftText : null}"
+            android:text="@{buttons.list.get(2).get(3).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1458,7 +1472,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(3).topText : null}"
+            android:text="@{buttons.list.get(2).get(3).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main23"
@@ -1475,7 +1489,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(3).rightText : null}"
+            android:text="@{buttons.list.get(2).get(3).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1491,7 +1505,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(3).bottomText : null}"
+            android:text="@{buttons.list.get(2).get(3).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1500,14 +1514,14 @@
             app:layout_constraintTop_toBottomOf="@id/main23"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover23"
+        <ImageView
+            android:id="@+id/bg33"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(2).get(3).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(3).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(3).getBgResId())}"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
-            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
 
         <TextView
@@ -1517,7 +1531,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(3).get(3).mainText : null}"
+            android:text="@{buttons.list.get(3).get(3).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1534,7 +1548,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(3).leftText : null}"
+            android:text="@{buttons.list.get(3).get(3).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1550,7 +1564,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(3).topText : null}"
+            android:text="@{buttons.list.get(3).get(3).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main33"
@@ -1567,7 +1581,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(3).rightText : null}"
+            android:text="@{buttons.list.get(3).get(3).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1583,7 +1597,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(3).bottomText : null}"
+            android:text="@{buttons.list.get(3).get(3).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
@@ -1592,15 +1606,15 @@
             app:layout_constraintTop_toBottomOf="@id/main33"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover33"
+        <ImageView
+            android:id="@+id/bg04"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(3).get(3).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
-            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+            android:src="@{buttons.list.get(0).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(4).getBgResId())}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
 
         <TextView
             android:id="@+id/main04"
@@ -1609,7 +1623,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(0).get(4).mainText : null}"
+            android:text="@{buttons.list.get(0).get(4).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1626,7 +1640,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(4).leftText : null}"
+            android:text="@{buttons.list.get(0).get(4).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1642,7 +1656,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(4).topText : null}"
+            android:text="@{buttons.list.get(0).get(4).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main04"
@@ -1659,7 +1673,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(0).get(4).rightText : null}"
+            android:text="@{buttons.list.get(0).get(4).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1675,7 +1689,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(0).get(4).bottomText : null}"
+            android:text="@{buttons.list.get(0).get(4).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1684,14 +1698,14 @@
             app:layout_constraintTop_toBottomOf="@id/main04"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover04"
+        <ImageView
+            android:id="@+id/bg14"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(0).get(4).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(1).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(4).getBgResId())}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
 
         <TextView
@@ -1701,7 +1715,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(1).get(4).mainText : null}"
+            android:text="@{buttons.list.get(1).get(4).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1718,7 +1732,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(4).leftText : null}"
+            android:text="@{buttons.list.get(1).get(4).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1734,7 +1748,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(4).topText : null}"
+            android:text="@{buttons.list.get(1).get(4).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main14"
@@ -1751,7 +1765,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(1).get(4).rightText : null}"
+            android:text="@{buttons.list.get(1).get(4).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1767,7 +1781,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(1).get(4).bottomText : null}"
+            android:text="@{buttons.list.get(1).get(4).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1776,14 +1790,14 @@
             app:layout_constraintTop_toBottomOf="@id/main14"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover14"
+        <ImageView
+            android:id="@+id/bg24"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(1).get(4).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(2).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(4).getBgResId())}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
-            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
 
         <TextView
@@ -1793,7 +1807,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(2).get(4).mainText : null}"
+            android:text="@{buttons.list.get(2).get(4).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1810,7 +1824,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(4).leftText : null}"
+            android:text="@{buttons.list.get(2).get(4).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1826,7 +1840,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(4).topText : null}"
+            android:text="@{buttons.list.get(2).get(4).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main24"
@@ -1843,7 +1857,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(2).get(4).rightText : null}"
+            android:text="@{buttons.list.get(2).get(4).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1859,7 +1873,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(2).get(4).bottomText : null}"
+            android:text="@{buttons.list.get(2).get(4).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1868,14 +1882,14 @@
             app:layout_constraintTop_toBottomOf="@id/main24"
             tools:text="" />
 
-        <View
-            android:id="@+id/cover24"
+        <ImageView
+            android:id="@+id/bg34"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(2).get(4).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
+            android:src="@{buttons.list.get(3).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(4).getBgResId())}"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
-            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
 
         <TextView
@@ -1885,7 +1899,7 @@
             android:gravity="center"
             android:lineSpacingExtra="0dp"
             android:minWidth="@dimen/buttonPrimaryText"
-            android:text="@{buttons != null ? buttons.list.get(3).get(4).mainText : null}"
+            android:text="@{buttons.list.get(3).get(4).mainText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonPrimaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1902,7 +1916,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(4).leftText : null}"
+            android:text="@{buttons.list.get(3).get(4).leftText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1918,7 +1932,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(4).topText : null}"
+            android:text="@{buttons.list.get(3).get(4).topText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/main34"
@@ -1935,7 +1949,7 @@
             android:lines="1"
             android:maxLines="1"
             android:padding="4dp"
-            android:text="@{buttons != null ? buttons.list.get(3).get(4).rightText : null}"
+            android:text="@{buttons.list.get(3).get(4).rightText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1951,7 +1965,7 @@
             android:gravity="center"
             android:lines="1"
             android:maxLines="1"
-            android:text="@{buttons != null ? buttons.list.get(3).get(4).bottomText : null}"
+            android:text="@{buttons.list.get(3).get(4).bottomText}"
             android:textColor="@color/primaryTextInvertColor"
             android:textSize="@dimen/buttonSecondaryText"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -1959,16 +1973,6 @@
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/main34"
             tools:text="" />
-
-        <View
-            android:id="@+id/cover34"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@{(buttons != null &amp;&amp; buttons.list.get(3).get(4).tapped == Area.MAIN) ? @color/buttonTappedBackgroundColor : @android:color/transparent}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

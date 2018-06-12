@@ -4,14 +4,15 @@ data class Buttons(
         val list: List<List<Button>>
 ) {
     data class Button(
-            val mainText: String?,
-            val leftText: String?,
-            val topText: String?,
-            val rightText: String?,
-            val bottomText: String?,
-            var tapped: Area?
+            val main: Command,
+            val left: Command,
+            val top: Command,
+            val right: Command,
+            val bottom: Command,
+            var tapped: Area
     ) {
         enum class Area {
+            UNDEFINED,
             MAIN,
             LEFT,
             TOP,

@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.geckour.paincalcmate.Buttons.Button.Area" />
+        <import type="com.geckour.paincalcmate.model.Buttons" />
 
         <import type="android.support.v4.content.ContextCompat" />
 
         <variable
             name="buttons"
-            type="com.geckour.paincalcmate.Buttons" />
+            type="com.geckour.paincalcmate.model.Buttons" />
 
         <variable
             name="background"
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:background="@{background == null ? @color/primaryLightColor : null}"
         tools:background="@color/primaryLightColor"
-        tools:context=".MainActivity">
+        tools:context=".ui.MainActivity">
 
         <ImageView
             android:layout_width="0dp"

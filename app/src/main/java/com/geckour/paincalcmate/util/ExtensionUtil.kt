@@ -1,7 +1,7 @@
 package com.geckour.paincalcmate.util
 
-import com.geckour.paincalcmate.Command
-import com.geckour.paincalcmate.ItemType
+import com.geckour.paincalcmate.model.Command
+import com.geckour.paincalcmate.model.ItemType
 
 fun List<Command>.append(command: Command): List<Command> =
         ArrayList(this).apply { add(command) }

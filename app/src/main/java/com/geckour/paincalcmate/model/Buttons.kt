@@ -1,4 +1,6 @@
-package com.geckour.paincalcmate
+package com.geckour.paincalcmate.model
+
+import com.geckour.paincalcmate.R
 
 data class Buttons(
         val list: List<List<Button>>

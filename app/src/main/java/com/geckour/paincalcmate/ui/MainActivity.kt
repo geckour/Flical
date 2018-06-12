@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate
+package com.geckour.paincalcmate.ui
 
 import android.databinding.DataBindingUtil
 import android.graphics.PointF
@@ -8,6 +8,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
+import com.geckour.paincalcmate.model.Buttons
+import com.geckour.paincalcmate.model.Command
+import com.geckour.paincalcmate.model.ItemType
+import com.geckour.paincalcmate.R
 import com.geckour.paincalcmate.databinding.ActivityMainBinding
 import com.geckour.paincalcmate.util.getDisplayString
 import com.geckour.paincalcmate.util.parse

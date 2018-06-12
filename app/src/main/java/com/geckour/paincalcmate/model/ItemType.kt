@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate
+package com.geckour.paincalcmate.model
 
 enum class ItemType {
     NONE,

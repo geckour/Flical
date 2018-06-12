@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate
+package com.geckour.paincalcmate.adapter
 
 import android.databinding.BindingAdapter
 import android.graphics.Bitmap

@@ -12,11 +12,16 @@
         <variable
             name="buttons"
             type="com.geckour.paincalcmate.Buttons" />
+
+        <variable
+            name="background"
+            type="android.graphics.Bitmap" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@{background == null ? @color/primaryLightColor : null}"
         tools:background="@color/primaryLightColor"
         tools:context=".MainActivity">
 
@@ -28,7 +33,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@sample/tools:avatars" />
+            app:srcBitmap="@{background}" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_v_01"
@@ -56,42 +61,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.12" />
+            app:layout_constraintGuide_percent="0.16" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_t"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2" />
+            app:layout_constraintGuide_percent="0.25" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.36" />
+            app:layout_constraintGuide_percent="0.40" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.52" />
+            app:layout_constraintGuide_percent="0.55" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.68" />
+            app:layout_constraintGuide_percent="0.70" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.84" />
+            app:layout_constraintGuide_percent="0.85" />
 
         <EditText
             android:id="@+id/inputField"

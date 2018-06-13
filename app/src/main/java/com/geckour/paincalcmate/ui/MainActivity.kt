@@ -8,12 +8,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
+import com.geckour.paincalcmate.R
+import com.geckour.paincalcmate.databinding.ActivityMainBinding
 import com.geckour.paincalcmate.model.Buttons
 import com.geckour.paincalcmate.model.Command
 import com.geckour.paincalcmate.model.ItemType
-import com.geckour.paincalcmate.R
-import com.geckour.paincalcmate.databinding.ActivityMainBinding
 import com.geckour.paincalcmate.util.getDisplayString
+import com.geckour.paincalcmate.util.invoke
+import com.geckour.paincalcmate.util.normalize
 import com.geckour.paincalcmate.util.parse
 
 class MainActivity : AppCompatActivity() {
@@ -61,11 +63,11 @@ class MainActivity : AppCompatActivity() {
                                     Buttons.Button.Area.UNDEFINED)
                     ),
                     listOf(
-                            Buttons.Button(Command(ItemType.MR, "MR"),
+                            Buttons.Button(Command(ItemType.M, "M"),
                                     Command(ItemType.MC, "MC"),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.M_MINUS, "M-"),
-                                    Command(ItemType.M_PLUS, "M+"),
+                                    Command(ItemType.NONE),
+                                    Command(ItemType.MR, "MR"),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "8"),
                                     Command(ItemType.NONE),
@@ -119,7 +121,7 @@ class MainActivity : AppCompatActivity() {
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.CALC, "="),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.ANS, "ANS"),
+                                    Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Buttons.Button.Area.UNDEFINED)
@@ -269,7 +271,20 @@ class MainActivity : AppCompatActivity() {
                 } ?: return
 
                 commandList = key.parse(commandList)
-                binding.inputField.setText(commandList.getDisplayString())
+
+                if (key.type == ItemType.CALC || commandList.isEmpty()) {
+                    binding.resultPreview.text = null
+                } else {
+                    val result = commandList.invoke(Command(ItemType.CALC))
+
+                    if (commandList.normalize().size > 1
+                            && result.isNotEmpty()
+                            && result.last().type != ItemType.NONE) {
+                        binding.resultPreview.text = result.getDisplayString()
+                    }
+                }
+
+                binding.inputField.text = commandList.getDisplayString()
             }
         }
     }

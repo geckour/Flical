@@ -31,14 +31,12 @@ enum class ItemType(val weight: Int? = null) {
     DIFF,
     COPY,
     PASTE,
+    M,
     MR,
     MC,
-    M_PLUS,
-    M_MINUS,
     DEL,
     AC,
     LEFT,
     RIGHT,
-    CALC,
-    ANS
+    CALC
 }

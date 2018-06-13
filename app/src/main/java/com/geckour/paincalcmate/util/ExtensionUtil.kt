@@ -23,14 +23,12 @@ fun Command.parse(commandList: List<Command>): List<Command> =
             ItemType.AC,
             ItemType.COPY,
             ItemType.PASTE,
+            ItemType.M,
             ItemType.MR,
             ItemType.MC,
-            ItemType.M_PLUS,
-            ItemType.M_MINUS,
-            ItemType.CALC,
-            ItemType.ANS -> commandList.invoke(this)
+            ItemType.CALC -> commandList.invoke(this)
 
-            else -> commandList.append(this)
+            else -> commandList.append(this).purify()
         }
 
 fun List<Command>.invoke(command: Command): List<Command> =
@@ -39,10 +37,9 @@ fun List<Command>.invoke(command: Command): List<Command> =
             ItemType.RIGHT -> emptyList()
             ItemType.COPY -> emptyList()
             ItemType.PASTE -> emptyList()
+            ItemType.M -> emptyList()
             ItemType.MR -> emptyList()
             ItemType.MC -> emptyList()
-            ItemType.M_PLUS -> emptyList()
-            ItemType.M_MINUS -> emptyList()
             ItemType.CALC -> {
                 this.normalize()
                         .toRpn()
@@ -53,7 +50,6 @@ fun List<Command>.invoke(command: Command): List<Command> =
                             )
                         } ?: listOf(Command(ItemType.NONE, "ERROR!"))
             }
-            ItemType.ANS -> emptyList()
             ItemType.DEL -> this.dropLast(1)
             ItemType.AC -> emptyList()
             else -> this
@@ -75,6 +71,9 @@ fun List<Command>.normalize(): List<Command> {
 
     return returnList
 }
+
+fun List<Command>.purify(): List<Command> =
+        this.filter { it.type != ItemType.NONE }
 
 fun List<Command>.toRpn(): List<Command> {
     val returnList: ArrayList<Command> = ArrayList()

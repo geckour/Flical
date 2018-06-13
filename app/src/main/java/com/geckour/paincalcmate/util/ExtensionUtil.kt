@@ -10,12 +10,10 @@ fun List<Command>.append(command: Command): List<Command> =
         ArrayList(this).apply { add(command) }
 
 fun List<Command>.getDisplayString(): String =
-        this.mapNotNull {
-            if (it.type == ItemType.NUMBER)
-                it.text
-            else
-                it.text?.let { " $it " }
-        }.joinToString("").trim()
+        this.normalize()
+                .mapNotNull { it.text?.let { " $it" } }
+                .joinToString("")
+                .trim()
 
 fun Command.parse(commandList: List<Command>): List<Command> =
         when (this.type) {

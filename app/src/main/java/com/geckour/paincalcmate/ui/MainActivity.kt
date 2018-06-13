@@ -172,10 +172,10 @@ class MainActivity : AppCompatActivity() {
         binding.bg00.addOnLayoutChangeListener { _, left, top, right, bottom, _, _, _, _ ->
             bgBounds.set(0, 0, right - left, bottom - top)
             mainBounds.set(
-                    bgBounds.width() * -0.2f,
-                    bgBounds.height() * -0.2f,
-                    bgBounds.width() * 0.2f,
-                    bgBounds.height() * 0.2f)
+                    bgBounds.width() * -0.15f,
+                    bgBounds.height() * -0.15f,
+                    bgBounds.width() * 0.15f,
+                    bgBounds.height() * 0.15f)
         }
 
         (0..buttons.list.lastIndex).forEach { column ->

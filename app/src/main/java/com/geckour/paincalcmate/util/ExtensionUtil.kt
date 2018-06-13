@@ -2,7 +2,9 @@ package com.geckour.paincalcmate.util
 
 import com.geckour.paincalcmate.model.Command
 import com.geckour.paincalcmate.model.ItemType
+import timber.log.Timber
 import java.util.*
+import kotlin.math.*
 
 fun List<Command>.append(command: Command): List<Command> =
         ArrayList(this).apply { add(command) }
@@ -28,31 +30,30 @@ fun Command.parse(commandList: List<Command>): List<Command> =
             ItemType.M_PLUS,
             ItemType.M_MINUS,
             ItemType.CALC,
-            ItemType.ANS -> {
-                commandList.invoke(this)
-            }
+            ItemType.ANS -> commandList.invoke(this)
 
-            else -> {
-                commandList.append(this)
-            }
+            else -> commandList.append(this)
         }
 
 fun List<Command>.invoke(command: Command): List<Command> =
         when (command.type) {
-            ItemType.LEFT -> this
-            ItemType.RIGHT -> this
-            ItemType.COPY -> this
+            ItemType.LEFT -> emptyList()
+            ItemType.RIGHT -> emptyList()
+            ItemType.COPY -> emptyList()
             ItemType.PASTE -> emptyList()
             ItemType.MR -> emptyList()
-            ItemType.MC -> this
-            ItemType.M_PLUS -> this
-            ItemType.M_MINUS -> this
+            ItemType.MC -> emptyList()
+            ItemType.M_PLUS -> emptyList()
+            ItemType.M_MINUS -> emptyList()
             ItemType.CALC -> {
                 this.normalize()
                         .toRpn()
-                        .calculate().let {
-                            listOf(Command(ItemType.NUMBER, it?.toString()))
-                        }
+                        .calculate()?.let {
+                            listOf(
+                                    Command(ItemType.NONE, "="),
+                                    Command(ItemType.NUMBER, it.toString())
+                            )
+                        } ?: listOf(Command(ItemType.NONE, "ERROR!"))
             }
             ItemType.ANS -> emptyList()
             ItemType.DEL -> this.dropLast(1)
@@ -83,22 +84,6 @@ fun List<Command>.toRpn(): List<Command> {
 
     this.forEach {
         when (it.type) {
-            ItemType.PLUS, ItemType.MINUS -> {
-                while (stack.isNotEmpty()) {
-                    val stackFirstType = stack.first().type
-
-                    if (stackFirstType == ItemType.MULTI || stackFirstType == ItemType.DIV) {
-                        returnList.add(stack.pop())
-                    } else break
-                }
-
-                stack.push(it)
-            }
-
-            ItemType.MULTI, ItemType.DIV, ItemType.LEFT_BRA -> {
-                stack.push(it)
-            }
-
             ItemType.RIGHT_BRA -> {
                 val leftBraIndex =
                         stack.reversed().withIndex()
@@ -114,15 +99,26 @@ fun List<Command>.toRpn(): List<Command> {
                 }
             }
 
-            ItemType.NUMBER -> {
-                returnList.add(it)
+            else -> {
+                while (stack.isNotEmpty()) {
+                    val latestStackWeight = stack.last().type.weight ?: break
+                    val wight = it.type.weight ?: break
+
+                    if (latestStackWeight > wight) break
+                    else returnList.add(stack.pop())
+                }
+
+                stack.push(it)
             }
         }
     }
 
     returnList.addAll(stack.reversed())
 
-    return returnList
+    return returnList.apply {
+        Timber.d("original: ${this@toRpn.map { it.text }}")
+        Timber.d("rpn: ${this.map { it.text }}")
+    }
 }
 
 fun List<Command>.calculate(): Double? =
@@ -130,40 +126,122 @@ fun List<Command>.calculate(): Double? =
         else {
             val stack: Stack<Double> = Stack()
 
-            this.forEach {
-                when (it.type) {
-                    ItemType.NUMBER -> {
-                        stack.push(it.text?.toDouble() ?: 0.0)
-                    }
+            try {
+                this.forEach {
+                    when (it.type) {
+                        ItemType.NUMBER -> {
+                            stack.push(it.text?.toDouble()
+                                    ?: throw kotlin.IllegalStateException())
+                        }
 
-                    ItemType.PLUS -> {
-                        val a = stack.pop()
-                        val b = stack.pop()
-                        stack.add(b + a)
-                    }
+                        ItemType.PI -> {
+                            stack.push(PI)
+                        }
 
-                    ItemType.MINUS -> {
-                        val a = stack.pop()
-                        val b = stack.pop()
-                        stack.add(b - a)
-                    }
+                        ItemType.E -> {
+                            stack.push(E)
+                        }
 
-                    ItemType.MULTI -> {
-                        val a = stack.pop()
-                        val b = stack.pop()
-                        stack.add(b * a)
-                    }
+                        ItemType.PLUS -> {
+                            val a = stack.pop()
+                            val b = stack.pop()
+                            stack.add(b + a)
+                        }
 
-                    ItemType.DIV -> {
-                        val a = stack.pop()
-                        val b = stack.pop()
-                        stack.add(b / a)
-                    }
+                        ItemType.MINUS -> {
+                            val a = stack.pop()
+                            val b = stack.pop()
+                            stack.add(b - a)
+                        }
 
-                    else -> {
+                        ItemType.MULTI -> {
+                            val a = stack.pop()
+                            val b = stack.pop()
+                            stack.add(b * a)
+                        }
+
+                        ItemType.DIV -> {
+                            val a = stack.pop()
+                            val b = stack.pop()
+                            stack.add(b / a)
+                        }
+
+                        ItemType.POW -> {
+                            val a = stack.pop()
+                            val b = stack.pop()
+                            stack.add(b.pow(a))
+                        }
+
+                        ItemType.MOD -> {
+                            val a = stack.pop()
+                            val b = stack.pop()
+                            stack.add(b % a)
+                        }
+
+                        ItemType.SQRT -> {
+                            val a = stack.pop()
+                            stack.add(sqrt(a))
+                        }
+
+                        ItemType.COS -> {
+                            val a = stack.pop()
+                            stack.add(cos(a))
+                        }
+
+                        ItemType.SIN -> {
+                            val a = stack.pop()
+                            stack.add(sin(a))
+                        }
+
+                        ItemType.TAN -> {
+                            val a = stack.pop()
+                            stack.add(tan(a))
+                        }
+
+                        ItemType.A_COS -> {
+                            val a = stack.pop()
+                            stack.add(acos(a))
+                        }
+
+                        ItemType.A_SIN -> {
+                            val a = stack.pop()
+                            stack.add(asin(a))
+                        }
+
+                        ItemType.A_TAN -> {
+                            val a = stack.pop()
+                            stack.add(atan(a))
+                        }
+
+                        ItemType.LN -> {
+                            val a = stack.pop()
+                            stack.add(ln(a))
+                        }
+
+                        ItemType.LOG10 -> {
+                            val a = stack.pop()
+                            stack.add(log10(a))
+                        }
+
+                        ItemType.LOG2 -> {
+                            val a = stack.pop()
+                            stack.add(log2(a))
+                        }
+
+                        ItemType.ABS -> {
+                            val a = stack.pop()
+                            stack.add(abs(a))
+                        }
+
+                        else -> {
+                        }
                     }
                 }
-            }
 
-            stack.pop()
+                val accuracy = 10.0.pow(14)
+                (stack.pop() * accuracy).roundToLong().toDouble() / accuracy
+            } catch (t: Throwable) {
+                Timber.e(t)
+                null
+            }
         }

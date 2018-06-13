@@ -14,14 +14,22 @@
         tools:context=".ui.MainActivity">
 
         <include
-            android:id="@+id/settings_item_bg_image"
+            android:id="@+id/settings_item_set_bg_image"
             layout="@layout/item_settings_item"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <include
+            android:id="@+id/settings_item_clear_bg_image"
+            layout="@layout/item_settings_item"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/settings_item_set_bg_image" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

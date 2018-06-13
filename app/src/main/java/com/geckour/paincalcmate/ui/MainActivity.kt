@@ -1,10 +1,12 @@
 package com.geckour.paincalcmate.ui
 
+import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
@@ -13,10 +15,7 @@ import com.geckour.paincalcmate.databinding.ActivityMainBinding
 import com.geckour.paincalcmate.model.Buttons
 import com.geckour.paincalcmate.model.Command
 import com.geckour.paincalcmate.model.ItemType
-import com.geckour.paincalcmate.util.getDisplayString
-import com.geckour.paincalcmate.util.invoke
-import com.geckour.paincalcmate.util.normalize
-import com.geckour.paincalcmate.util.parse
+import com.geckour.paincalcmate.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -161,15 +160,24 @@ class MainActivity : AppCompatActivity() {
             )
     )
 
+    private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         injectButtons()
         binding.buttonSetting.setOnClickListener {
             startActivity(SettingsActivity.getIntent(this))
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        injectBackgroundImage()
     }
 
     private fun injectButtons() {
@@ -290,6 +298,12 @@ class MainActivity : AppCompatActivity() {
 
                 binding.inputField.text = commandList.getDisplayString()
             }
+        }
+    }
+
+    private fun injectBackgroundImage() {
+        sharedPreferences.getBgImageUri().apply {
+            binding.background = this?.extractMediaBitmap(this@MainActivity)
         }
     }
 }

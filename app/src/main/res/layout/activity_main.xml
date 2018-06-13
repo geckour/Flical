@@ -21,7 +21,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@{background == null ? @color/primaryLightColor : null}"
+        android:background="@{background == null ? @color/primaryLightColor : @android:color/transparent}"
         tools:background="@color/primaryLightColor"
         tools:context=".ui.MainActivity">
 

@@ -1,5 +1,9 @@
 package com.geckour.paincalcmate.util
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
 import com.geckour.paincalcmate.model.Command
 import com.geckour.paincalcmate.model.ItemType
 import timber.log.Timber
@@ -241,4 +245,21 @@ fun List<Command>.calculate(): Double? =
                 Timber.e(t)
                 null
             }
+        }
+
+fun Uri.extractMediaBitmap(context: Context): Bitmap? =
+        try {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, this)
+        } catch (t: Throwable) {
+            Timber.e(t)
+            null
+        }
+
+
+fun String.toUri(): Uri? =
+        try {
+            Uri.parse(this)
+        } catch (t: Throwable) {
+            Timber.e(t)
+            null
         }

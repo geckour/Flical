@@ -15,6 +15,6 @@
   <color name="buttonSecondaryColor">#616161</color>
 
   <color name="inputBackgroundColor">#d0ffffff</color>
-  <color name="buttonTappedBackgroundColor">#80fbc02d</color>
+  <color name="buttonTappedBackgroundColor">#a0fbc02d</color>
   <color name="backgroundMaskColor">#40000000</color>
 </resources>

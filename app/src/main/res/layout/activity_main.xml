@@ -2021,5 +2021,19 @@
             app:layout_constraintTop_toBottomOf="@id/main34"
             tools:text="" />
 
+        <ImageView
+            android:id="@+id/buttonSetting"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:padding="4dp"
+            android:background="@drawable/bg_button_round"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_more_vert_black_24px"
+            android:tint="@color/buttonSecondaryColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>

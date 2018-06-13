@@ -165,7 +165,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
         injectButtons()
+        binding.buttonSetting.setOnClickListener {
+            startActivity(SettingsActivity.getIntent(this))
+        }
     }
 
     private fun injectButtons() {

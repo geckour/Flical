@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import com.geckour.paincalcmate.R
 import com.geckour.paincalcmate.databinding.ActivitySettingsBinding
@@ -48,7 +49,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsItemClearBgImage.apply {
             data = SettingsItem(getString(R.string.settings_item_title_clear_bg_image),
                     getString(R.string.settings_item_desc_clear_bg_image))
-            root.setOnClickListener { resetBgImage() }
+            root.setOnClickListener { sharedPreferences.setBgImageUri() }
         }
     }
 
@@ -58,7 +59,7 @@ class SettingsActivity : AppCompatActivity() {
         when (requestCode) {
             RequestCode.REQUEST_CODE_PICK_MEDIA.ordinal -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.apply { sharedPreferences.setBgImageUri(this) }
+                    data?.data?.apply { sharedPreferences.setBgImageUri(this@SettingsActivity, this) }
                 }
             }
         }
@@ -71,9 +72,5 @@ class SettingsActivity : AppCompatActivity() {
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
         }
         startActivityForResult(intent, RequestCode.REQUEST_CODE_PICK_MEDIA.ordinal)
-    }
-
-    private fun resetBgImage() {
-        sharedPreferences.setBgImageUri(null)
     }
 }

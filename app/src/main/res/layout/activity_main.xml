@@ -104,7 +104,9 @@
             android:layout_height="0dp"
             android:background="@color/inputBackgroundColor"
             android:cursorVisible="false"
+            android:ellipsize="none"
             android:gravity="center_vertical|end"
+            android:singleLine="true"
             android:textColor="@color/primaryTextColor"
             android:textIsSelectable="true"
             app:autoSizeMaxTextSize="@dimen/formulaPrimaryText"
@@ -121,7 +123,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/inputBackgroundColor"
+            android:ellipsize="none"
             android:gravity="center_vertical|end"
+            android:singleLine="true"
             android:textColor="@color/secondaryTextColor"
             android:textIsSelectable="true"
             android:textSize="@dimen/formulaSecondaryText"
@@ -748,7 +752,7 @@
             app:layout_constraintEnd_toStartOf="@id/main21"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="d⁄dx" />
+            tools:text="ᵈ/dx" />
 
         <TextView
             android:id="@+id/sub211"
@@ -2027,8 +2031,8 @@
             android:layout_height="36dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:padding="4dp"
             android:background="@drawable/bg_button_round"
+            android:padding="4dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_more_vert_black_24px"
             android:tint="@color/buttonSecondaryColor"

@@ -2,6 +2,7 @@ package com.geckour.paincalcmate.ui
 
 import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
+import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
@@ -16,6 +17,7 @@ import com.geckour.paincalcmate.model.Buttons
 import com.geckour.paincalcmate.model.Command
 import com.geckour.paincalcmate.model.ItemType
 import com.geckour.paincalcmate.util.*
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,14 +32,14 @@ class MainActivity : AppCompatActivity() {
     private val buttons = Buttons(
             listOf(
                     listOf(
-                            Buttons.Button(Command(ItemType.COPY, "COPY"),
+                            Buttons.Button(Command(ItemType.M, "M"),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.PASTE, "PASTE"),
+                                    Command(ItemType.MC, "MC"),
+                                    Command(ItemType.MR, "MR"),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "7"),
-                                    Command(ItemType.NONE),
+                                    Command(ItemType.NUMBER, "4"),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
@@ -62,11 +64,11 @@ class MainActivity : AppCompatActivity() {
                                     Buttons.Button.Area.UNDEFINED)
                     ),
                     listOf(
-                            Buttons.Button(Command(ItemType.M, "M"),
-                                    Command(ItemType.MC, "MC"),
+                            Buttons.Button(Command(ItemType.LEFT, "◀"),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.MR, "MR"),
+                                    Command(ItemType.NONE),
+                                    Command(ItemType.NONE),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "8"),
                                     Command(ItemType.NONE),
@@ -76,9 +78,9 @@ class MainActivity : AppCompatActivity() {
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "5"),
                                     Command(ItemType.LEFT_BRA, "("),
-                                    Command(ItemType.ABS, "ABS"),
-                                    Command(ItemType.RIGHT_BRA, ")"),
                                     Command(ItemType.NONE),
+                                    Command(ItemType.RIGHT_BRA, ")"),
+                                    Command(ItemType.ABS, "ABS"),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "2"),
                                     Command(ItemType.NONE),
@@ -94,17 +96,17 @@ class MainActivity : AppCompatActivity() {
                                     Buttons.Button.Area.UNDEFINED)
                     ),
                     listOf(
-                            Buttons.Button(Command(ItemType.DEL, "DEL"),
+                            Buttons.Button(Command(ItemType.RIGHT, "▶"),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.AC, "AC"),
+                                    Command(ItemType.NONE),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "9"),
-                                    Command(ItemType.DIFF, "÷"),
-                                    Command(ItemType.X, "x"),
-                                    Command(ItemType.INTEGRAL, "∫"),
+                                    Command(ItemType.DIFF, "ᵈ/dx"),
                                     Command(ItemType.NONE),
+                                    Command(ItemType.INTEGRAL, "∫"),
+                                    Command(ItemType.X, "x"),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "6"),
                                     Command(ItemType.LOG10, "log₁₀"),
@@ -126,22 +128,22 @@ class MainActivity : AppCompatActivity() {
                                     Buttons.Button.Area.UNDEFINED)
                     ),
                     listOf(
-                            Buttons.Button(Command(ItemType.NONE),
-                                    Command(ItemType.LEFT, "◀"),
+                            Buttons.Button(Command(ItemType.DEL, "DEL"),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.RIGHT, "▶"),
                                     Command(ItemType.NONE),
+                                    Command(ItemType.NONE),
+                                    Command(ItemType.AC, "AC"),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.DIV, "÷"),
                                     Command(ItemType.MOD, "%"),
-                                    Command(ItemType.SQRT, "√"),
+                                    Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.MULTI, "×"),
                                     Command(ItemType.POW, "^"),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
+                                    Command(ItemType.SQRT, "√"),
                                     Command(ItemType.NONE),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.MINUS, "-"),
@@ -209,31 +211,29 @@ class MainActivity : AppCompatActivity() {
             else -> view.tag
         }
 
-
-        buttons.list.forEach {
-            it.forEach { it.tapped = Buttons.Button.Area.UNDEFINED }
-        }
-
         val diP = (view.tag as? PointF?)?.let {
             PointF(it.x - event.x, it.y - event.y)
-        } ?: PointF(0f, 0f)
+        }
 
         val area =
-                if (event.action == MotionEvent.ACTION_DOWN
-                        || event.action == MotionEvent.ACTION_POINTER_DOWN
-                        || (bgBounds.contains(event.x.toInt(), event.y.toInt())
-                                && mainBounds.contains(diP.x, diP.y))) {
-                    Buttons.Button.Area.MAIN
-                } else {
-                    val x = event.x - bgBounds.centerX()
-                    val y = (bgBounds.width() - event.y) - bgBounds.centerY()
-
-                    if (y > x) {
-                        if (y > -x) Buttons.Button.Area.TOP
-                        else Buttons.Button.Area.LEFT
+                if (diP == null) Buttons.Button.Area.UNDEFINED
+                else {
+                    if (event.action == MotionEvent.ACTION_DOWN
+                            || event.action == MotionEvent.ACTION_POINTER_DOWN
+                            || (bgBounds.contains(diP.x.toInt(), diP.y.toInt())
+                                    && mainBounds.contains(diP.x, diP.y))) {
+                        Buttons.Button.Area.MAIN
                     } else {
-                        if (y > -x) Buttons.Button.Area.RIGHT
-                        else Buttons.Button.Area.BOTTOM
+                        val x = event.x - bgBounds.centerX()
+                        val y = (bgBounds.width() - event.y) - bgBounds.centerY()
+
+                        if (y > x) {
+                            if (y > -x) Buttons.Button.Area.TOP
+                            else Buttons.Button.Area.LEFT
+                        } else {
+                            if (y > -x) Buttons.Button.Area.RIGHT
+                            else Buttons.Button.Area.BOTTOM
+                        }
                     }
                 }
 
@@ -268,12 +268,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun Buttons.Button.reflectState(area: Buttons.Button.Area, event: MotionEvent) {
         when (event.action) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN, MotionEvent.ACTION_MOVE -> {
-                this.tapped = area
-            }
-
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                val key = when (area) {
+                val command = when (this.tapped) {
                     Buttons.Button.Area.MAIN -> this.main
                     Buttons.Button.Area.LEFT -> this.left
                     Buttons.Button.Area.TOP -> this.top
@@ -282,9 +278,9 @@ class MainActivity : AppCompatActivity() {
                     Buttons.Button.Area.UNDEFINED -> null
                 } ?: return
 
-                commandList = key.parse(commandList)
+                commandList = command.parse(commandList)
 
-                if (key.type == ItemType.CALC || commandList.isEmpty()) {
+                if (command.type == ItemType.CALC || commandList.isEmpty()) {
                     binding.resultPreview.text = null
                 } else {
                     val result = commandList.invoke(Command(ItemType.CALC))
@@ -299,11 +295,20 @@ class MainActivity : AppCompatActivity() {
                 binding.inputField.text = commandList.getDisplayString()
             }
         }
+
+        this.tapped = area
     }
 
     private fun injectBackgroundImage() {
         sharedPreferences.getBgImageUri().apply {
-            binding.background = this?.extractMediaBitmap(this@MainActivity)
+            binding.background = this?.let {
+                try {
+                    BitmapFactory.decodeFile(it.path)
+                } catch (t: Throwable) {
+                    Timber.e(t)
+                    null
+                }
+            }
         }
     }
 }

@@ -47,7 +47,6 @@ fun Command.parse(commandList: List<Command>): List<Command> =
             ItemType.PASTE,
             ItemType.M,
             ItemType.MR,
-            ItemType.MC,
             ItemType.CALC -> commandList.invoke(this)
 
             else -> commandList.append(this).purify()
@@ -59,9 +58,8 @@ fun List<Command>.invoke(command: Command): List<Command> =
             ItemType.RIGHT -> emptyList()
             ItemType.COPY -> emptyList()
             ItemType.PASTE -> emptyList()
-            ItemType.M -> emptyList()
-            ItemType.MR -> emptyList()
-            ItemType.MC -> emptyList()
+            ItemType.M -> this
+            ItemType.MR -> this
             ItemType.CALC -> {
                 this.normalize()
                         .toRpn()

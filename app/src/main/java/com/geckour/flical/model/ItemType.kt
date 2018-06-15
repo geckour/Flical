@@ -33,7 +33,6 @@ enum class ItemType(val weight: Int? = null) {
     PASTE,
     M,
     MR,
-    MC,
     DEL,
     AC,
     LEFT,

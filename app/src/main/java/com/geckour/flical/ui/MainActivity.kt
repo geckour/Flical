@@ -18,12 +18,15 @@ import com.geckour.flical.model.Command
 import com.geckour.flical.model.ItemType
 import com.geckour.flical.util.*
 import timber.log.Timber
+import java.util.Collections.addAll
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     private var commandList: List<Command> = emptyList()
+
+    private var memory: List<Command> = emptyList()
 
     private val mainBounds = RectF()
 
@@ -35,11 +38,11 @@ class MainActivity : AppCompatActivity() {
                             Buttons.Button(Command(ItemType.M, "M"),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.MC, "MC"),
+                                    Command(ItemType.NONE),
                                     Command(ItemType.MR, "MR"),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.NUMBER, "7"),
-                                    Command(ItemType.NUMBER, "4"),
+                                    Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
                                     Command(ItemType.NONE),
@@ -143,8 +146,8 @@ class MainActivity : AppCompatActivity() {
                             Buttons.Button(Command(ItemType.MULTI, "×"),
                                     Command(ItemType.POW, "^"),
                                     Command(ItemType.NONE),
-                                    Command(ItemType.SQRT, "√"),
                                     Command(ItemType.NONE),
+                                    Command(ItemType.SQRT, "√"),
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.MINUS, "-"),
                                     Command(ItemType.NONE),
@@ -280,15 +283,27 @@ class MainActivity : AppCompatActivity() {
 
                 commandList = command.parse(commandList)
 
-                if (command.type == ItemType.CALC || commandList.isEmpty()) {
-                    binding.resultPreview.text = null
-                } else {
-                    val result = commandList.invoke(Command(ItemType.CALC))
+                when {
+                    command.type == ItemType.M -> {
+                        memory = commandList
+                    }
 
-                    if (commandList.normalize().size > 1
-                            && result.isNotEmpty()
-                            && result.last().type != ItemType.NONE) {
-                        binding.resultPreview.text = result.getDisplayString()
+                    command.type == ItemType.MR -> {
+                        commandList += memory
+                    }
+
+                    command.type == ItemType.CALC || commandList.isEmpty() -> {
+                        binding.resultPreview.text = null
+                    }
+
+                    else -> {
+                        val result = commandList.invoke(Command(ItemType.CALC))
+
+                        if (commandList.normalize().size > 1
+                                && result.isNotEmpty()
+                                && result.last().type != ItemType.NONE) {
+                            binding.resultPreview.text = result.getDisplayString()
+                        }
                     }
                 }
 

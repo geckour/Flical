@@ -156,7 +156,7 @@ fun List<Command>.toRpn(): List<Command> {
 fun List<Command>.calculate(): Command? =
         if (this.isEmpty()) null
         else {
-            val mathContext = MathContext(14, RoundingMode.CEILING)
+            val mathContext = MathContext(14, RoundingMode.HALF_DOWN)
 
             val stack: Stack<ExBigDecimal> = Stack()
 

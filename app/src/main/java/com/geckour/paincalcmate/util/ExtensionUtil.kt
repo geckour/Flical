@@ -13,6 +13,7 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.*
 
 enum class BigDecimalType {
@@ -77,20 +78,35 @@ fun List<Command>.invoke(command: Command): List<Command> =
         }
 
 fun List<Command>.normalize(): List<Command> {
-    val returnList: ArrayList<Command> = ArrayList()
+    fun List<Command>.isNumberConsecutive(): Boolean =
+            this.size > 1
+                    && (this.last().type == ItemType.NUMBER
+                    && this[this.lastIndex - 1].type == ItemType.NUMBER)
 
-    this.forEach {
-        if (returnList.isEmpty() ||
-                (it.type == ItemType.NUMBER
-                        && returnList.last().type == ItemType.NUMBER).not()) {
-            returnList.add(it)
-        } else {
-            val new = returnList.last().let { n -> n.copy(text = n.text + it.text) }
-            returnList[returnList.lastIndex] = new
+    fun List<Command>.isNumberNegative(): Boolean =
+            this.size > 1
+                    && this.last().type == ItemType.NUMBER
+                    && this[this.lastIndex - 1].type == ItemType.MINUS
+                    && (this.size < 3 || this[this.lastIndex - 2].type != ItemType.NUMBER)
+
+    fun List<Command>.isNeedConcat(): Boolean =
+            this.isNumberConsecutive() || this.isNumberNegative()
+
+    fun ArrayList<Command>.concatNumber() {
+        if (this.isNeedConcat()) {
+            val last = this.removeAt(this.lastIndex).let { l -> Command(ItemType.NUMBER, this.last().text + l.text) }
+            this[this.lastIndex] = last
         }
     }
 
-    return returnList
+    val resultList: ArrayList<Command> = ArrayList()
+
+    this.forEach {
+        resultList.add(it)
+        resultList.concatNumber()
+    }
+
+    return resultList
 }
 
 fun List<Command>.purify(): List<Command> =
@@ -297,7 +313,8 @@ fun List<Command>.calculate(): Command? =
                     when (it.type) {
                         BigDecimalType.POSITIVE_INFINITY -> Command(ItemType.NONE, "Infinity")
                         BigDecimalType.NEGATIVE_INFINITY -> Command(ItemType.NONE, "-Infinity")
-                        else -> Command(ItemType.NUMBER, it.value?.toPlainString() ?: throw IllegalStateException())
+                        else -> Command(ItemType.NUMBER, it.value?.toPlainString()
+                                ?: throw IllegalStateException())
                     }
                 }
             } catch (t: Throwable) {

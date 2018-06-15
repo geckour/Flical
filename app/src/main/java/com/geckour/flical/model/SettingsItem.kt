@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate.model
+package com.geckour.flical.model
 
 data class SettingsItem(
         val title: String,

@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate.adapter
+package com.geckour.flical.adapter
 
 import android.databinding.BindingAdapter
 import android.graphics.Bitmap

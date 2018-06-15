@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate.util
+package com.geckour.flical.util
 
 import android.content.Context
 import android.content.SharedPreferences

@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="com.geckour.paincalcmate.model.Buttons" />
+        <import type="com.geckour.flical.model.Buttons" />
 
         <import type="android.support.v4.content.ContextCompat" />
 
         <variable
             name="buttons"
-            type="com.geckour.paincalcmate.model.Buttons" />
+            type="com.geckour.flical.model.Buttons" />
 
         <variable
             name="background"

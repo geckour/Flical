@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate.util
+package com.geckour.flical.util
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -6,8 +6,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import ch.obermuhlner.math.big.BigDecimalMath
-import com.geckour.paincalcmate.model.Command
-import com.geckour.paincalcmate.model.ItemType
+import com.geckour.flical.model.Command
+import com.geckour.flical.model.ItemType
 import timber.log.Timber
 import java.math.BigDecimal
 import java.math.MathContext

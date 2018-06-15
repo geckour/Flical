@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate
+package com.geckour.flical
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4

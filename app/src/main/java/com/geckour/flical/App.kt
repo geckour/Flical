@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate
+package com.geckour.flical
 
 import android.app.Application
 import timber.log.Timber

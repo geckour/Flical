@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate.ui
+package com.geckour.flical.ui
 
 import android.Manifest
 import android.app.Activity
@@ -10,10 +10,10 @@ import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import com.geckour.paincalcmate.R
-import com.geckour.paincalcmate.databinding.ActivitySettingsBinding
-import com.geckour.paincalcmate.model.SettingsItem
-import com.geckour.paincalcmate.util.setBgImageUri
+import com.geckour.flical.R
+import com.geckour.flical.databinding.ActivitySettingsBinding
+import com.geckour.flical.model.SettingsItem
+import com.geckour.flical.util.setBgImageUri
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.RuntimePermissions
 

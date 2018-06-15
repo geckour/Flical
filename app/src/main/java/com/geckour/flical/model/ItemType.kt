@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate.model
+package com.geckour.flical.model
 
 enum class ItemType(val weight: Int? = null) {
     NONE,

@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate.ui
+package com.geckour.flical.ui
 
 import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
@@ -11,12 +11,12 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
-import com.geckour.paincalcmate.R
-import com.geckour.paincalcmate.databinding.ActivityMainBinding
-import com.geckour.paincalcmate.model.Buttons
-import com.geckour.paincalcmate.model.Command
-import com.geckour.paincalcmate.model.ItemType
-import com.geckour.paincalcmate.util.*
+import com.geckour.flical.R
+import com.geckour.flical.databinding.ActivityMainBinding
+import com.geckour.flical.model.Buttons
+import com.geckour.flical.model.Command
+import com.geckour.flical.model.ItemType
+import com.geckour.flical.util.*
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {

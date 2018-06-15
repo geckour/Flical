@@ -29,6 +29,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -59,4 +63,7 @@ dependencies {
     // Permission
     implementation "com.github.hotchemi:permissionsdispatcher:${permission_dispatcher_version}"
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:${permission_dispatcher_version}"
+
+    // BigDecimal Math
+    implementation 'ch.obermuhlner:big-math:2.0.0'
 }

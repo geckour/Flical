@@ -5,11 +5,27 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
+import ch.obermuhlner.math.big.BigDecimalMath
 import com.geckour.paincalcmate.model.Command
 import com.geckour.paincalcmate.model.ItemType
 import timber.log.Timber
+import java.math.BigDecimal
+import java.math.MathContext
+import java.math.RoundingMode
 import java.util.*
 import kotlin.math.*
+
+enum class BigDecimalType {
+    NAN,
+    POSITIVE_INFINITY,
+    NEGATIVE_INFINITY,
+    NORMAL
+}
+
+data class ExBigDecimal(
+        val type: BigDecimalType,
+        val value: BigDecimal? = null
+)
 
 fun List<Command>.append(command: Command): List<Command> =
         ArrayList(this).apply { add(command) }
@@ -51,7 +67,7 @@ fun List<Command>.invoke(command: Command): List<Command> =
                         .calculate()?.let {
                             listOf(
                                     Command(ItemType.NONE, "="),
-                                    Command(ItemType.NUMBER, it.toString())
+                                    it
                             )
                         } ?: listOf(Command(ItemType.NONE, "ERROR!"))
             }
@@ -123,125 +139,167 @@ fun List<Command>.toRpn(): List<Command> {
     }
 }
 
-fun List<Command>.calculate(): Double? =
+fun List<Command>.calculate(): Command? =
         if (this.isEmpty()) null
         else {
-            val stack: Stack<Double> = Stack()
+            val mathContext = MathContext(14, RoundingMode.CEILING)
+
+            val stack: Stack<ExBigDecimal> = Stack()
 
             try {
                 this.forEach {
                     when (it.type) {
                         ItemType.NUMBER -> {
-                            stack.push(it.text?.toDouble()
-                                    ?: throw kotlin.IllegalStateException())
+                            stack.push(
+                                    ExBigDecimal(BigDecimalType.NORMAL,
+                                            BigDecimal(it.text
+                                                    ?: throw IllegalStateException()))
+                            )
                         }
 
                         ItemType.PI -> {
-                            stack.push(PI)
+                            stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimal(PI)))
                         }
 
                         ItemType.E -> {
-                            stack.push(E)
+                            stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimal(E)))
                         }
 
                         ItemType.PLUS -> {
-                            val a = stack.pop()
-                            val b = stack.pop()
-                            stack.add(b + a)
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val b = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, b.add(a, mathContext)))
                         }
 
                         ItemType.MINUS -> {
-                            val a = stack.pop()
-                            val b = stack.pop()
-                            stack.add(b - a)
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val b = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, b.subtract(a, mathContext)))
                         }
 
                         ItemType.MULTI -> {
-                            val a = stack.pop()
-                            val b = stack.pop()
-                            stack.add(b * a)
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val b = stack.pop().value ?: throw IllegalStateException()
+                            val preResult = b.toDouble() * a.toDouble()
+                            stack.add(when (preResult) {
+                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.multiply(a, mathContext))
+                            })
                         }
 
                         ItemType.DIV -> {
-                            val a = stack.pop()
-                            val b = stack.pop()
-                            stack.add(b / a)
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val b = stack.pop().value ?: throw IllegalStateException()
+                            val preResult = b.toDouble() / a.toDouble()
+                            stack.add(when (preResult) {
+                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.divide(a, mathContext))
+                            })
                         }
 
                         ItemType.POW -> {
-                            val a = stack.pop()
-                            val b = stack.pop()
-                            stack.add(b.pow(a))
+                            val a = stack.pop().value?.let {
+                                if (it.toDouble() % 1.0 == 0.0) it.toInt()
+                                else throw IllegalStateException("Must power with Int value")
+                            } ?: throw IllegalStateException()
+                            val b = stack.pop().value ?: throw IllegalStateException()
+                            val preResult = b.toDouble().pow(a)
+                            stack.add(when (preResult) {
+                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.pow(a, mathContext))
+                            })
                         }
 
                         ItemType.MOD -> {
-                            val a = stack.pop()
-                            val b = stack.pop()
-                            stack.add(b % a)
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val b = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, b.remainder(a, mathContext)))
                         }
 
                         ItemType.SQRT -> {
-                            val a = stack.pop()
-                            stack.add(sqrt(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.sqrt(a, mathContext)))
                         }
 
                         ItemType.COS -> {
-                            val a = stack.pop()
-                            stack.add(cos(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.cos(a, mathContext)))
                         }
 
                         ItemType.SIN -> {
-                            val a = stack.pop()
-                            stack.add(sin(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.sin(a, mathContext)))
                         }
 
                         ItemType.TAN -> {
-                            val a = stack.pop()
-                            stack.add(tan(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.tan(a, mathContext)))
                         }
 
                         ItemType.A_COS -> {
-                            val a = stack.pop()
-                            stack.add(acos(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.acos(a, mathContext)))
                         }
 
                         ItemType.A_SIN -> {
-                            val a = stack.pop()
-                            stack.add(asin(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.asin(a, mathContext)))
                         }
 
                         ItemType.A_TAN -> {
-                            val a = stack.pop()
-                            stack.add(atan(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.atan(a, mathContext)))
                         }
 
                         ItemType.LN -> {
-                            val a = stack.pop()
-                            stack.add(ln(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val preResult = ln(a.toDouble())
+                            stack.add(when (preResult) {
+                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log(a, mathContext))
+                            })
                         }
 
                         ItemType.LOG10 -> {
-                            val a = stack.pop()
-                            stack.add(log10(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val preResult = log10(a.toDouble())
+                            stack.add(when (preResult) {
+                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log10(a, mathContext))
+                            })
                         }
 
                         ItemType.LOG2 -> {
-                            val a = stack.pop()
-                            stack.add(log2(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            val preResult = log2(a.toDouble())
+                            stack.add(when (preResult) {
+                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log2(a, mathContext))
+                            })
                         }
 
                         ItemType.ABS -> {
-                            val a = stack.pop()
-                            stack.add(abs(a))
+                            val a = stack.pop().value ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, a.abs(mathContext)))
                         }
 
                         else -> {
                         }
                     }
                 }
-
-                val accuracy = 10.0.pow(14)
-                (stack.pop() * accuracy).roundToLong().toDouble() / accuracy
+                stack.pop().let {
+                    when (it.type) {
+                        BigDecimalType.POSITIVE_INFINITY -> Command(ItemType.NONE, "Infinity")
+                        BigDecimalType.NEGATIVE_INFINITY -> Command(ItemType.NONE, "-Infinity")
+                        else -> Command(ItemType.NUMBER, it.value?.toPlainString() ?: throw IllegalStateException())
+                    }
+                }
             } catch (t: Throwable) {
                 Timber.e(t)
                 null

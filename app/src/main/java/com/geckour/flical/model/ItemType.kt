@@ -2,6 +2,9 @@ package com.geckour.flical.model
 
 enum class ItemType(val weight: Int? = null) {
     NONE,
+    POSITIVE_INFINITY,
+    NEGATIVE_INFINITY,
+    NAN,
     NUMBER(0),
     ZERO2,
     PI(0),

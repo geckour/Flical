@@ -195,9 +195,10 @@ fun List<Command>.calculate(): Command? =
                             val a = stack.pop().value ?: throw IllegalStateException()
                             val b = stack.pop().value ?: throw IllegalStateException()
                             val preResult = b.toDouble() * a.toDouble()
-                            stack.add(when (preResult) {
-                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
-                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
                                 else -> ExBigDecimal(BigDecimalType.NORMAL, b.multiply(a, mathContext))
                             })
                         }
@@ -206,9 +207,10 @@ fun List<Command>.calculate(): Command? =
                             val a = stack.pop().value ?: throw IllegalStateException()
                             val b = stack.pop().value ?: throw IllegalStateException()
                             val preResult = b.toDouble() / a.toDouble()
-                            stack.add(when (preResult) {
-                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
-                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
                                 else -> ExBigDecimal(BigDecimalType.NORMAL, b.divide(a, mathContext))
                             })
                         }
@@ -220,9 +222,10 @@ fun List<Command>.calculate(): Command? =
                             } ?: throw IllegalStateException()
                             val b = stack.pop().value ?: throw IllegalStateException()
                             val preResult = b.toDouble().pow(a)
-                            stack.add(when (preResult) {
-                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
-                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
                                 else -> ExBigDecimal(BigDecimalType.NORMAL, b.pow(a, mathContext))
                             })
                         }
@@ -230,12 +233,24 @@ fun List<Command>.calculate(): Command? =
                         ItemType.MOD -> {
                             val a = stack.pop().value ?: throw IllegalStateException()
                             val b = stack.pop().value ?: throw IllegalStateException()
-                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, b.remainder(a, mathContext)))
+                            val preResult = b.toDouble() % a.toDouble()
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.remainder(a, mathContext))
+                            })
                         }
 
                         ItemType.SQRT -> {
                             val a = stack.pop().value ?: throw IllegalStateException()
-                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.sqrt(a, mathContext)))
+                            val preResult = sqrt(a.toDouble())
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.sqrt(a, mathContext))
+                            })
                         }
 
                         ItemType.COS -> {
@@ -271,9 +286,10 @@ fun List<Command>.calculate(): Command? =
                         ItemType.LN -> {
                             val a = stack.pop().value ?: throw IllegalStateException()
                             val preResult = ln(a.toDouble())
-                            stack.add(when (preResult) {
-                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
-                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
                                 else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log(a, mathContext))
                             })
                         }
@@ -281,9 +297,10 @@ fun List<Command>.calculate(): Command? =
                         ItemType.LOG10 -> {
                             val a = stack.pop().value ?: throw IllegalStateException()
                             val preResult = log10(a.toDouble())
-                            stack.add(when (preResult) {
-                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
-                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
                                 else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log10(a, mathContext))
                             })
                         }
@@ -291,9 +308,10 @@ fun List<Command>.calculate(): Command? =
                         ItemType.LOG2 -> {
                             val a = stack.pop().value ?: throw IllegalStateException()
                             val preResult = log2(a.toDouble())
-                            stack.add(when (preResult) {
-                                Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
-                                Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                            stack.add(when {
+                                preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
+                                preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
+                                preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
                                 else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log2(a, mathContext))
                             })
                         }
@@ -309,8 +327,9 @@ fun List<Command>.calculate(): Command? =
                 }
                 stack.pop().let {
                     when (it.type) {
-                        BigDecimalType.POSITIVE_INFINITY -> Command(ItemType.NONE, "Infinity")
-                        BigDecimalType.NEGATIVE_INFINITY -> Command(ItemType.NONE, "-Infinity")
+                        BigDecimalType.POSITIVE_INFINITY -> Command(ItemType.POSITIVE_INFINITY, "Infinity")
+                        BigDecimalType.NEGATIVE_INFINITY -> Command(ItemType.NEGATIVE_INFINITY, "-Infinity")
+                        BigDecimalType.NAN -> Command(ItemType.NAN, "NaN")
                         else -> Command(ItemType.NUMBER, it.value?.toPlainString()
                                 ?: throw IllegalStateException())
                     }

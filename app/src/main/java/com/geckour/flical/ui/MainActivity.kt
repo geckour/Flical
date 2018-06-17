@@ -18,7 +18,6 @@ import com.geckour.flical.model.Command
 import com.geckour.flical.model.ItemType
 import com.geckour.flical.util.*
 import timber.log.Timber
-import java.util.Collections.addAll
 
 class MainActivity : AppCompatActivity() {
 
@@ -145,7 +144,7 @@ class MainActivity : AppCompatActivity() {
                                     Buttons.Button.Area.UNDEFINED),
                             Buttons.Button(Command(ItemType.MULTI, "×"),
                                     Command(ItemType.POW, "^"),
-                                    Command(ItemType.NONE),
+                                    Command(ItemType.FACTOR, "!"),
                                     Command(ItemType.NONE),
                                     Command(ItemType.SQRT, "√"),
                                     Buttons.Button.Area.UNDEFINED),
@@ -169,6 +168,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        precision = 14
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -300,14 +301,15 @@ class MainActivity : AppCompatActivity() {
                         val result = commandList.invoke(Command(ItemType.CALC))
 
                         if (commandList.normalize().size > 1
-                                && result.isNotEmpty()
-                                && result.last().type != ItemType.NONE) {
-                            binding.resultPreview.text = result.getDisplayString()
+                                && result.lastOrNull()?.type == ItemType.NUMBER) {
+                            binding.resultPreview.onEvaluate(result, precision)
+                        } else {
+                            binding.resultPreview.redisplay()
                         }
                     }
                 }
 
-                binding.inputField.text = commandList.getDisplayString()
+                binding.formula.changeFormulaTo(commandList)
             }
         }
 

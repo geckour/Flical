@@ -16,6 +16,7 @@ enum class ItemType(val weight: Int? = null) {
     MULTI(3),
     DIV(3),
     POW(2),
+    FACTOR(2),
     MOD(2),
     SQRT(1),
     SIN(1),

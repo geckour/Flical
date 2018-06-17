@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="com.geckour.flical.model.Buttons" />
+        <import type="com.geckour.flical.model.Buttons"/>
 
-        <import type="android.support.v4.content.ContextCompat" />
+        <import type="android.support.v4.content.ContextCompat"/>
 
         <variable
             name="buttons"
-            type="com.geckour.flical.model.Buttons" />
+            type="com.geckour.flical.model.Buttons"/>
 
         <variable
             name="background"
-            type="android.graphics.Bitmap" />
+            type="android.graphics.Bitmap"/>
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -33,107 +33,120 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcBitmap="@{background}" />
+            app:srcBitmap="@{background}"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_v_01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.25" />
+            app:layout_constraintGuide_percent="0.25"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_v_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
+            app:layout_constraintGuide_percent="0.5"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_v_23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
+            app:layout_constraintGuide_percent="0.75"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2" />
+            app:layout_constraintGuide_percent="0.2"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_t"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.3" />
+            app:layout_constraintGuide_percent="0.3"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.44" />
+            app:layout_constraintGuide_percent="0.44"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.58" />
+            app:layout_constraintGuide_percent="0.58"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.72" />
+            app:layout_constraintGuide_percent="0.72"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.86" />
+            app:layout_constraintGuide_percent="0.86"/>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/inputField"
+        <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/inputBackgroundColor"
-            android:cursorVisible="false"
-            android:ellipsize="none"
-            android:gravity="center_vertical|end"
-            android:singleLine="true"
-            android:textColor="@color/primaryTextColor"
-            android:textIsSelectable="true"
-            app:autoSizeMaxTextSize="@dimen/formulaPrimaryText"
-            app:autoSizeMinTextSize="@dimen/formulaSecondaryText"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toTopOf="@id/guide_h_input"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="ln(e^5)" />
-
-        <TextView
-            android:id="@+id/resultPreview"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/inputBackgroundColor"
-            android:ellipsize="none"
-            android:gravity="center_vertical|end"
-            android:singleLine="true"
-            android:textColor="@color/secondaryTextColor"
-            android:textIsSelectable="true"
-            android:textSize="@dimen/formulaSecondaryText"
             app:layout_constraintBottom_toTopOf="@id/guide_h_t"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputField"
-            tools:text="= 5" />
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.geckour.flical.ui.view.CalculatorScrollView
+            android:id="@+id/formula_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.geckour.flical.ui.view.CalculatorFormula
+                android:id="@+id/formula"
+                style="@style/DisplayTextStyle.Formula"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:ellipsize="none"
+                android:gravity="center_vertical|end"
+                android:longClickable="true"
+                android:singleLine="true"
+                android:textColor="@color/primaryTextColor"
+                android:textIsSelectable="false"
+                tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !"
+                tools:textSize="@dimen/formula_min_textsize"/>
+        </com.geckour.flical.ui.view.CalculatorScrollView>
+
+        <com.geckour.flical.ui.view.CalculatorResult
+            android:id="@+id/resultPreview"
+            style="@style/DisplayTextStyle.Result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:bufferType="spannable"
+            android:focusable="false"
+            android:singleLine="true"
+            android:textColor="@color/secondaryTextColor"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_t"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_input"
+            tools:text="= 2395007990"/>
 
         <View
             android:layout_width="0dp"
@@ -142,7 +155,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guide_h_t" />
+            app:layout_constraintTop_toTopOf="@id/guide_h_t"/>
 
         <ImageView
             android:id="@+id/bg00"
@@ -154,7 +167,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:src="@drawable/bg_button_highlight_right" />
+            tools:src="@drawable/bg_button_highlight_right"/>
 
         <TextView
             android:id="@+id/main00"
@@ -171,7 +184,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="COPY" />
+            tools:text="COPY"/>
 
         <TextView
             android:id="@+id/sub000"
@@ -188,7 +201,7 @@
             app:layout_constraintEnd_toStartOf="@id/main00"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub001"
@@ -204,7 +217,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="PASTE" />
+            tools:text="PASTE"/>
 
         <TextView
             android:id="@+id/sub002"
@@ -221,7 +234,7 @@
             app:layout_constraintEnd_toEndOf="@id/guide_v_01"
             app:layout_constraintStart_toEndOf="@id/main00"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub003"
@@ -237,7 +250,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main00"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg10"
@@ -248,7 +261,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"/>
 
         <TextView
             android:id="@+id/main10"
@@ -265,7 +278,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="MR" />
+            tools:text="MR"/>
 
         <TextView
             android:id="@+id/sub100"
@@ -282,7 +295,7 @@
             app:layout_constraintEnd_toStartOf="@id/main10"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="MC" />
+            tools:text="MC"/>
 
         <TextView
             android:id="@+id/sub101"
@@ -298,7 +311,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="M-" />
+            tools:text="M-"/>
 
         <TextView
             android:id="@+id/sub102"
@@ -315,7 +328,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/main10"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="M+" />
+            tools:text="M+"/>
 
         <TextView
             android:id="@+id/sub103"
@@ -331,7 +344,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/main10"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg20"
@@ -342,7 +355,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"/>
 
         <TextView
             android:id="@+id/main20"
@@ -359,7 +372,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="DEL" />
+            tools:text="DEL"/>
 
         <TextView
             android:id="@+id/sub200"
@@ -376,7 +389,7 @@
             app:layout_constraintEnd_toStartOf="@id/main20"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub201"
@@ -392,7 +405,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="AC" />
+            tools:text="AC"/>
 
         <TextView
             android:id="@+id/sub202"
@@ -409,7 +422,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/main20"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub203"
@@ -425,7 +438,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/main20"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg30"
@@ -436,7 +449,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_01"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"/>
 
         <TextView
             android:id="@+id/main30"
@@ -453,7 +466,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub300"
@@ -470,7 +483,7 @@
             app:layout_constraintEnd_toStartOf="@id/main30"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="◀" />
+            tools:text="◀"/>
 
         <TextView
             android:id="@+id/sub301"
@@ -486,7 +499,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="▲" />
+            tools:text="▲"/>
 
         <TextView
             android:id="@+id/sub302"
@@ -503,7 +516,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/main30"
             app:layout_constraintTop_toBottomOf="@id/guide_h_t"
-            tools:text="▶" />
+            tools:text="▶"/>
 
         <TextView
             android:id="@+id/sub303"
@@ -519,7 +532,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/main30"
-            tools:text="▼" />
+            tools:text="▼"/>
 
         <ImageView
             android:id="@+id/bg01"
@@ -530,7 +543,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"/>
 
         <TextView
             android:id="@+id/main01"
@@ -547,7 +560,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="7" />
+            tools:text="7"/>
 
         <TextView
             android:id="@+id/sub010"
@@ -564,7 +577,7 @@
             app:layout_constraintEnd_toStartOf="@id/main01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub011"
@@ -580,7 +593,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub012"
@@ -597,7 +610,7 @@
             app:layout_constraintEnd_toEndOf="@id/guide_v_01"
             app:layout_constraintStart_toEndOf="@id/main01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub013"
@@ -613,7 +626,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main01"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg11"
@@ -624,7 +637,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"/>
 
         <TextView
             android:id="@+id/main11"
@@ -641,7 +654,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="8" />
+            tools:text="8"/>
 
         <TextView
             android:id="@+id/sub110"
@@ -658,7 +671,7 @@
             app:layout_constraintEnd_toStartOf="@id/main11"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub111"
@@ -674,7 +687,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub112"
@@ -691,7 +704,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/main11"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub113"
@@ -707,7 +720,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/main11"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg21"
@@ -718,7 +731,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"/>
 
         <TextView
             android:id="@+id/main21"
@@ -735,7 +748,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="9" />
+            tools:text="9"/>
 
         <TextView
             android:id="@+id/sub210"
@@ -752,7 +765,7 @@
             app:layout_constraintEnd_toStartOf="@id/main21"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="ᵈ/dx" />
+            tools:text="ᵈ/dx"/>
 
         <TextView
             android:id="@+id/sub211"
@@ -768,7 +781,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="x" />
+            tools:text="x"/>
 
         <TextView
             android:id="@+id/sub212"
@@ -785,7 +798,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/main21"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="∫" />
+            tools:text="∫"/>
 
         <TextView
             android:id="@+id/sub213"
@@ -801,7 +814,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/main21"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg31"
@@ -812,7 +825,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"/>
 
         <TextView
             android:id="@+id/main31"
@@ -829,7 +842,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="÷" />
+            tools:text="÷"/>
 
         <TextView
             android:id="@+id/sub310"
@@ -846,7 +859,7 @@
             app:layout_constraintEnd_toStartOf="@id/main31"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="%" />
+            tools:text="%"/>
 
         <TextView
             android:id="@+id/sub311"
@@ -862,7 +875,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="√" />
+            tools:text="√"/>
 
         <TextView
             android:id="@+id/sub312"
@@ -879,7 +892,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/main31"
             app:layout_constraintTop_toBottomOf="@id/guide_h_01"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub313"
@@ -895,7 +908,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/main31"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg02"
@@ -906,7 +919,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"/>
 
         <TextView
             android:id="@+id/main02"
@@ -923,7 +936,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="4" />
+            tools:text="4"/>
 
         <TextView
             android:id="@+id/sub020"
@@ -940,7 +953,7 @@
             app:layout_constraintEnd_toStartOf="@id/main02"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub021"
@@ -956,7 +969,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub022"
@@ -973,7 +986,7 @@
             app:layout_constraintEnd_toEndOf="@id/guide_v_01"
             app:layout_constraintStart_toEndOf="@id/main02"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub023"
@@ -989,7 +1002,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main02"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg12"
@@ -1000,7 +1013,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"/>
 
         <TextView
             android:id="@+id/main12"
@@ -1017,7 +1030,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="5" />
+            tools:text="5"/>
 
         <TextView
             android:id="@+id/sub120"
@@ -1034,7 +1047,7 @@
             app:layout_constraintEnd_toStartOf="@id/main12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="(" />
+            tools:text="("/>
 
         <TextView
             android:id="@+id/sub121"
@@ -1050,7 +1063,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="ABS" />
+            tools:text="ABS"/>
 
         <TextView
             android:id="@+id/sub122"
@@ -1067,7 +1080,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/main12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text=")" />
+            tools:text=")"/>
 
         <TextView
             android:id="@+id/sub123"
@@ -1083,7 +1096,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/main12"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg22"
@@ -1094,7 +1107,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"/>
 
         <TextView
             android:id="@+id/main22"
@@ -1111,7 +1124,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="6" />
+            tools:text="6"/>
 
         <TextView
             android:id="@+id/sub220"
@@ -1128,7 +1141,7 @@
             app:layout_constraintEnd_toStartOf="@id/main22"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="log₁₀" />
+            tools:text="log₁₀"/>
 
         <TextView
             android:id="@+id/sub221"
@@ -1144,7 +1157,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub222"
@@ -1161,7 +1174,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/main22"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="log₂" />
+            tools:text="log₂"/>
 
         <TextView
             android:id="@+id/sub223"
@@ -1177,7 +1190,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/main22"
-            tools:text="ln" />
+            tools:text="ln"/>
 
         <ImageView
             android:id="@+id/bg32"
@@ -1188,7 +1201,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_23"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"/>
 
         <TextView
             android:id="@+id/main32"
@@ -1205,7 +1218,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="×" />
+            tools:text="×"/>
 
         <TextView
             android:id="@+id/sub320"
@@ -1222,7 +1235,7 @@
             app:layout_constraintEnd_toStartOf="@id/main32"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="^" />
+            tools:text="^"/>
 
         <TextView
             android:id="@+id/sub321"
@@ -1238,7 +1251,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub322"
@@ -1255,7 +1268,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/main32"
             app:layout_constraintTop_toBottomOf="@id/guide_h_12"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub323"
@@ -1271,7 +1284,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/main32"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg03"
@@ -1282,7 +1295,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"/>
 
         <TextView
             android:id="@+id/main03"
@@ -1299,7 +1312,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="1" />
+            tools:text="1"/>
 
         <TextView
             android:id="@+id/sub030"
@@ -1316,7 +1329,7 @@
             app:layout_constraintEnd_toStartOf="@id/main03"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="cos⁻¹" />
+            tools:text="cos⁻¹"/>
 
         <TextView
             android:id="@+id/sub031"
@@ -1332,7 +1345,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="sin⁻¹" />
+            tools:text="sin⁻¹"/>
 
         <TextView
             android:id="@+id/sub032"
@@ -1349,7 +1362,7 @@
             app:layout_constraintEnd_toEndOf="@id/guide_v_01"
             app:layout_constraintStart_toEndOf="@id/main03"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="tan⁻¹" />
+            tools:text="tan⁻¹"/>
 
         <TextView
             android:id="@+id/sub033"
@@ -1365,7 +1378,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main03"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg13"
@@ -1376,7 +1389,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"/>
 
         <TextView
             android:id="@+id/main13"
@@ -1393,7 +1406,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="2" />
+            tools:text="2"/>
 
         <TextView
             android:id="@+id/sub130"
@@ -1410,7 +1423,7 @@
             app:layout_constraintEnd_toStartOf="@id/main13"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub131"
@@ -1426,7 +1439,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub132"
@@ -1443,7 +1456,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/main13"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub133"
@@ -1459,7 +1472,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/main13"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg23"
@@ -1470,7 +1483,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"/>
 
         <TextView
             android:id="@+id/main23"
@@ -1487,7 +1500,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="3" />
+            tools:text="3"/>
 
         <TextView
             android:id="@+id/sub230"
@@ -1504,7 +1517,7 @@
             app:layout_constraintEnd_toStartOf="@id/main23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="cos" />
+            tools:text="cos"/>
 
         <TextView
             android:id="@+id/sub231"
@@ -1520,7 +1533,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="sin" />
+            tools:text="sin"/>
 
         <TextView
             android:id="@+id/sub232"
@@ -1537,7 +1550,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/main23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="tan" />
+            tools:text="tan"/>
 
         <TextView
             android:id="@+id/sub233"
@@ -1553,7 +1566,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/main23"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg33"
@@ -1564,7 +1577,7 @@
             app:layout_constraintBottom_toTopOf="@id/guide_h_34"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"/>
 
         <TextView
             android:id="@+id/main33"
@@ -1581,7 +1594,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="-" />
+            tools:text="-"/>
 
         <TextView
             android:id="@+id/sub330"
@@ -1598,7 +1611,7 @@
             app:layout_constraintEnd_toStartOf="@id/main33"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub331"
@@ -1614,7 +1627,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub332"
@@ -1631,7 +1644,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/main33"
             app:layout_constraintTop_toBottomOf="@id/guide_h_23"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub333"
@@ -1647,7 +1660,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/main33"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg04"
@@ -1658,7 +1671,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"/>
 
         <TextView
             android:id="@+id/main04"
@@ -1675,7 +1688,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="." />
+            tools:text="."/>
 
         <TextView
             android:id="@+id/sub040"
@@ -1692,7 +1705,7 @@
             app:layout_constraintEnd_toStartOf="@id/main04"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub041"
@@ -1708,7 +1721,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="π" />
+            tools:text="π"/>
 
         <TextView
             android:id="@+id/sub042"
@@ -1725,7 +1738,7 @@
             app:layout_constraintEnd_toEndOf="@id/guide_v_01"
             app:layout_constraintStart_toEndOf="@id/main04"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="e" />
+            tools:text="e"/>
 
         <TextView
             android:id="@+id/sub043"
@@ -1741,7 +1754,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_01"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/main04"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg14"
@@ -1752,7 +1765,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"/>
 
         <TextView
             android:id="@+id/main14"
@@ -1769,7 +1782,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="0" />
+            tools:text="0"/>
 
         <TextView
             android:id="@+id/sub140"
@@ -1786,7 +1799,7 @@
             app:layout_constraintEnd_toStartOf="@id/main14"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub141"
@@ -1802,7 +1815,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="00" />
+            tools:text="00"/>
 
         <TextView
             android:id="@+id/sub142"
@@ -1819,7 +1832,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/main14"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub143"
@@ -1835,7 +1848,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_12"
             app:layout_constraintStart_toEndOf="@id/guide_v_01"
             app:layout_constraintTop_toBottomOf="@id/main14"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg24"
@@ -1846,7 +1859,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"/>
 
         <TextView
             android:id="@+id/main24"
@@ -1863,7 +1876,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="=" />
+            tools:text="="/>
 
         <TextView
             android:id="@+id/sub240"
@@ -1880,7 +1893,7 @@
             app:layout_constraintEnd_toStartOf="@id/main24"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub241"
@@ -1896,7 +1909,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="ANS" />
+            tools:text="ANS"/>
 
         <TextView
             android:id="@+id/sub242"
@@ -1913,7 +1926,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/main24"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub243"
@@ -1929,7 +1942,7 @@
             app:layout_constraintEnd_toStartOf="@id/guide_v_23"
             app:layout_constraintStart_toEndOf="@id/guide_v_12"
             app:layout_constraintTop_toBottomOf="@id/main24"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/bg34"
@@ -1940,7 +1953,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
-            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"/>
 
         <TextView
             android:id="@+id/main34"
@@ -1957,7 +1970,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="+" />
+            tools:text="+"/>
 
         <TextView
             android:id="@+id/sub340"
@@ -1974,7 +1987,7 @@
             app:layout_constraintEnd_toStartOf="@id/main34"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="Σ" />
+            tools:text="Σ"/>
 
         <TextView
             android:id="@+id/sub341"
@@ -1990,7 +2003,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub342"
@@ -2007,7 +2020,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/main34"
             app:layout_constraintTop_toBottomOf="@id/guide_h_34"
-            tools:text="" />
+            tools:text=""/>
 
         <TextView
             android:id="@+id/sub343"
@@ -2023,7 +2036,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/guide_v_23"
             app:layout_constraintTop_toBottomOf="@id/main34"
-            tools:text="" />
+            tools:text=""/>
 
         <ImageView
             android:id="@+id/buttonSetting"
@@ -2037,7 +2050,7 @@
             android:src="@drawable/ic_more_vert_black_24px"
             android:tint="@color/buttonSecondaryColor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </layout>

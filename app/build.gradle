@@ -11,7 +11,7 @@ kotlin.experimental.coroutines 'enable'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.geckour.paincalcmate"
+        applicationId "com.geckour.flical"
         minSdkVersion 21
         targetSdkVersion 27
         versionCode 1
@@ -45,7 +45,7 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$android_support_version"
     implementation "com.android.support:support-media-compat:$android_support_version"
     implementation "com.android.support:support-v13:$android_support_version"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

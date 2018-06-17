@@ -28,6 +28,8 @@ data class ExBigDecimal(
         val value: BigDecimal? = null
 )
 
+var precision: Int = 0
+
 fun List<Command>.append(command: Command): List<Command> =
         ArrayList(this).apply { add(command) }
 
@@ -156,7 +158,7 @@ fun List<Command>.toRpn(): List<Command> {
 fun List<Command>.calculate(): Command? =
         if (this.isEmpty()) null
         else {
-            val mathContext = MathContext(14, RoundingMode.HALF_DOWN)
+            val mathContext = MathContext(100)
 
             val stack: Stack<ExBigDecimal> = Stack()
 
@@ -172,11 +174,11 @@ fun List<Command>.calculate(): Command? =
                         }
 
                         ItemType.PI -> {
-                            stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimal(PI)))
+                            stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.pi(mathContext)))
                         }
 
                         ItemType.E -> {
-                            stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimal(E)))
+                            stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.e(mathContext)))
                         }
 
                         ItemType.PLUS -> {
@@ -215,18 +217,23 @@ fun List<Command>.calculate(): Command? =
                             })
                         }
 
-                        ItemType.POW -> {
+                        ItemType.FACTOR -> {
                             val a = stack.pop().value?.let {
-                                if (it.toDouble() % 1.0 == 0.0) it.toInt()
-                                else throw IllegalStateException("Must power with Int value")
+                                if (BigDecimalMath.isIntValue(it)) it.toInt()
+                                else throw IllegalStateException("Must factor with Int value")
                             } ?: throw IllegalStateException()
+                            stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.factorial(a)))
+                        }
+
+                        ItemType.POW -> {
+                            val a = stack.pop().value ?: throw IllegalStateException()
                             val b = stack.pop().value ?: throw IllegalStateException()
-                            val preResult = b.toDouble().pow(a)
+                            val preResult = b.toDouble().pow(a.toDouble())
                             stack.add(when {
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.pow(a, mathContext))
+                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.pow(b, a, mathContext))
                             })
                         }
 
@@ -325,13 +332,47 @@ fun List<Command>.calculate(): Command? =
                         }
                     }
                 }
-                stack.pop().let {
-                    when (it.type) {
-                        BigDecimalType.POSITIVE_INFINITY -> Command(ItemType.POSITIVE_INFINITY, "Infinity")
-                        BigDecimalType.NEGATIVE_INFINITY -> Command(ItemType.NEGATIVE_INFINITY, "-Infinity")
-                        BigDecimalType.NAN -> Command(ItemType.NAN, "NaN")
-                        else -> Command(ItemType.NUMBER, it.value?.toPlainString()
-                                ?: throw IllegalStateException())
+                if (stack.size > 1) {
+                    stack.toList()
+                            .asReversed()
+                            .map {
+                                Command(ItemType.NUMBER, it.value?.toPlainString())
+                            }.let {
+                                val returnList: ArrayList<Command> = ArrayList()
+
+                                it.forEach {
+                                    returnList.add(it)
+                                    returnList.add(Command(ItemType.MULTI))
+                                }
+                                returnList.removeAt(returnList.lastIndex)
+
+                                return@let returnList
+                            }.toRpn()
+                            .calculate()
+                } else {
+                    stack.pop().let {
+                        return@let when (it.type) {
+                            BigDecimalType.POSITIVE_INFINITY -> {
+                                Command(ItemType.POSITIVE_INFINITY, "Infinity")
+                            }
+                            BigDecimalType.NEGATIVE_INFINITY -> {
+                                Command(ItemType.NEGATIVE_INFINITY, "-Infinity")
+                            }
+                            BigDecimalType.NAN -> {
+                                Command(ItemType.NAN, "NaN")
+                            }
+                            else -> {
+                                val text = it.value
+                                        ?.setScale(precision, RoundingMode.HALF_UP)
+                                        ?.let {
+                                            if (BigDecimalMath.isIntValue(it))
+                                                it.toInt().toString()
+                                            else it.toPlainString()
+                                        } ?: throw IllegalStateException()
+
+                                Command(ItemType.NUMBER, text)
+                            }
+                        }
                     }
                 }
             } catch (t: Throwable) {

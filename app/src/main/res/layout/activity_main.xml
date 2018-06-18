@@ -21,8 +21,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@{background == null ? @color/primaryLightColor : @android:color/transparent}"
-        tools:background="@color/primaryLightColor"
+        android:background="@{background == null ? @color/backgroundColor : @android:color/transparent}"
+        tools:background="@color/backgroundColor"
         tools:context=".ui.MainActivity">
 
         <ImageView
@@ -61,42 +61,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2"/>
+            app:layout_constraintGuide_percent="0.275"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_t"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.3"/>
+            app:layout_constraintGuide_percent="0.4"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_01"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.44"/>
+            app:layout_constraintGuide_percent="0.52"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.58"/>
+            app:layout_constraintGuide_percent="0.64"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_23"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.72"/>
+            app:layout_constraintGuide_percent="0.76"/>
 
         <android.support.constraint.Guideline
             android:id="@+id/guide_h_34"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.86"/>
+            app:layout_constraintGuide_percent="0.88"/>
 
         <View
             android:layout_width="0dp"
@@ -2048,7 +2048,7 @@
             android:padding="4dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_more_vert_black_24px"
-            android:tint="@color/buttonSecondaryColor"
+            android:tint="@color/buttonTintColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 

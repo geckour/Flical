@@ -8,13 +8,13 @@ import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivitySettingsBinding
 import com.geckour.flical.model.SettingsItem
 import com.geckour.flical.util.setBgImageUri
 import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
@@ -43,7 +43,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsItemSetBgImage.apply {
             data = SettingsItem(getString(R.string.settings_item_title_set_bg_image),
                     getString(R.string.settings_item_desc_set_bg_image))
-            root.setOnClickListener { pickBgImage() }
+            root.setOnClickListener { pickBgImageWithPermissionCheck() }
         }
 
         binding.settingsItemClearBgImage.apply {
@@ -65,12 +65,23 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        onRequestPermissionsResult(requestCode, grantResults)
+    }
+
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    private fun pickBgImage() {
+    fun pickBgImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
         }
         startActivityForResult(intent, RequestCode.REQUEST_CODE_PICK_MEDIA.ordinal)
+    }
+
+    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
+    fun onStoragePermissionError() {
+        pickBgImageWithPermissionCheck()
     }
 }

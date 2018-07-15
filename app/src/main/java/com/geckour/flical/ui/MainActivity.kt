@@ -309,7 +309,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                binding.formula.changeFormulaTo(commandList)
+                binding.formula.text = commandList.getDisplayString()
             }
         }
 

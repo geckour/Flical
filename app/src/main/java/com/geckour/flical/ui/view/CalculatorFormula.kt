@@ -122,22 +122,6 @@ class CalculatorFormula
         return lastFitTextSize
     }
 
-    /**
-     * Functionally equivalent to setText(), but explicitly announce changes.
-     * If the new text is an extension of the old one, announce the addition.
-     * Otherwise, e.g. after deletion, announce the entire new text.
-     */
-    fun changeFormulaTo(commands: List<Command>) {
-        val added = commands.lastOrNull()?.text
-        val newText = commands.getDisplayString()
-        if (added != null) {
-            announceForAccessibility(added)
-        } else {
-            announceForAccessibility(newText)
-        }
-        setText(newText, TextView.BufferType.SPANNABLE)
-    }
-
     fun setOnTextSizeChangeListener(listener: OnTextSizeChangeListener) {
         onTextSizeChangeListener = listener
     }

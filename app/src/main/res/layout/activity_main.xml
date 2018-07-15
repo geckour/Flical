@@ -111,6 +111,9 @@
             android:id="@+id/formula_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_gravity="center_vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none"
             app:layout_constraintBottom_toTopOf="@id/guide_h_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -127,7 +130,6 @@
                 android:longClickable="true"
                 android:singleLine="true"
                 android:textColor="@color/primaryTextColor"
-                android:textIsSelectable="false"
                 tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !"
                 tools:textSize="@dimen/formula_min_textsize"/>
         </com.geckour.flical.ui.view.CalculatorScrollView>
@@ -139,7 +141,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:bufferType="spannable"
-            android:focusable="false"
             android:singleLine="true"
             android:textColor="@color/secondaryTextColor"
             app:layout_constraintBottom_toTopOf="@id/guide_h_t"

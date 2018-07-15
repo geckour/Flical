@@ -100,7 +100,7 @@ class CalculatorFormula
         setTextSizeInternal(unit, size, true)
     }
 
-    fun getVariableTextSize(text: CharSequence): Float {
+    private fun getVariableTextSize(text: CharSequence): Float {
         if (widthConstraint < 0 || maximumTextSize <= minimumTextSize) {
             // Not measured, bail early.
             return textSize

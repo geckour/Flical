@@ -122,16 +122,18 @@
             <com.geckour.flical.ui.view.CalculatorFormula
                 android:id="@+id/formula"
                 style="@style/DisplayTextStyle.Formula"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical|end"
+                android:background="@null"
+                android:cursorVisible="true"
                 android:ellipsize="none"
                 android:gravity="center_vertical|end"
                 android:longClickable="true"
                 android:singleLine="true"
                 android:textColor="@color/primaryTextColor"
-                tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !"
-                tools:textSize="@dimen/formula_min_textsize"/>
+                android:textCursorDrawable="@null"
+                tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !"/>
         </com.geckour.flical.ui.view.CalculatorScrollView>
 
         <com.geckour.flical.ui.view.CalculatorResult

@@ -107,34 +107,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <com.geckour.flical.ui.view.CalculatorScrollView
-            android:id="@+id/formula_container"
+        <com.geckour.flical.ui.view.CalculatorFormula
+            android:id="@+id/formula"
+            style="@style/DisplayTextStyle.Formula"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_gravity="center_vertical"
-            android:overScrollMode="never"
-            android:scrollbars="none"
+            android:layout_gravity="center_vertical|end"
+            android:background="@null"
+            android:ellipsize="none"
+            android:gravity="center_vertical|end"
+            android:singleLine="true"
+            android:textColor="@color/primaryTextColor"
             app:layout_constraintBottom_toTopOf="@id/guide_h_input"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.geckour.flical.ui.view.CalculatorFormula
-                android:id="@+id/formula"
-                style="@style/DisplayTextStyle.Formula"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical|end"
-                android:background="@null"
-                android:cursorVisible="true"
-                android:ellipsize="none"
-                android:gravity="center_vertical|end"
-                android:longClickable="true"
-                android:singleLine="true"
-                android:textColor="@color/primaryTextColor"
-                android:textCursorDrawable="@null"
-                tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !"/>
-        </com.geckour.flical.ui.view.CalculatorScrollView>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !"/>
 
         <com.geckour.flical.ui.view.CalculatorResult
             android:id="@+id/resultPreview"

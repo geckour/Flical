@@ -14,10 +14,9 @@
     </style>
 
     <style name="DisplayTextStyle" parent="@android:style/Widget.Material.Light.TextView">
-        <item name="android:cursorVisible">false</item>
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:includeFontPadding">false</item>
-        <item name="android:gravity">bottom|end</item>
+        <item name="android:gravity">center_vertical|end</item>
         <item name="android:textAlignment">viewEnd</item>
     </style>
 
@@ -26,7 +25,6 @@
         <item name="android:paddingBottom">@dimen/formula_padding_bottom</item>
         <item name="android:paddingStart">@dimen/formula_padding_start</item>
         <item name="android:paddingEnd">@dimen/formula_padding_end</item>
-        <item name="android:gravity">center_vertical</item>
         <item name="minTextSize">@dimen/formula_min_textsize</item>
         <item name="maxTextSize">@dimen/formula_max_textsize</item>
         <item name="stepTextSize">@dimen/formula_step_textsize</item>
@@ -37,7 +35,6 @@
         <item name="android:paddingBottom">@dimen/result_padding_bottom</item>
         <item name="android:paddingStart">@dimen/result_padding_start</item>
         <item name="android:paddingEnd">@dimen/result_padding_end</item>
-        <item name="android:gravity">center_vertical</item>
         <item name="android:textSize">@dimen/result_textsize</item>
     </style>
 

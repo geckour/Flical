@@ -3,7 +3,6 @@ package com.geckour.flical.ui
 import android.content.SharedPreferences
 import android.databinding.DataBindingUtil
 import android.graphics.BitmapFactory
-import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
@@ -31,138 +30,148 @@ class MainActivity : AppCompatActivity() {
 
     private val bgBounds = Rect()
 
-    private val buttons = Buttons(
-            listOf(
-                    listOf(
-                            Buttons.Button(Command(ItemType.M, "M"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.MR, "MR"),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "7"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "4"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "1"),
-                                    Command(ItemType.A_COS, "cos⁻¹"),
-                                    Command(ItemType.A_SIN, "sin⁻¹"),
-                                    Command(ItemType.A_TAN, "tan⁻¹"),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "."),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.PI, "π"),
-                                    Command(ItemType.E, "e"),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED)
-                    ),
-                    listOf(
-                            Buttons.Button(Command(ItemType.LEFT, "◀"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "8"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "5"),
-                                    Command(ItemType.LEFT_BRA, "("),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.RIGHT_BRA, ")"),
-                                    Command(ItemType.ABS, "ABS"),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "2"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "0"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.ZERO2, "00"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED)
-                    ),
-                    listOf(
-                            Buttons.Button(Command(ItemType.RIGHT, "▶"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "9"),
-                                    Command(ItemType.LOG10, "log₁₀"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.LOG2, "log₂"),
-                                    Command(ItemType.LN, "ln"),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "6"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.NUMBER, "3"),
-                                    Command(ItemType.COS, "cos"),
-                                    Command(ItemType.SIN, "sin"),
-                                    Command(ItemType.TAN, "tan"),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.CALC, "="),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED)
-                    ),
-                    listOf(
-                            Buttons.Button(Command(ItemType.DEL, "DEL"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.AC, "AC"),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.DIV, "÷"),
-                                    Command(ItemType.MOD, "%"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.MULTI, "×"),
-                                    Command(ItemType.POW, "^"),
-                                    Command(ItemType.FACTOR, "!"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.SQRT, "√"),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.MINUS, "-"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED),
-                            Buttons.Button(Command(ItemType.PLUS, "+"),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Command(ItemType.NONE),
-                                    Buttons.Button.Area.UNDEFINED)
-                    )
-            )
-    )
+    private val buttons by lazy {
+        Buttons(
+                listOf(
+                        listOf(
+                                Buttons.Button(Command(ItemType.M, "M"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.MR, "MR"),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "7"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "4"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "1"),
+                                        Command(ItemType.A_COS, "cos⁻¹"),
+                                        Command(ItemType.A_SIN, "sin⁻¹"),
+                                        Command(ItemType.A_TAN, "tan⁻¹"),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "."),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.PI, "π"),
+                                        Command(ItemType.E, "e"),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED)
+                        ),
+                        listOf(
+                                Buttons.Button(Command(ItemType.LEFT, "◀"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "8"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "5"),
+                                        Command(ItemType.LEFT_BRA, "("),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.RIGHT_BRA, ")"),
+                                        Command(ItemType.ABS, "ABS"),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "2"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "0"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.ZERO2, "00"),
+                                        Command(ItemType.NUMBER, getString(R.string.tax)),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED)
+                        ),
+                        listOf(
+                                Buttons.Button(Command(ItemType.RIGHT, "▶"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "9"),
+                                        Command(ItemType.LOG10, "log₁₀"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.LOG2, "log₂"),
+                                        Command(ItemType.LN, "ln"),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "6"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.NUMBER, "3"),
+                                        Command(ItemType.COS, "cos"),
+                                        Command(ItemType.SIN, "sin"),
+                                        Command(ItemType.TAN, "tan"),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.CALC, "="),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED)
+                        ),
+                        listOf(
+                                Buttons.Button(Command(ItemType.DEL, "DEL"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.AC, "AC"),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.DIV, "÷"),
+                                        Command(ItemType.MOD, "%"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.MULTI, "×"),
+                                        Command(ItemType.POW, "^"),
+                                        Command(ItemType.FACTOR, "!"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.SQRT, "√"),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.MINUS, "-"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED),
+                                Buttons.Button(Command(ItemType.PLUS, "+"),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Command(ItemType.NONE),
+                                        Buttons.Button.Area.UNDEFINED)
+                        )
+                )
+        )
+    }
+
+    private val onInserted: (positionToMove: Int) -> Unit = {
+        binding.formula.cursorPosition = it
+    }
+
+    private val onRemoved: (positionToMove: Int) -> Unit = {
+        binding.formula.cursorPosition = it
+    }
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -192,10 +201,12 @@ class MainActivity : AppCompatActivity() {
         binding.bg00.addOnLayoutChangeListener { _, left, top, right, bottom, _, _, _, _ ->
             bgBounds.set(0, 0, right - left, bottom - top)
             mainBounds.set(
-                    bgBounds.width() * -0.15f,
-                    bgBounds.height() * -0.15f,
-                    bgBounds.width() * 0.15f,
-                    bgBounds.height() * 0.15f)
+                    bgBounds.width() * 0.3f,
+                    bgBounds.height() * 0.3f,
+                    bgBounds.width() * 0.7f,
+                    bgBounds.height() * 0.7f)
+
+            Timber.d("bgBounds: $bgBounds, mainBounds: $mainBounds")
         }
 
         (0..buttons.list.lastIndex).forEach { column ->
@@ -207,25 +218,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onButtonTouch(view: View, event: MotionEvent): Boolean {
-        view.tag = when (event.action) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> PointF(event.x, event.y)
-
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> null
-
-            else -> view.tag
-        }
-
-        val diP = (view.tag as? PointF?)?.let {
-            PointF(it.x - event.x, it.y - event.y)
-        }
-
         val area =
-                if (diP == null) Buttons.Button.Area.UNDEFINED
-                else {
+                if (event.action == MotionEvent.ACTION_UP
+                        || event.action == MotionEvent.ACTION_POINTER_UP) {
+                    Buttons.Button.Area.UNDEFINED
+                } else {
                     if (event.action == MotionEvent.ACTION_DOWN
                             || event.action == MotionEvent.ACTION_POINTER_DOWN
-                            || (bgBounds.contains(diP.x.toInt(), diP.y.toInt())
-                                    && mainBounds.contains(diP.x, diP.y))) {
+                            || mainBounds.contains(event.x, event.y)) {
                         Buttons.Button.Area.MAIN
                     } else {
                         val x = event.x - bgBounds.centerX()
@@ -282,34 +282,46 @@ class MainActivity : AppCompatActivity() {
                     Buttons.Button.Area.UNDEFINED -> null
                 } ?: return
 
-                commandList = command.parse(commandList)
-
                 when {
+                    command.type == ItemType.RIGHT -> {
+                        binding.formula.cursorPosition++
+                    }
+
+                    command.type == ItemType.LEFT -> {
+                        binding.formula.cursorPosition--
+                    }
+
                     command.type == ItemType.M -> {
                         memory = commandList
                     }
 
                     command.type == ItemType.MR -> {
-                        commandList += memory
+                        commandList = commandList.insert(memory, binding.formula.cursorPosition, onInserted)
                     }
 
-                    command.type == ItemType.CALC || commandList.isEmpty() -> {
-                        binding.resultPreview.text = null
-                    }
-
-                    else -> {
-                        val result = commandList.invoke(Command(ItemType.CALC))
-
-                        if (commandList.normalize().size > 1
-                                && result.lastOrNull()?.type == ItemType.NUMBER) {
-                            binding.resultPreview.onEvaluate(result, precision)
-                        } else {
-                            binding.resultPreview.redisplay()
-                        }
+                    command.type == ItemType.DEL -> {
+                        commandList = commandList.remove(binding.formula.cursorPosition, onRemoved)
                     }
                 }
 
-                binding.formula.text = commandList.getDisplayString()
+                commandList =
+                        if (command.isSpecial) commandList.invoke(command)
+                        else commandList.insert(listOf(command), binding.formula.cursorPosition, onInserted).purify()
+
+                if (command.type == ItemType.CALC || commandList.isEmpty()) {
+                    binding.resultPreview.setText(null)
+                } else {
+                    val result = commandList.invoke(Command(ItemType.CALC))
+
+                    if (commandList.normalize().size > 1
+                            && result.lastOrNull()?.type == ItemType.NUMBER) {
+                        binding.resultPreview.onEvaluate(result, precision)
+                    } else {
+                        binding.resultPreview.redisplay()
+                    }
+                }
+
+                binding.formula.setText(commandList.getDisplayString())
             }
         }
 

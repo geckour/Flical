@@ -29,8 +29,6 @@ enum class ItemType(val weight: Int? = null) {
     LOG10(1),
     LOG2(1),
     ABS(1),
-    COPY,
-    PASTE,
     M,
     MR,
     DEL,

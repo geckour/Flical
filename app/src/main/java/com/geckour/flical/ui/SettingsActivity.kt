@@ -5,10 +5,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivitySettingsBinding
 import com.geckour.flical.model.SettingsItem

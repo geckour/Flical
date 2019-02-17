@@ -1,13 +1,13 @@
 package com.geckour.flical.ui
 
 import android.content.SharedPreferences
-import android.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.preference.PreferenceManager
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MotionEvent
 import android.view.View
 import com.geckour.flical.R

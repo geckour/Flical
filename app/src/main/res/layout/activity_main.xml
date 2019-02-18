@@ -1,18 +1,2048 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-</android.support.constraint.ConstraintLayout>
+        <import type="com.geckour.flical.model.Buttons" />
+
+        <import type="androidx.core.content.ContextCompat" />
+
+        <variable
+            name="buttons"
+            type="com.geckour.flical.model.Buttons" />
+
+        <variable
+            name="background"
+            type="android.graphics.Bitmap" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@{background == null ? @color/backgroundColor : @android:color/transparent}"
+        tools:background="@color/backgroundColor"
+        tools:context=".ui.main.MainActivity">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcBitmap="@{background}" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_v_01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_v_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_v_23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_h_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.275" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_h_t"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_h_01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.52" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_h_12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.64" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_h_23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.76" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guide_h_34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.88" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/inputBackgroundColor"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_t"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.geckour.flical.ui.view.CalculatorFormula
+            android:id="@+id/formula"
+            style="@style/DisplayTextStyle.Formula"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center_vertical|end"
+            android:background="@null"
+            android:ellipsize="none"
+            android:gravity="center_vertical|end"
+            android:singleLine="true"
+            android:textColor="@color/primaryTextColor"
+            android:textIsSelectable="true"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_input"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !" />
+
+        <com.geckour.flical.ui.view.CalculatorResult
+            android:id="@+id/resultPreview"
+            style="@style/DisplayTextStyle.Result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:bufferType="spannable"
+            android:singleLine="true"
+            android:textColor="@color/secondaryTextColor"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_t"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_input"
+            tools:text="= 2395007990" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/backgroundMaskColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guide_h_t" />
+
+        <ImageView
+            android:id="@+id/bg00"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(0).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(0).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:src="@drawable/bg_button_highlight_right" />
+
+        <TextView
+            android:id="@+id/main00"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(0).get(0).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="COPY" />
+
+        <TextView
+            android:id="@+id/sub000"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(0).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/main00"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub001"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(0).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main00"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="PASTE" />
+
+        <TextView
+            android:id="@+id/sub002"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(0).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toEndOf="@id/guide_v_01"
+            app:layout_constraintStart_toEndOf="@id/main00"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub003"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(0).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main00"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg10"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(1).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(0).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
+
+        <TextView
+            android:id="@+id/main10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(1).get(0).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="MR" />
+
+        <TextView
+            android:id="@+id/sub100"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(0).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/main10"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="MC" />
+
+        <TextView
+            android:id="@+id/sub101"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(0).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main10"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="M-" />
+
+        <TextView
+            android:id="@+id/sub102"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(0).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/main10"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="M+" />
+
+        <TextView
+            android:id="@+id/sub103"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(0).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/main10"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg20"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(2).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(0).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
+
+        <TextView
+            android:id="@+id/main20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(2).get(0).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="DEL" />
+
+        <TextView
+            android:id="@+id/sub200"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(0).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/main20"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub201"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(0).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main20"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="AC" />
+
+        <TextView
+            android:id="@+id/sub202"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(0).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/main20"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub203"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(0).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/main20"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg30"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(3).get(0).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(0).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t" />
+
+        <TextView
+            android:id="@+id/main30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(3).get(0).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub300"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(0).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toStartOf="@id/main30"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="◀" />
+
+        <TextView
+            android:id="@+id/sub301"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(0).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main30"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="▲" />
+
+        <TextView
+            android:id="@+id/sub302"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(0).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/main30"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_t"
+            tools:text="▶" />
+
+        <TextView
+            android:id="@+id/sub303"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(0).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_01"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/main30"
+            tools:text="▼" />
+
+        <ImageView
+            android:id="@+id/bg01"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(0).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(1).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+
+        <TextView
+            android:id="@+id/main01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(0).get(1).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="7" />
+
+        <TextView
+            android:id="@+id/sub010"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(1).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/main01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub011"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(1).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main01"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub012"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(1).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toEndOf="@id/guide_v_01"
+            app:layout_constraintStart_toEndOf="@id/main01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub013"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(1).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main01"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg11"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(1).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(1).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+
+        <TextView
+            android:id="@+id/main11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(1).get(1).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="8" />
+
+        <TextView
+            android:id="@+id/sub110"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(1).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/main11"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub111"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(1).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main11"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub112"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(1).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/main11"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub113"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(1).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/main11"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg21"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(2).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(1).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+
+        <TextView
+            android:id="@+id/main21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(2).get(1).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="9" />
+
+        <TextView
+            android:id="@+id/sub210"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(1).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/main21"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="ᵈ/dx" />
+
+        <TextView
+            android:id="@+id/sub211"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(1).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main21"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="x" />
+
+        <TextView
+            android:id="@+id/sub212"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(1).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/main21"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="∫" />
+
+        <TextView
+            android:id="@+id/sub213"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(1).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/main21"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg31"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(3).get(1).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(1).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01" />
+
+        <TextView
+            android:id="@+id/main31"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(3).get(1).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="÷" />
+
+        <TextView
+            android:id="@+id/sub310"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(1).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toStartOf="@id/main31"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="%" />
+
+        <TextView
+            android:id="@+id/sub311"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(1).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main31"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="√" />
+
+        <TextView
+            android:id="@+id/sub312"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(1).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/main31"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_01"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub313"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(1).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/main31"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg02"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(0).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(2).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+
+        <TextView
+            android:id="@+id/main02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(0).get(2).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="4" />
+
+        <TextView
+            android:id="@+id/sub020"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(2).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/main02"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub021"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(2).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main02"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub022"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(2).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toEndOf="@id/guide_v_01"
+            app:layout_constraintStart_toEndOf="@id/main02"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub023"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(2).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main02"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg12"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(1).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(2).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+
+        <TextView
+            android:id="@+id/main12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(1).get(2).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="5" />
+
+        <TextView
+            android:id="@+id/sub120"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(2).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/main12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="(" />
+
+        <TextView
+            android:id="@+id/sub121"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(2).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main12"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="ABS" />
+
+        <TextView
+            android:id="@+id/sub122"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(2).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/main12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text=")" />
+
+        <TextView
+            android:id="@+id/sub123"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(2).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/main12"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg22"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(2).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(2).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+
+        <TextView
+            android:id="@+id/main22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(2).get(2).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="6" />
+
+        <TextView
+            android:id="@+id/sub220"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(2).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/main22"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="log₁₀" />
+
+        <TextView
+            android:id="@+id/sub221"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(2).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main22"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub222"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(2).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/main22"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="log₂" />
+
+        <TextView
+            android:id="@+id/sub223"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(2).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/main22"
+            tools:text="ln" />
+
+        <ImageView
+            android:id="@+id/bg32"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(3).get(2).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(2).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12" />
+
+        <TextView
+            android:id="@+id/main32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(3).get(2).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="×" />
+
+        <TextView
+            android:id="@+id/sub320"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(2).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toStartOf="@id/main32"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="^" />
+
+        <TextView
+            android:id="@+id/sub321"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(2).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main32"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub322"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(2).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/main32"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_12"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub323"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(2).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_23"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/main32"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg03"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(0).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(3).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+
+        <TextView
+            android:id="@+id/main03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(0).get(3).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="1" />
+
+        <TextView
+            android:id="@+id/sub030"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(3).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/main03"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="cos⁻¹" />
+
+        <TextView
+            android:id="@+id/sub031"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(3).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main03"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="sin⁻¹" />
+
+        <TextView
+            android:id="@+id/sub032"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(3).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toEndOf="@id/guide_v_01"
+            app:layout_constraintStart_toEndOf="@id/main03"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="tan⁻¹" />
+
+        <TextView
+            android:id="@+id/sub033"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(3).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main03"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg13"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(1).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(3).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+
+        <TextView
+            android:id="@+id/main13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(1).get(3).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="2" />
+
+        <TextView
+            android:id="@+id/sub130"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(3).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/main13"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub131"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(3).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main13"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub132"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(3).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/main13"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub133"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(3).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/main13"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg23"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(2).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(3).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+
+        <TextView
+            android:id="@+id/main23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(2).get(3).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="3" />
+
+        <TextView
+            android:id="@+id/sub230"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(3).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/main23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="cos" />
+
+        <TextView
+            android:id="@+id/sub231"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(3).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main23"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="sin" />
+
+        <TextView
+            android:id="@+id/sub232"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(3).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/main23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="tan" />
+
+        <TextView
+            android:id="@+id/sub233"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(3).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/main23"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg33"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(3).get(3).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(3).getBgResId())}"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23" />
+
+        <TextView
+            android:id="@+id/main33"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(3).get(3).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="-" />
+
+        <TextView
+            android:id="@+id/sub330"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(3).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toStartOf="@id/main33"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub331"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(3).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main33"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub332"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(3).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/main33"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_23"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub333"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(3).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/guide_h_34"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/main33"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg04"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(0).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(0).get(4).getBgResId())}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+
+        <TextView
+            android:id="@+id/main04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(0).get(4).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="." />
+
+        <TextView
+            android:id="@+id/sub040"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(4).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main04"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub041"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(4).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main04"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="π" />
+
+        <TextView
+            android:id="@+id/sub042"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(0).get(4).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guide_v_01"
+            app:layout_constraintStart_toEndOf="@id/main04"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="e" />
+
+        <TextView
+            android:id="@+id/sub043"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(0).get(4).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_01"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main04"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg14"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(1).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(1).get(4).getBgResId())}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+
+        <TextView
+            android:id="@+id/main14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(1).get(4).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/sub140"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(4).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main14"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub141"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(4).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main14"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="00" />
+
+        <TextView
+            android:id="@+id/sub142"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(1).get(4).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/main14"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub143"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(1).get(4).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_12"
+            app:layout_constraintStart_toEndOf="@id/guide_v_01"
+            app:layout_constraintTop_toBottomOf="@id/main14"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg24"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(2).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(2).get(4).getBgResId())}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+
+        <TextView
+            android:id="@+id/main24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(2).get(4).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="=" />
+
+        <TextView
+            android:id="@+id/sub240"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(4).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main24"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub241"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(4).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main24"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="ANS" />
+
+        <TextView
+            android:id="@+id/sub242"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(2).get(4).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/main24"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub243"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(2).get(4).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guide_v_23"
+            app:layout_constraintStart_toEndOf="@id/guide_v_12"
+            app:layout_constraintTop_toBottomOf="@id/main24"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/bg34"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:src="@{buttons.list.get(3).get(4).getBgResId() == 0 ? null : ContextCompat.getDrawable(context, buttons.list.get(3).get(4).getBgResId())}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34" />
+
+        <TextView
+            android:id="@+id/main34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:lineSpacingExtra="0dp"
+            android:minWidth="@dimen/buttonPrimaryText"
+            android:text="@{buttons.list.get(3).get(4).main.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonPrimaryText"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="+" />
+
+        <TextView
+            android:id="@+id/sub340"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(4).left.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/main34"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="Σ" />
+
+        <TextView
+            android:id="@+id/sub341"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(4).top.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toTopOf="@id/main34"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub342"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:padding="4dp"
+            android:text="@{buttons.list.get(3).get(4).right.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/main34"
+            app:layout_constraintTop_toBottomOf="@id/guide_h_34"
+            tools:text="" />
+
+        <TextView
+            android:id="@+id/sub343"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="@{buttons.list.get(3).get(4).bottom.text}"
+            android:textColor="@color/primaryTextInvertColor"
+            android:textSize="@dimen/buttonSecondaryText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guide_v_23"
+            app:layout_constraintTop_toBottomOf="@id/main34"
+            tools:text="" />
+
+        <ImageView
+            android:id="@+id/buttonSetting"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_button_round"
+            android:padding="4dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_settings_20px"
+            android:tint="@color/buttonTintColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

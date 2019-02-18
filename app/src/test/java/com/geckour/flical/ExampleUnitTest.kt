@@ -1,4 +1,4 @@
-package com.geckour.paincalcmate
+package com.geckour.flical
 
 import org.junit.Test
 

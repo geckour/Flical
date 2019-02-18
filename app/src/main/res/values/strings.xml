@@ -1,3 +1,10 @@
 <resources>
-    <string name="app_name">PainCalcMate</string>
+    <string name="app_name">Flical</string>
+
+    <string name="title_settings">Settings</string>
+
+    <string name="settings_item_title_set_bg_image">Set Background image</string>
+    <string name="settings_item_desc_set_bg_image">Change background image by pick media in device</string>
+    <string name="settings_item_title_clear_bg_image">Remove Background image</string>
+    <string name="settings_item_desc_clear_bg_image">Remove background image if already set</string>
 </resources>

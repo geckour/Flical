@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="buttonPrimaryText">26sp</dimen>
+    <dimen name="buttonSecondaryText">14sp</dimen>
+
+    <!-- Dimens for display formula. -->
+    <dimen name="formula_padding_top">0dp</dimen>
+    <dimen name="formula_padding_bottom">0dp</dimen>
+    <dimen name="formula_padding_start">16dp</dimen>
+    <dimen name="formula_padding_end">16dp</dimen>
+    <dimen name="formula_min_textsize">44sp</dimen>
+    <dimen name="formula_max_textsize">80sp</dimen>
+    <dimen name="formula_step_textsize">8sp</dimen>
+    <!-- Dimens for display result. -->
+    <dimen name="result_padding_top">0dp</dimen>
+    <dimen name="result_padding_bottom">0dp</dimen>
+    <dimen name="result_padding_start">16dp</dimen>
+    <dimen name="result_padding_end">16dp</dimen>
+    <dimen name="result_textsize">40sp</dimen>
+</resources>

@@ -213,10 +213,7 @@ fun List<Command>.toRpn(): List<Command> {
 
     returnList.addAll(stack.reversed())
 
-    return returnList.apply {
-        Timber.d("original: ${this@toRpn.map { it.text }}")
-        Timber.d("rpn: ${this.map { it.text }}")
-    }
+    return returnList
 }
 
 fun List<Command>.calculate(): Command? =

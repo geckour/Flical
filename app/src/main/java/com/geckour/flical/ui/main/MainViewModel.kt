@@ -212,8 +212,6 @@ class MainViewModel : ViewModel() {
                 bgBounds.width() * 0.7f,
                 bgBounds.height() * 0.7f
             )
-
-            Timber.d("bgBounds: $bgBounds, mainBounds: $mainBounds")
         }
 
         repeat(buttons.list.size) { column ->

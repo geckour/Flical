@@ -25,14 +25,14 @@ data class ExBigDecimal(
 var precision: Int = 0
 
 fun List<Command>.getDisplayString(): String =
-    this.normalize()
+    normalize()
         .mapNotNull { it.text?.let { " $it" } }
         .joinToString("")
         .trim()
         .clean()
 
 private fun String.clean(): String =
-    replace(Regex("^(.*[^0.])0+?$"), "$1")
+    replace(Regex("^(.*\\.\\d+?)0+$"), "$1")
 
 fun String.deserialize(): List<Command> =
     split(" ")
@@ -83,7 +83,7 @@ fun List<Command>.invoke(command: Command): List<Command> =
     when (command.type) {
         ItemType.AC -> emptyList()
         ItemType.CALC -> {
-            this.normalize()
+            normalize()
                 .toRpn()
                 .calculate()?.let {
                     listOf(
@@ -95,10 +95,11 @@ fun List<Command>.invoke(command: Command): List<Command> =
         else -> this
     }
 
-fun MutableList<Command>.invoke(command: Command) {
+fun MutableList<Command>.invoke(command: Command, onInvoked: (position: Int) -> Unit = {}) {
     val result = this.toList().invoke(command)
     this.clear()
     this.addAll(result)
+    onInvoked(getDisplayString().length)
 }
 
 fun List<Command>.normalize(): List<Command> =
@@ -114,8 +115,8 @@ fun List<Command>.normalize(): List<Command> =
         return@fold mutableList
     }
 
-fun MutableList<Command>.purify() {
-    this.removeAll { it.type == ItemType.NONE }
+private fun MutableList<Command>.purify() {
+    removeAll { it.type == ItemType.NONE }
 }
 
 fun MutableList<Command>.insert(
@@ -123,11 +124,23 @@ fun MutableList<Command>.insert(
     position: Int = 0,
     onInserted: (position: Int) -> Unit = {}
 ) {
-    val index = this.getIndexFromPosition(position) + 1
-    val textLength = this.getDisplayString().length
+    val textLengthBeforePurify = getDisplayString().length
+    purify()
+    mutilateNumbers()
+    val normalizedPosition = (position + getDisplayString().length - textLengthBeforePurify).let {
+        if (it < 0) 0 else it
+    }
+    val index = getIndexFromPosition(normalizedPosition) + 1
+    val textLength = getDisplayString().length
     addAll(index, commands.mutilateNumbers())
-    val positionToMove = position + this.getDisplayString().length - textLength
+    val positionToMove = normalizedPosition + getDisplayString().length - textLength
     onInserted(positionToMove)
+}
+
+private fun MutableList<Command>.mutilateNumbers() {
+    val result = this.toList().mutilateNumbers()
+    this.clear()
+    this.addAll(result)
 }
 
 private fun List<Command>.mutilateNumbers(): List<Command> =
@@ -140,15 +153,15 @@ private fun List<Command>.mutilateNumbers(): List<Command> =
 fun MutableList<Command>.remove(position: Int = 0, onRemoved: (position: Int) -> Unit = {}) {
     if (position > 0) {
         val index = getIndexFromPosition(position)
-        val textLength = this.getDisplayString().length
+        val textLength = getDisplayString().length
         removeAt(index)
-        val positionToMove = position + this.getDisplayString().length - textLength
+        val positionToMove = position + getDisplayString().length - textLength
         onRemoved(positionToMove)
     }
 }
 
 private fun List<Command>.getIndexFromPosition(position: Int): Int {
-    if (position < 0) return this.lastIndex
+    if (position <= 0) return -1
 
     repeat(this.size) {
         val length = this.subList(0, it + 1).getDisplayString().length

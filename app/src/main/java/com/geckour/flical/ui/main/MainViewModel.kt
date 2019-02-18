@@ -321,14 +321,14 @@ class MainViewModel : ViewModel() {
                     }
                 }
 
-                if (command.isSpecial) commandList.invoke(command)
+                if (command.isSpecial)
+                    commandList.invoke(command, onPositionToMoveChanged)
                 else {
                     commandList.insert(
                         listOf(command),
                         binding.formula.cursorPosition,
                         onPositionToMoveChanged
                     )
-                    commandList.purify()
                 }
 
                 if (command.type == ItemType.CALC || commandList.isEmpty())
@@ -349,7 +349,6 @@ class MainViewModel : ViewModel() {
             binding.formula.cursorPosition,
             onPositionToMoveChanged
         )
-        commandList.purify()
 
         refreshResult(binding)
         refreshFormula(binding)

@@ -342,7 +342,6 @@ class MainViewModel : ViewModel() {
 
     internal fun onTextPasted(binding: ActivityMainBinding, text: String) {
         val deserialized = text.deserialize()
-        Timber.d("fgeck deserialized: $deserialized")
         commandList.insert(
             deserialized,
             binding.formula.cursorPosition,

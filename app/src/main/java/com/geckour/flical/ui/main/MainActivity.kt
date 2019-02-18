@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
             if (it != null) viewModel.onTextPasted(binding, it)
         }
         binding.formula.requestFocus()
+        binding.formula.showSoftInputOnFocus = false
     }
 
     override fun onResume() {

@@ -27,7 +27,7 @@ class CalculatorFormula
 
     var cursorPosition: Int = -1
         get() = when {
-            field < 0 || field > text.length -> text.length
+            field < 0 || field > text?.length ?: 0 -> text?.length ?: 0
             else -> field
         }
 
@@ -70,7 +70,7 @@ class CalculatorFormula
 
         // Re-calculate our textSize based on new width.
         widthConstraint = (View.MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight)
-        val textSize = getVariableTextSize(text)
+        val textSize = getVariableTextSize(text ?: "")
         if (getTextSize() != textSize) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         }

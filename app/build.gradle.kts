@@ -53,6 +53,11 @@ dependencies {
     // Logging
     implementation(Deps.Timber.timber)
 
+    // ViewModel
+    implementation(Deps.AndroidX.Lifecycle.extensions)
+    implementation(Deps.AndroidX.Lifecycle.viewModelKtx)
+    kapt(Deps.AndroidX.Lifecycle.compiler)
+
     // Permission
     implementation(Deps.PermissionDispatcher.permissionDispatcher)
     kapt(Deps.PermissionDispatcher.processor)

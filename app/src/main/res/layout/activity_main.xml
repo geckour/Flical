@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:background="@{background == null ? @color/backgroundColor : @android:color/transparent}"
         tools:background="@color/backgroundColor"
-        tools:context=".ui.MainActivity">
+        tools:context=".ui.main.MainActivity">
 
         <ImageView
             android:layout_width="0dp"

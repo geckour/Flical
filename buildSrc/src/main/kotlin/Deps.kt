@@ -15,7 +15,7 @@ object Deps {
         const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
 
         const val compileSdkVersion = 28
-        const val minSdkVersion = 14
+        const val minSdkVersion = 24
         const val targetSdkVersion = 28
     }
 

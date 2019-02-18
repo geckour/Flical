@@ -1,14 +1,16 @@
-package com.geckour.flical.ui
+package com.geckour.flical.ui.settings
 
 import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.databinding.DataBindingUtil
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.viewModelScope
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivitySettingsBinding
 import com.geckour.flical.model.SettingsItem
@@ -30,13 +32,17 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivitySettingsBinding
-    private lateinit var sharedPreferences: SharedPreferences
+    private val viewModel: SettingsViewModel by lazy {
+        ViewModelProviders.of(this)[SettingsViewModel::class.java]
+    }
+    private val sharedPreferences: SharedPreferences by lazy {
+        PreferenceManager.getDefaultSharedPreferences(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         supportActionBar?.setTitle(R.string.title_settings)
 
@@ -59,7 +65,13 @@ class SettingsActivity : AppCompatActivity() {
         when (requestCode) {
             RequestCode.REQUEST_CODE_PICK_MEDIA.ordinal -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.apply { sharedPreferences.setBgImageUri(this@SettingsActivity, this) }
+                    data?.data?.apply {
+                        sharedPreferences.setBgImageUri(
+                                this@SettingsActivity,
+                                viewModel.viewModelScope,
+                                this
+                        )
+                    }
                 }
             }
         }

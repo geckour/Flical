@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.net.Uri
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
@@ -13,20 +14,20 @@ enum class SettingsKey(val default: Any? = null) {
 }
 
 fun SharedPreferences.getBgImageUri(): Uri? = getSettingsValue<String>(SettingsKey.BG_IMAGE_URI)?.toUri()
-fun SharedPreferences.setBgImageUri(context: Context, uri: Uri) {
-    async {
+fun SharedPreferences.setBgImageUri(context: Context, coroutineScope: CoroutineScope, uri: Uri) {
+    coroutineScope.launch {
         val dirName = "images"
         val fileName = "bg_image"
-        val dir = context.filesDir.let { File(it, dirName) }
+        val dir = File(context.filesDir, dirName)
         val file = File(dir, fileName)
 
         if (file.exists()) file.delete()
         if (dir.exists().not()) dir.mkdir()
 
-        val bitmap = uri.extractMediaBitmap(context) ?: return@async
+        val bitmap = uri.extractMediaBitmap(context) ?: return@launch
 
         FileOutputStream(file).use {
-            val type = context.contentResolver.getType(uri).parseMimeType()
+            val type = context.contentResolver.getType(uri)?.parseMimeType()
                     ?: Bitmap.CompressFormat.JPEG
             bitmap.compress(type, 100, it)
             it.flush()

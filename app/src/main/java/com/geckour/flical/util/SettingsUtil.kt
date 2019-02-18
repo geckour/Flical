@@ -8,7 +8,6 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 

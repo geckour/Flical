@@ -13,6 +13,8 @@ object Deps {
     object GradlePlugin {
         const val android = "com.android.tools.build:gradle:3.3.1"
         const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
+        const val googleService = "com.google.gms:google-services:4.0.1"
+        const val fabric = "io.fabric.tools:gradle:1.26.1"
 
         const val compileSdkVersion = 28
         const val minSdkVersion = 24
@@ -56,5 +58,10 @@ object Deps {
 
     object Exif {
         const val exifInterface = "androidx.exifinterface:exifinterface:1.0.0"
+    }
+
+    object Firebase {
+        const val core = "com.google.firebase:firebase-core:16.0.4"
+        const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.9.3"
     }
 }

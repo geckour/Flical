@@ -1,8 +1,8 @@
 package com.geckour.flical.util
 
-import androidx.databinding.BindingAdapter
 import android.graphics.Bitmap
 import android.widget.ImageView
+import androidx.databinding.BindingAdapter
 
 @BindingAdapter("app:srcBitmap")
 fun loadImage(imageView: ImageView, bitmap: Bitmap?) {

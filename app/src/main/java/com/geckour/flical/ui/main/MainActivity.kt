@@ -3,17 +3,17 @@ package com.geckour.flical.ui.main
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivityMainBinding
+import com.geckour.flical.ui.CrashlyticsEnabledActivity
 import com.geckour.flical.ui.settings.SettingsActivity
 import com.geckour.flical.util.getBgImageUri
 import com.geckour.flical.util.observe
 import com.geckour.flical.util.precision
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : CrashlyticsEnabledActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by lazy {

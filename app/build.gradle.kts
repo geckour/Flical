@@ -1,8 +1,12 @@
+import com.android.build.gradle.internal.packaging.getDefaultDebugKeystoreLocation
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
+    id("io.fabric")
+    id("com.google.gms.google-services") apply false
 }
 
 android {
@@ -15,19 +19,32 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = Deps.Test.instrumentTestRunner
 
-        dataBinding.setEnabled(true)
+        dataBinding.isEnabled = true
 
         val filesAuthorityValue = "$applicationId.files"
         manifestPlaceholders = mapOf("filesAuthority" to filesAuthorityValue)
         buildConfigField("String", "FILES_AUTHORITY", "\"$filesAuthorityValue\"")
     }
+    signingConfigs {
+        getByName("debug") {
+            storeFile = getDefaultDebugKeystoreLocation()
+        }
+        create("release") {
+            val releaseSettingGradleFile = File("${project.rootDir}/app/signing/release.gradle")
+            if (releaseSettingGradleFile.exists())
+                apply(from = releaseSettingGradleFile, to = android)
+            else
+                throw GradleException("Missing ${releaseSettingGradleFile.absolutePath} . Generate the file by copying and modifying ${project.rootDir}/app/signing/release.gradle.sample .")
+        }
+    }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -50,6 +67,10 @@ dependencies {
     implementation(Deps.Kotlin.Coroutines.core)
     implementation(Deps.Kotlin.Coroutines.android)
 
+    // Firebase
+    implementation(Deps.Firebase.core)
+    implementation(Deps.Firebase.crashlytics) { isTransitive = true }
+
     // Logging
     implementation(Deps.Timber.timber)
 
@@ -68,3 +89,5 @@ dependencies {
     // Exif
     implementation(Deps.Exif.exifInterface)
 }
+
+apply(plugin = "com.google.gms.google-services")

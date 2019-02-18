@@ -7,20 +7,20 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.preference.PreferenceManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.viewModelScope
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivitySettingsBinding
 import com.geckour.flical.model.SettingsItem
+import com.geckour.flical.ui.CrashlyticsEnabledActivity
 import com.geckour.flical.util.setBgImageUri
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : CrashlyticsEnabledActivity() {
 
     private enum class RequestCode {
         REQUEST_CODE_PICK_MEDIA

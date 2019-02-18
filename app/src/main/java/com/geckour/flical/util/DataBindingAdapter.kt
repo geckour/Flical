@@ -1,4 +1,4 @@
-package com.geckour.flical.adapter
+package com.geckour.flical.util
 
 import androidx.databinding.BindingAdapter
 import android.graphics.Bitmap

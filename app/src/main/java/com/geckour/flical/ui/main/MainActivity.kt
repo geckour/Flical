@@ -1,7 +1,6 @@
 package com.geckour.flical.ui.main
 
 import android.content.SharedPreferences
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,6 @@ import com.geckour.flical.ui.settings.SettingsActivity
 import com.geckour.flical.util.getBgImageUri
 import com.geckour.flical.util.observe
 import com.geckour.flical.util.precision
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,7 +47,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        injectBackgroundImage()
+        viewModel.injectBackgroundImage(binding, sharedPreferences.getBgImageUri())
     }
 
     private fun observeEvent() {
@@ -57,19 +55,6 @@ class MainActivity : AppCompatActivity() {
             it ?: return@observe
             if (it > -1 && it <= binding.formula.text?.length ?: 0)
                 binding.formula.setSelection(it)
-        }
-    }
-
-    private fun injectBackgroundImage() {
-        sharedPreferences.getBgImageUri().apply {
-            binding.background = this?.let {
-                try {
-                    BitmapFactory.decodeFile(it.path)
-                } catch (t: Throwable) {
-                    Timber.e(t)
-                    null
-                }
-            }
         }
     }
 }

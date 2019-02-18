@@ -53,4 +53,8 @@ object Deps {
     object BigDecimalMath {
         const val bigDecimalMath = "ch.obermuhlner:big-math:2.0.1"
     }
+
+    object Exif {
+        const val exifInterface = "androidx.exifinterface:exifinterface:1.0.0"
+    }
 }

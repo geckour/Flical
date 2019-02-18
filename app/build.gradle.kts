@@ -64,4 +64,7 @@ dependencies {
 
     // BigDecimal Math
     implementation(Deps.BigDecimalMath.bigDecimalMath)
+
+    // Exif
+    implementation(Deps.Exif.exifInterface)
 }

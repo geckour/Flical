@@ -1,8 +1,10 @@
 package com.geckour.flical.ui.main
 
 import android.app.Activity
+import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.RectF
+import android.net.Uri
 import android.view.MotionEvent
 import android.view.View
 import androidx.lifecycle.ViewModel
@@ -367,5 +369,16 @@ class MainViewModel : ViewModel() {
 
     private fun refreshFormula(binding: ActivityMainBinding) {
         binding.formula.setText(commandList.getDisplayString())
+    }
+
+    internal fun injectBackgroundImage(binding: ActivityMainBinding, uri: Uri?) {
+        binding.background = uri?.let {
+            try {
+                BitmapFactory.decodeFile(it.path)
+            } catch (t: Throwable) {
+                Timber.e(t)
+                null
+            }
+        }
     }
 }

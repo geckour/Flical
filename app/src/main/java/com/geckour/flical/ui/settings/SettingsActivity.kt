@@ -28,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
 
     companion object {
         fun getIntent(context: Context): Intent =
-                Intent(context, SettingsActivity::class.java)
+            Intent(context, SettingsActivity::class.java)
     }
 
     private lateinit var binding: ActivitySettingsBinding
@@ -47,14 +47,18 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setTitle(R.string.title_settings)
 
         binding.settingsItemSetBgImage.apply {
-            data = SettingsItem(getString(R.string.settings_item_title_set_bg_image),
-                    getString(R.string.settings_item_desc_set_bg_image))
+            data = SettingsItem(
+                getString(R.string.settings_item_title_set_bg_image),
+                getString(R.string.settings_item_desc_set_bg_image)
+            )
             root.setOnClickListener { pickBgImageWithPermissionCheck() }
         }
 
         binding.settingsItemClearBgImage.apply {
-            data = SettingsItem(getString(R.string.settings_item_title_clear_bg_image),
-                    getString(R.string.settings_item_desc_clear_bg_image))
+            data = SettingsItem(
+                getString(R.string.settings_item_title_clear_bg_image),
+                getString(R.string.settings_item_desc_clear_bg_image)
+            )
             root.setOnClickListener { sharedPreferences.setBgImageUri() }
         }
     }
@@ -67,9 +71,9 @@ class SettingsActivity : AppCompatActivity() {
                 if (resultCode == Activity.RESULT_OK) {
                     data?.data?.apply {
                         sharedPreferences.setBgImageUri(
-                                this@SettingsActivity,
-                                viewModel.viewModelScope,
-                                this
+                            this@SettingsActivity,
+                            viewModel.viewModelScope,
+                            this
                         )
                     }
                 }

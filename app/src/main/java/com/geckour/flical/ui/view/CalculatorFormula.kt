@@ -1,20 +1,21 @@
 package com.geckour.flical.ui.view
 
+import android.content.ClipboardManager
 import android.content.Context
 import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.View
 import com.geckour.flical.R
 import kotlin.math.min
 
 class CalculatorFormula
-@JvmOverloads constructor(context: Context,
-                          attrs: AttributeSet? = null,
-                          defStyleAttr: Int = 0) : AlignedTextView(context, attrs, defStyleAttr) {
+@JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : AlignedTextView(context, attrs, defStyleAttr) {
 
     // Temporary paint for use in layout methods.
     private val tempPaint = TextPaint()
@@ -25,31 +26,29 @@ class CalculatorFormula
 
     private var widthConstraint = -1
 
-    var cursorPosition: Int = -1
+    var onTextPasted: ((String?) -> Unit)? = null
+
+    var cursorPosition: Int = 0
         get() = when {
             field < 0 || field > text?.length ?: 0 -> text?.length ?: 0
             else -> field
         }
-
-    private val gestureDetector: GestureDetector = GestureDetector(context,
-            object : GestureDetector.SimpleOnGestureListener() {
-                override fun onDown(e: MotionEvent?): Boolean = true
-
-                override fun onLongPress(e: MotionEvent) {
-                    cursorPosition = -1
-                    selectAll()
-                }
-            })
+        private set
 
     init {
         val typedArray = context.obtainStyledAttributes(
-                attrs, R.styleable.CalculatorFormula, defStyleAttr, 0)
+            attrs, R.styleable.CalculatorFormula, defStyleAttr, 0
+        )
         maximumTextSize = typedArray.getDimension(
-                R.styleable.CalculatorFormula_maxTextSize, textSize)
+            R.styleable.CalculatorFormula_maxTextSize, textSize
+        )
         minimumTextSize = typedArray.getDimension(
-                R.styleable.CalculatorFormula_minTextSize, textSize)
-        stepTextSize = typedArray.getDimension(R.styleable.CalculatorFormula_stepTextSize,
-                (maximumTextSize - minimumTextSize) / 3)
+            R.styleable.CalculatorFormula_minTextSize, textSize
+        )
+        stepTextSize = typedArray.getDimension(
+            R.styleable.CalculatorFormula_stepTextSize,
+            (maximumTextSize - minimumTextSize) / 3
+        )
         typedArray.recycle()
 
         setTextIsSelectable(true)
@@ -87,17 +86,10 @@ class CalculatorFormula
         setSelection(cursorPosition)
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN -> {
-                val offset = layout.getOffsetForHorizontal(0, event.x + scrollX)
+    override fun onSelectionChanged(selStart: Int, selEnd: Int) {
+        super.onSelectionChanged(selStart, selEnd)
 
-                cursorPosition = offset
-                setSelection(cursorPosition)
-            }
-        }
-
-        return gestureDetector.onTouchEvent(event)
+        cursorPosition = selStart
     }
 
     private fun getVariableTextSize(text: CharSequence): Float {
@@ -120,5 +112,21 @@ class CalculatorFormula
         }
 
         return lastFitTextSize
+    }
+
+    override fun onTextContextMenuItem(id: Int): Boolean {
+        return when (id) {
+            android.R.id.paste -> {
+                val pasted = context?.getSystemService(ClipboardManager::class.java)
+                    ?.primaryClip?.let {
+                    if (it.itemCount > 0)
+                        it.getItemAt(it.itemCount - 1).text.toString()
+                    else null
+                }
+                onTextPasted?.invoke(pasted)
+                true
+            }
+            else -> super.onTextContextMenuItem(id)
+        }
     }
 }

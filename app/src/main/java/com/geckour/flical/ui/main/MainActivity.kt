@@ -39,6 +39,10 @@ class MainActivity : AppCompatActivity() {
         binding.buttonSetting.setOnClickListener {
             startActivity(SettingsActivity.getIntent(this))
         }
+        binding.formula.onTextPasted = {
+            if (it != null) viewModel.onTextPasted(binding, it)
+        }
+        binding.formula.requestFocus()
     }
 
     override fun onResume() {
@@ -50,7 +54,8 @@ class MainActivity : AppCompatActivity() {
     private fun observeEvent() {
         viewModel.positionToMove.observe(this) {
             it ?: return@observe
-            binding.formula.cursorPosition = it
+            if (it > -1 && it <= binding.formula.text?.length ?: 0)
+                binding.formula.setSelection(it)
         }
     }
 

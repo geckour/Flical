@@ -107,7 +107,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.geckour.flical.ui.view.CalculatorFormula
+        <com.geckour.flical.ui.widget.CalculatorFormula
             android:id="@+id/formula"
             style="@style/DisplayTextStyle.Formula"
             android:layout_width="0dp"
@@ -126,7 +126,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="ln ( e ^ 5 ) × cos ( 2 π ) + 12 !" />
 
-        <com.geckour.flical.ui.view.CalculatorResult
+        <com.geckour.flical.ui.widget.CalculatorResult
             android:id="@+id/resultPreview"
             style="@style/DisplayTextStyle.Result"
             android:layout_width="0dp"

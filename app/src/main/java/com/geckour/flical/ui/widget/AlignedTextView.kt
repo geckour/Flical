@@ -1,4 +1,4 @@
-package com.geckour.flical.ui.view
+package com.geckour.flical.ui.widget
 
 import android.content.Context
 import android.graphics.Rect

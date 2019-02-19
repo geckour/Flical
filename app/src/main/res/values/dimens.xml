@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="buttonPrimaryText">26sp</dimen>
-    <dimen name="buttonSecondaryText">14sp</dimen>
-
+    <!-- Dimens for display toolbar -->
+    <dimen name="toolbarText">20sp</dimen>
+    <!-- Dimens for display buttons -->
+    <dimen name="buttonPrimaryText">24sp</dimen>
+    <dimen name="buttonSecondaryText">12sp</dimen>
     <!-- Dimens for display formula. -->
     <dimen name="formula_padding_top">0dp</dimen>
     <dimen name="formula_padding_bottom">0dp</dimen>

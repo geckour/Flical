@@ -44,7 +44,7 @@ class SettingsActivity : CrashlyticsEnabledActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings)
 
-        supportActionBar?.setTitle(R.string.title_settings)
+        setSupportActionBar(binding.toolbar)
 
         binding.settingsItemSetBgImage.apply {
             data = SettingsItem(

@@ -13,6 +13,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.ToolbarTextStyle" parent="AppTheme.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textSize">@dimen/toolbarText</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="DisplayTextStyle" parent="@android:style/Widget.Material.Light.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:includeFontPadding">false</item>

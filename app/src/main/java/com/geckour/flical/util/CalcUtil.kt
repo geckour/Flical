@@ -66,6 +66,9 @@ fun String.deserialize(): List<Command> =
             }
         }
 
+val Command.isAffectOnInvoke: Boolean
+    get() = this.type == ItemType.AC || this.type == ItemType.CALC
+
 val Command.isSpecial: Boolean
     get() = when (this.type) {
         ItemType.LEFT,
@@ -96,10 +99,12 @@ fun List<Command>.invoke(command: Command): List<Command> =
     }
 
 fun MutableList<Command>.invoke(command: Command, onInvoked: (position: Int) -> Unit = {}) {
-    val result = this.toList().invoke(command)
-    this.clear()
-    this.addAll(result)
-    onInvoked(getDisplayString().length)
+    if (command.isAffectOnInvoke) {
+        val result = this.toList().invoke(command)
+        this.clear()
+        this.addAll(result)
+        onInvoked(getDisplayString().length)
+    }
 }
 
 fun List<Command>.normalize(): List<Command> =

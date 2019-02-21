@@ -107,16 +107,18 @@ fun MutableList<Command>.invoke(command: Command, onInvoked: (position: Int) -> 
     }
 }
 
-fun List<Command>.normalize(): List<Command> =
+fun List<Command>.normalize(): List<Command> = // Combine numbers
     fold(mutableListOf()) { mutableList, command ->
         val last = mutableList.lastOrNull()
         if (command.type == ItemType.NUMBER
-            && (last?.type == ItemType.NUMBER || last?.type == ItemType.MINUS)
+            && (last?.type == ItemType.NUMBER ||
+                    (last?.type == ItemType.MINUS && // Process negative number
+                            mutableList.getOrNull(mutableList.lastIndex - 1)?.type // Avoid reckoning multiple operation for example: 5 - 3 -> 5 -3 -> 5 * -3
+                            != ItemType.NUMBER))
         ) {
-            mutableList[mutableList.lastIndex] = last.copy(text = last.text + command.text)
-        } else {
-            mutableList.add(command)
-        }
+            mutableList[mutableList.lastIndex] = Command(ItemType.NUMBER, last.text + command.text)
+        } else mutableList.add(command)
+
         return@fold mutableList
     }
 

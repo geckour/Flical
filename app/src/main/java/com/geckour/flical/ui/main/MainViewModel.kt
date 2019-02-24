@@ -207,10 +207,10 @@ class MainViewModel : ViewModel() {
         binding.bg00.addOnLayoutChangeListener { _, left, top, right, bottom, _, _, _, _ ->
             bgBounds.set(0, 0, right - left, bottom - top)
             mainBounds.set(
-                bgBounds.width() * 0.3f,
-                bgBounds.height() * 0.3f,
-                bgBounds.width() * 0.7f,
-                bgBounds.height() * 0.7f
+                bgBounds.width() * 0.2f,
+                bgBounds.height() * 0.2f,
+                bgBounds.width() * 0.8f,
+                bgBounds.height() * 0.8f
             )
         }
 
@@ -274,7 +274,9 @@ class MainViewModel : ViewModel() {
             R.id.bg24 -> buttons.list[2][4]
             R.id.bg34 -> buttons.list[3][4]
             else -> null
-        }?.reflectState(binding, area, event)
+        }
+            ?.reflectState(binding, event)
+            ?.tapped = area
 
         binding.buttons = buttons
 
@@ -283,9 +285,8 @@ class MainViewModel : ViewModel() {
 
     private fun Buttons.Button.reflectState(
         binding: ActivityMainBinding,
-        area: Buttons.Button.Area,
         event: MotionEvent
-    ) {
+    ): Buttons.Button {
         when (event.action) {
             MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
                 val command = when (this.tapped) {
@@ -295,7 +296,9 @@ class MainViewModel : ViewModel() {
                     Buttons.Button.Area.RIGHT -> this.right
                     Buttons.Button.Area.BOTTOM -> this.bottom
                     Buttons.Button.Area.UNDEFINED -> null
-                } ?: return
+                } ?: return this
+
+                if (command.type == ItemType.NONE) return this
 
                 when {
                     command.type == ItemType.RIGHT -> {
@@ -337,7 +340,7 @@ class MainViewModel : ViewModel() {
             }
         }
 
-        this.tapped = area
+        return this
     }
 
     internal fun onTextPasted(binding: ActivityMainBinding, text: String) {

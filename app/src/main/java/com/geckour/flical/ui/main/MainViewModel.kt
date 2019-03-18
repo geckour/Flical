@@ -1,6 +1,9 @@
 package com.geckour.flical.ui.main
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.RectF
@@ -14,6 +17,7 @@ import com.geckour.flical.databinding.ActivityMainBinding
 import com.geckour.flical.model.Buttons
 import com.geckour.flical.model.Command
 import com.geckour.flical.model.ItemType
+import com.geckour.flical.ui.widget.CalculatorResult
 import com.geckour.flical.util.*
 import timber.log.Timber
 
@@ -388,5 +392,16 @@ class MainViewModel : ViewModel() {
                 null
             }
         }
+    }
+
+    internal fun onLongClickResult(resultView: CalculatorResult): Boolean {
+        val resultText = resultView.text?.toString()
+        if (resultText.isNullOrBlank()) return false
+
+        resultView.context.getSystemService(ClipboardManager::class.java).primaryClip =
+            ClipData.newPlainText(null, resultText.replace(Regex("^=\\s*(.+?)$"), "$1"))
+        Toast.makeText(resultView.context, R.string.toast_completed_copy, Toast.LENGTH_SHORT).show()
+
+        return true
     }
 }

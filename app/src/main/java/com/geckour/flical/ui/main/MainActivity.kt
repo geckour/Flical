@@ -9,6 +9,7 @@ import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivityMainBinding
 import com.geckour.flical.ui.CrashlyticsEnabledActivity
 import com.geckour.flical.ui.settings.SettingsActivity
+import com.geckour.flical.ui.widget.CalculatorResult
 import com.geckour.flical.util.getBgImageUri
 import com.geckour.flical.util.observe
 import com.geckour.flical.util.precision
@@ -42,6 +43,10 @@ class MainActivity : CrashlyticsEnabledActivity() {
         }
         binding.formula.requestFocus()
         binding.formula.showSoftInputOnFocus = false
+
+        binding.resultPreview.setOnLongClickListener {
+            viewModel.onLongClickResult(it as CalculatorResult)
+        }
     }
 
     override fun onResume() {

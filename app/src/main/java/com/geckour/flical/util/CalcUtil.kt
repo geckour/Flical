@@ -69,7 +69,7 @@ fun String.deserialize(): List<Command> =
 val Command.isAffectOnInvoke: Boolean
     get() = this.type == ItemType.AC || this.type == ItemType.CALC
 
-val Command.isSpecial: Boolean
+val Command.isNotShown: Boolean
     get() = when (this.type) {
         ItemType.LEFT,
         ItemType.RIGHT,
@@ -99,12 +99,10 @@ fun List<Command>.invoke(command: Command): List<Command> =
     }
 
 fun MutableList<Command>.invoke(command: Command, onInvoked: (position: Int) -> Unit = {}) {
-    if (command.isAffectOnInvoke) {
-        val result = this.toList().invoke(command)
-        this.clear()
-        this.addAll(result)
-        onInvoked(getDisplayString().length)
-    }
+    val result = this.toList().invoke(command)
+    this.clear()
+    this.addAll(result)
+    onInvoked(getDisplayString().length)
 }
 
 fun List<Command>.normalize(): List<Command> = // Combine numbers
@@ -131,17 +129,19 @@ fun MutableList<Command>.insert(
     position: Int = 0,
     onInserted: (position: Int) -> Unit = {}
 ) {
-    val textLengthBeforePurify = getDisplayString().length
-    purify()
-    mutilateNumbers()
-    val normalizedPosition = (position + getDisplayString().length - textLengthBeforePurify).let {
-        if (it < 0) 0 else it
+    if (commands.none { it.isNotShown }) {
+        val textLengthBeforePurify = getDisplayString().length
+        purify()
+        mutilateNumbers()
+        val normalizedPosition = (position + getDisplayString().length - textLengthBeforePurify).let {
+            if (it < 0) 0 else it
+        }
+        val index = getIndexFromPosition(normalizedPosition) + 1
+        val textLength = getDisplayString().length
+        addAll(index, commands.mutilateNumbers())
+        val positionToMove = normalizedPosition + getDisplayString().length - textLength
+        onInserted(positionToMove)
     }
-    val index = getIndexFromPosition(normalizedPosition) + 1
-    val textLength = getDisplayString().length
-    addAll(index, commands.mutilateNumbers())
-    val positionToMove = normalizedPosition + getDisplayString().length - textLength
-    onInserted(positionToMove)
 }
 
 private fun MutableList<Command>.mutilateNumbers() {

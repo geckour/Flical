@@ -310,7 +310,8 @@ class MainViewModel : ViewModel() {
                     }
 
                     command.type == ItemType.M -> {
-                        memory = commandList
+                        memory = commandList.map { it.copy() }
+                        onPositionToMoveChanged(binding.formula.cursorPosition)
                     }
 
                     command.type == ItemType.MR -> {
@@ -322,7 +323,7 @@ class MainViewModel : ViewModel() {
                     }
                 }
 
-                if (command.isSpecial)
+                if (command.isAffectOnInvoke)
                     commandList.invoke(command, onPositionToMoveChanged)
                 else {
                     commandList.insert(

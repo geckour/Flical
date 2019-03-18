@@ -37,7 +37,7 @@ private fun String.clean(): String =
 fun String.deserialize(): List<Command> =
     split(" ")
         .filter { it.isNotBlank() }
-        .map { it.trim() }
+        .map { it.trim().replace(",", "") }
         .mapNotNull {
             when {
                 it.matches(Regex("^\\d+?\\.?\\d*?$")) -> Command(ItemType.NUMBER, it)

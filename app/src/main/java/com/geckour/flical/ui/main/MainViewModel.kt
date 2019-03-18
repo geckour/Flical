@@ -1,18 +1,23 @@
 package com.geckour.flical.ui.main
 
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.RectF
 import android.net.Uri
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivityMainBinding
 import com.geckour.flical.model.Buttons
 import com.geckour.flical.model.Command
 import com.geckour.flical.model.ItemType
+import com.geckour.flical.ui.widget.CalculatorResult
 import com.geckour.flical.util.*
 import timber.log.Timber
 
@@ -345,7 +350,13 @@ class MainViewModel : ViewModel() {
     }
 
     internal fun onTextPasted(binding: ActivityMainBinding, text: String) {
+        if (text.isBlank()) return
+
         val deserialized = text.deserialize()
+        if (deserialized.isEmpty()) {
+            Toast.makeText(binding.root.context, R.string.toast_failed_paste, Toast.LENGTH_SHORT).show()
+            return
+        }
         commandList.insert(
             deserialized,
             binding.formula.cursorPosition,
@@ -381,5 +392,16 @@ class MainViewModel : ViewModel() {
                 null
             }
         }
+    }
+
+    internal fun onLongClickResult(resultView: CalculatorResult): Boolean {
+        val resultText = resultView.text?.toString()
+        if (resultText.isNullOrBlank()) return false
+
+        resultView.context.getSystemService(ClipboardManager::class.java).primaryClip =
+            ClipData.newPlainText(null, resultText.replace(Regex("^=\\s*(.+?)$"), "$1"))
+        Toast.makeText(resultView.context, R.string.toast_completed_copy, Toast.LENGTH_SHORT).show()
+
+        return true
     }
 }

@@ -15,8 +15,8 @@ android {
         applicationId = "com.geckour.flical"
         minSdkVersion(Deps.GradlePlugin.minSdkVersion)
         targetSdkVersion(Deps.GradlePlugin.targetSdkVersion)
-        versionCode = 6
-        versionName = "1.0.5"
+        versionCode = 7
+        versionName = "1.0.6"
         testInstrumentationRunner = Deps.Test.instrumentTestRunner
 
         dataBinding.isEnabled = true

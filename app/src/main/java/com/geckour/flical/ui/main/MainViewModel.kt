@@ -7,6 +7,7 @@ import android.graphics.RectF
 import android.net.Uri
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivityMainBinding
@@ -345,7 +346,13 @@ class MainViewModel : ViewModel() {
     }
 
     internal fun onTextPasted(binding: ActivityMainBinding, text: String) {
+        if (text.isBlank()) return
+
         val deserialized = text.deserialize()
+        if (deserialized.isEmpty()) {
+            Toast.makeText(binding.root.context, R.string.toast_failed_paste, Toast.LENGTH_SHORT).show()
+            return
+        }
         commandList.insert(
             deserialized,
             binding.formula.cursorPosition,

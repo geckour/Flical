@@ -116,7 +116,7 @@ class MainViewModel : ViewModel() {
                         Command(ItemType.NONE),
                         Command(ItemType.ZERO2),
                         Command(ItemType.NUMBER, "1.08"),
-                        Command(ItemType.NONE),
+                        Command(ItemType.NUMBER, "1.1"),
                         Buttons.Button.Area.UNDEFINED
                     )
                 ),
@@ -398,8 +398,9 @@ class MainViewModel : ViewModel() {
         val resultText = resultView.text?.toString()
         if (resultText.isNullOrBlank()) return false
 
-        resultView.context.getSystemService(ClipboardManager::class.java).primaryClip =
+        resultView.context.getSystemService(ClipboardManager::class.java)?.setPrimaryClip(
             ClipData.newPlainText(null, resultText.replace(Regex("^=\\s*(.+?)$"), "$1"))
+        )
         Toast.makeText(resultView.context, R.string.toast_completed_copy, Toast.LENGTH_SHORT).show()
 
         return true

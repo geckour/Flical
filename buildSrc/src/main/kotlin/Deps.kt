@@ -1,24 +1,24 @@
 object Deps {
     object Kotlin {
-        const val version = "1.3.21"
+        const val version = "1.3.50"
         val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
 
         object Coroutines {
-            const val version = "1.0.1"
+            const val version = "1.3.2"
             val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
             val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         }
     }
 
     object GradlePlugin {
-        const val android = "com.android.tools.build:gradle:3.3.1"
+        const val android = "com.android.tools.build:gradle:3.5.2"
         const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
-        const val googleService = "com.google.gms:google-services:4.0.1"
-        const val fabric = "io.fabric.tools:gradle:1.26.1"
+        const val googleService = "com.google.gms:google-services:4.3.3"
+        const val fabric = "io.fabric.tools:gradle:1.31.0"
 
-        const val compileSdkVersion = 28
+        const val compileSdkVersion = 29
         const val minSdkVersion = 24
-        const val targetSdkVersion = 28
+        const val targetSdkVersion = 29
     }
 
     object Test {

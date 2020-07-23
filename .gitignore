@@ -119,6 +119,7 @@ obj/
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 .idea/jarRepositories.xml
+.idea/kotlinc.xml
 
 # OS-specific files
 .DS_Store

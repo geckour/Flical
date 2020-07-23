@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.preference.PreferenceManager
 import com.geckour.flical.R
@@ -26,9 +27,8 @@ import timber.log.Timber
 class MainActivity : CrashlyticsEnabledActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val viewModel: MainViewModel by viewModels()
 
-    private val commandList: MutableList<Command> = mutableListOf()
-    private var memory: List<Command> = emptyList()
     private val mainBounds = RectF()
     private val bgBounds = Rect()
 
@@ -206,16 +206,6 @@ class MainActivity : CrashlyticsEnabledActivity() {
             )
         )
 
-    private val onPositionToMoveChanged: (Int) -> Unit = {
-        Timber.d("geckf new position: $it")
-        Timber.d("geckf formula text length: ${binding.formula.text?.length}")
-        if (it > -1 && it <= binding.formula.text?.length ?: 0) {
-            binding.formula.setSelection(it)
-            Timber.d("geckf change position invoked: $it")
-            Timber.d("geckf changed position on formula text: ${binding.formula.cursorPosition}")
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -227,21 +217,48 @@ class MainActivity : CrashlyticsEnabledActivity() {
         binding.buttonSetting.setOnClickListener {
             startActivity(SettingsActivity.getIntent(this))
         }
-        binding.formula.onTextPasted = {
-            if (it != null) onTextPasted(it)
+        binding.formula.apply {
+            onTextPasted = {
+                if (it != null) onTextPasted(it)
+            }
+            onSelectionChanged = { start, end ->
+                viewModel.onSelectionChangedByUser(start, end)
+            }
+            requestFocus()
+            showSoftInputOnFocus = false
         }
-        binding.formula.requestFocus()
-        binding.formula.showSoftInputOnFocus = false
 
         binding.resultPreview.setOnLongClickListener {
             onLongClickResult(it as CalculatorResult)
         }
+
+        observeEvents()
     }
 
     override fun onResume() {
         super.onResume()
 
         injectBackgroundImage(PreferenceManager.getDefaultSharedPreferences(this).getBgImageUri())
+    }
+
+    private fun observeEvents() {
+        viewModel.formulaCursorPosition.observe(this) {
+            it ?: return@observe
+
+            binding.formula.setSelection(it)
+        }
+
+        viewModel.formulaText.observe(this) {
+            binding.formula.setText(it)
+        }
+
+        viewModel.resultCommands.observe(this) {
+            if (it.isNullOrEmpty()) {
+                binding.resultPreview.redisplay()
+            } else {
+                binding.resultPreview.onEvaluate(it, precision)
+            }
+        }
     }
 
     private fun injectButtons() {
@@ -264,8 +281,6 @@ class MainActivity : CrashlyticsEnabledActivity() {
                 }
             }
         }
-
-        onPositionToMoveChanged(0)
     }
 
     private fun onButtonTouch(
@@ -346,48 +361,23 @@ class MainActivity : CrashlyticsEnabledActivity() {
 
                 when (command.type) {
                     ItemType.RIGHT -> {
-                        onPositionToMoveChanged(binding.formula.cursorPosition + 1)
+                        viewModel.moveCursorRight()
                     }
                     ItemType.LEFT -> {
-                        onPositionToMoveChanged(binding.formula.cursorPosition - 1)
+                        viewModel.moveCursorLeft()
                     }
                     ItemType.M -> {
-                        memory = commandList.map { it.copy() }
-                        onPositionToMoveChanged(binding.formula.cursorPosition)
+                        viewModel.updateMemory()
                     }
                     ItemType.MR -> {
-                        commandList.insert(
-                            memory,
-                            binding.formula.cursorPosition
-                        ) {
-                            refreshFormula()
-                            onPositionToMoveChanged(it)
-                        }
+                        viewModel.insertCommands(viewModel.memory)
                     }
                     ItemType.DEL -> {
-                        commandList.remove(binding.formula.cursorPosition) {
-                            refreshFormula()
-                            onPositionToMoveChanged(it)
-                        }
+                        viewModel.delete()
                     }
                 }
 
-                if (command.isAffectOnInvoke) {
-                    commandList.invoke(command, onPositionToMoveChanged)
-                    refreshFormula()
-                } else {
-                    commandList.insert(
-                        listOf(command),
-                        binding.formula.cursorPosition
-                    ) {
-                        refreshFormula()
-                        onPositionToMoveChanged(it)
-                    }
-                }
-
-                if (command.type == ItemType.CALC || commandList.isEmpty())
-                    binding.resultPreview.setText(null)
-                else refreshResult()
+                viewModel.processCommand(command)
             }
         }
 
@@ -403,31 +393,8 @@ class MainActivity : CrashlyticsEnabledActivity() {
                 .show()
             return
         }
-        commandList.insert(
-            deserialized,
-            binding.formula.cursorPosition
-        ) {
-            refreshFormula()
-            onPositionToMoveChanged(it)
-        }
-
-        refreshResult()
-    }
-
-    private fun refreshResult() {
-        val result = commandList.toList().invoke(Command(ItemType.CALC))
-
-        if (commandList.toList().normalize().size > 1
-            && result.lastOrNull()?.type == ItemType.NUMBER
-        ) {
-            binding.resultPreview.onEvaluate(result, precision)
-        } else {
-            binding.resultPreview.redisplay()
-        }
-    }
-
-    private fun refreshFormula() {
-        binding.formula.setText(commandList.getDisplayString())
+        viewModel.insertCommands(deserialized)
+        viewModel.refreshResult()
     }
 
     private fun injectBackgroundImage(uri: Uri?) {

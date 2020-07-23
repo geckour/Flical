@@ -65,4 +65,12 @@ object Deps {
         const val core = "com.google.firebase:firebase-core:17.4.4"
         const val crashlytics = "com.crashlytics.sdk.android:crashlytics:2.10.1"
     }
+
+    object Truth {
+        const val truth = "com.google.truth:truth:1.0.1"
+    }
+
+    object MockK {
+        const val mockK = "io.mockk:mockk:1.10.0"
+    }
 }

@@ -10,8 +10,7 @@ import android.view.View
 import com.geckour.flical.R
 import kotlin.math.min
 
-class CalculatorFormula
-@JvmOverloads constructor(
+class CalculatorFormula @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
@@ -27,13 +26,13 @@ class CalculatorFormula
     private var widthConstraint = -1
 
     var onTextPasted: ((String?) -> Unit)? = null
+    var onSelectionChanged: ((start: Int, end: Int) -> Unit)? = null
 
-    var cursorPosition: Int = 0
+    private var cursorPosition: Int = 0
         get() = when {
             field < 0 || field > text?.length ?: 0 -> text?.length ?: 0
             else -> field
         }
-        private set
 
     init {
         val typedArray = context.obtainStyledAttributes(
@@ -77,7 +76,12 @@ class CalculatorFormula
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
-    override fun onTextChanged(text: CharSequence, start: Int, lengthBefore: Int, lengthAfter: Int) {
+    override fun onTextChanged(
+        text: CharSequence,
+        start: Int,
+        lengthBefore: Int,
+        lengthAfter: Int
+    ) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
 
         setTextSize(TypedValue.COMPLEX_UNIT_PX, getVariableTextSize(text.toString()))
@@ -90,6 +94,7 @@ class CalculatorFormula
         super.onSelectionChanged(selStart, selEnd)
 
         cursorPosition = selStart
+        onSelectionChanged?.invoke(selStart, selEnd)
     }
 
     private fun getVariableTextSize(text: CharSequence): Float {
@@ -119,10 +124,10 @@ class CalculatorFormula
             android.R.id.paste -> {
                 val pasted = context?.getSystemService(ClipboardManager::class.java)
                     ?.primaryClip?.let {
-                    if (it.itemCount > 0)
-                        it.getItemAt(it.itemCount - 1).text.toString()
-                    else null
-                }
+                        if (it.itemCount > 0)
+                            it.getItemAt(it.itemCount - 1).text.toString()
+                        else null
+                    }
                 onTextPasted?.invoke(pasted)
                 true
             }

@@ -94,6 +94,10 @@ dependencies {
 
     // Exif
     implementation(Deps.Exif.exifInterface)
+
+    // Test
+    testImplementation(Deps.Truth.truth)
+    testImplementation(Deps.MockK.mockK)
 }
 
 apply(plugin = "com.google.gms.google-services")

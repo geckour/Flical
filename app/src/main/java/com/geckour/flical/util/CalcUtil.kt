@@ -158,13 +158,13 @@ private fun List<Command>.mutilateNumbers(): List<Command> =
     }
 
 fun MutableList<Command>.remove(position: Int = 0, onRemoved: (position: Int) -> Unit = {}) {
-    if (position > 0) {
-        val index = getIndexFromPosition(position)
-        val textLength = getDisplayString().length
-        removeAt(index)
-        val positionToMove = position + getDisplayString().length - textLength
-        onRemoved(positionToMove)
-    }
+    if (position < 1) return
+
+    val index = getIndexFromPosition(position)
+    val textLength = getDisplayString().length
+    removeAt(index)
+    val positionToMove = position + getDisplayString().length - textLength
+    onRemoved(positionToMove)
 }
 
 private fun List<Command>.getIndexFromPosition(position: Int): Int {

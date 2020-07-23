@@ -6,15 +6,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivitySettingsBinding
 import com.geckour.flical.model.SettingsItem
 import com.geckour.flical.ui.CrashlyticsEnabledActivity
 import com.geckour.flical.util.setBgImageUri
+import com.geckour.flical.util.clearBgImageUri
+import kotlinx.coroutines.launch
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
@@ -32,17 +33,13 @@ class SettingsActivity : CrashlyticsEnabledActivity() {
     }
 
     private lateinit var binding: ActivitySettingsBinding
-    private val viewModel: SettingsViewModel by lazy {
-        ViewModelProviders.of(this)[SettingsViewModel::class.java]
-    }
-    private val sharedPreferences: SharedPreferences by lazy {
-        PreferenceManager.getDefaultSharedPreferences(this)
-    }
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_settings)
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
         setSupportActionBar(binding.toolbar)
 
@@ -59,29 +56,31 @@ class SettingsActivity : CrashlyticsEnabledActivity() {
                 getString(R.string.settings_item_title_clear_bg_image),
                 getString(R.string.settings_item_desc_clear_bg_image)
             )
-            root.setOnClickListener { sharedPreferences.setBgImageUri() }
+            root.setOnClickListener { sharedPreferences.clearBgImageUri() }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        if (resultCode != Activity.RESULT_OK) return
+
         when (requestCode) {
             RequestCode.REQUEST_CODE_PICK_MEDIA.ordinal -> {
-                if (resultCode == Activity.RESULT_OK) {
-                    data?.data?.apply {
-                        sharedPreferences.setBgImageUri(
-                            this@SettingsActivity,
-                            viewModel.viewModelScope,
-                            this
-                        )
+                data?.data?.let {
+                    lifecycleScope.launch {
+                        sharedPreferences.setBgImageUri(this@SettingsActivity, it)
                     }
                 }
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         onRequestPermissionsResult(requestCode, grantResults)

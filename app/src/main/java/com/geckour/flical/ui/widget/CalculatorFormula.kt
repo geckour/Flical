@@ -82,7 +82,7 @@ class CalculatorFormula
 
         setTextSize(TypedValue.COMPLEX_UNIT_PX, getVariableTextSize(text.toString()))
 
-        cursorPosition = cursorPosition // Validation with get() method
+        cursorPosition = cursorPosition // Validate with get() method
         setSelection(cursorPosition)
     }
 

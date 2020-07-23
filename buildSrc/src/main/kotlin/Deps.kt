@@ -33,6 +33,7 @@ object Deps {
         const val coreKtx = "androidx.core:core-ktx:1.3.0"
         const val design = "com.google.android.material:material:1.2.0-rc01"
         const val constraint = "androidx.constraintlayout:constraintlayout:2.0.0-beta8"
+        const val preference = "androidx.preference:preference-ktx:1.1.1"
 
         object Lifecycle {
             private const val version = "2.2.0"

@@ -6,7 +6,6 @@ enum class ItemType(val weight: Int? = null, val defaultText: String? = null) {
     NEGATIVE_INFINITY,
     NAN,
     NUMBER(0),
-    ZERO2(defaultText = "00"),
     PI(0, "π"),
     E(0, "e"),
     LEFT_BRA(defaultText = "("),

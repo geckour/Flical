@@ -3,7 +3,6 @@ package com.geckour.flical.ui.main
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.RectF
@@ -114,7 +113,7 @@ class MainViewModel : ViewModel() {
                     Buttons.Button(
                         Command(ItemType.NUMBER, "0"),
                         Command(ItemType.NONE),
-                        Command(ItemType.ZERO2),
+                        Command(ItemType.NUMBER, "00"),
                         Command(ItemType.NUMBER, "1.08"),
                         Command(ItemType.NUMBER, "1.1"),
                         Buttons.Button.Area.UNDEFINED
@@ -221,7 +220,8 @@ class MainViewModel : ViewModel() {
 
         repeat(buttons.list.size) { column ->
             repeat(buttons.list[0].size) { row ->
-                val id = activity.resources.getIdentifier("bg$column$row", "id", activity.packageName)
+                val id =
+                    activity.resources.getIdentifier("bg$column$row", "id", activity.packageName)
                 activity.findViewById<View>(id).setOnTouchListener { v, event ->
                     onButtonTouch(binding, v, event)
                 }
@@ -231,7 +231,11 @@ class MainViewModel : ViewModel() {
         onPositionToMoveChanged(0)
     }
 
-    private fun onButtonTouch(binding: ActivityMainBinding, view: View, event: MotionEvent): Boolean {
+    private fun onButtonTouch(
+        binding: ActivityMainBinding,
+        view: View,
+        event: MotionEvent
+    ): Boolean {
         val area =
             if (event.action == MotionEvent.ACTION_UP
                 || event.action == MotionEvent.ACTION_POINTER_UP
@@ -320,7 +324,11 @@ class MainViewModel : ViewModel() {
                     }
 
                     command.type == ItemType.MR -> {
-                        commandList.insert(memory, binding.formula.cursorPosition, onPositionToMoveChanged)
+                        commandList.insert(
+                            memory,
+                            binding.formula.cursorPosition,
+                            onPositionToMoveChanged
+                        )
                     }
 
                     command.type == ItemType.DEL -> {
@@ -354,7 +362,8 @@ class MainViewModel : ViewModel() {
 
         val deserialized = text.deserialize()
         if (deserialized.isEmpty()) {
-            Toast.makeText(binding.root.context, R.string.toast_failed_paste, Toast.LENGTH_SHORT).show()
+            Toast.makeText(binding.root.context, R.string.toast_failed_paste, Toast.LENGTH_SHORT)
+                .show()
             return
         }
         commandList.insert(

@@ -41,7 +41,6 @@ fun String.deserialize(): List<Command> =
         .mapNotNull {
             when {
                 it.matches(Regex("^\\d+?\\.?\\d*?$")) -> Command(ItemType.NUMBER, it)
-                it == ItemType.ZERO2.defaultText -> Command(ItemType.ZERO2)
                 it == ItemType.PI.defaultText -> Command(ItemType.PI)
                 it == ItemType.E.defaultText -> Command(ItemType.E)
                 it == ItemType.PLUS.defaultText -> Command(ItemType.PLUS)
@@ -133,9 +132,10 @@ fun MutableList<Command>.insert(
         val textLengthBeforePurify = getDisplayString().length
         purify()
         mutilateNumbers()
-        val normalizedPosition = (position + getDisplayString().length - textLengthBeforePurify).let {
-            if (it < 0) 0 else it
-        }
+        val normalizedPosition =
+            (position + getDisplayString().length - textLengthBeforePurify).let {
+                if (it < 0) 0 else it
+            }
         val index = getIndexFromPosition(normalizedPosition) + 1
         val textLength = getDisplayString().length
         addAll(index, commands.mutilateNumbers())
@@ -246,11 +246,21 @@ fun List<Command>.calculate(): Command? =
                     }
 
                     ItemType.PI -> {
-                        stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.pi(mathContext)))
+                        stack.push(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.pi(mathContext)
+                            )
+                        )
                     }
 
                     ItemType.E -> {
-                        stack.push(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.e(mathContext)))
+                        stack.push(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.e(mathContext)
+                            )
+                        )
                     }
 
                     ItemType.PLUS -> {
@@ -274,7 +284,10 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.multiply(a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    b.multiply(a, mathContext)
+                                )
                             }
                         )
                     }
@@ -288,7 +301,10 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.divide(a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    b.divide(a, mathContext)
+                                )
                             }
                         )
                     }
@@ -310,7 +326,10 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.pow(b, a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    BigDecimalMath.pow(b, a, mathContext)
+                                )
                             }
                         )
                     }
@@ -324,7 +343,10 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, b.remainder(a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    b.remainder(a, mathContext)
+                                )
                             }
                         )
                     }
@@ -337,39 +359,72 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.sqrt(a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    BigDecimalMath.sqrt(a, mathContext)
+                                )
                             }
                         )
                     }
 
                     ItemType.COS -> {
                         val a = stack.pop().value ?: throw IllegalStateException()
-                        stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.cos(a, mathContext)))
+                        stack.add(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.cos(a, mathContext)
+                            )
+                        )
                     }
 
                     ItemType.SIN -> {
                         val a = stack.pop().value ?: throw IllegalStateException()
-                        stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.sin(a, mathContext)))
+                        stack.add(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.sin(a, mathContext)
+                            )
+                        )
                     }
 
                     ItemType.TAN -> {
                         val a = stack.pop().value ?: throw IllegalStateException()
-                        stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.tan(a, mathContext)))
+                        stack.add(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.tan(a, mathContext)
+                            )
+                        )
                     }
 
                     ItemType.A_COS -> {
                         val a = stack.pop().value ?: throw IllegalStateException()
-                        stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.acos(a, mathContext)))
+                        stack.add(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.acos(a, mathContext)
+                            )
+                        )
                     }
 
                     ItemType.A_SIN -> {
                         val a = stack.pop().value ?: throw IllegalStateException()
-                        stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.asin(a, mathContext)))
+                        stack.add(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.asin(a, mathContext)
+                            )
+                        )
                     }
 
                     ItemType.A_TAN -> {
                         val a = stack.pop().value ?: throw IllegalStateException()
-                        stack.add(ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.atan(a, mathContext)))
+                        stack.add(
+                            ExBigDecimal(
+                                BigDecimalType.NORMAL,
+                                BigDecimalMath.atan(a, mathContext)
+                            )
+                        )
                     }
 
                     ItemType.LN -> {
@@ -380,7 +435,10 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log(a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    BigDecimalMath.log(a, mathContext)
+                                )
                             }
                         )
                     }
@@ -393,7 +451,10 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log10(a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    BigDecimalMath.log10(a, mathContext)
+                                )
                             }
                         )
                     }
@@ -406,7 +467,10 @@ fun List<Command>.calculate(): Command? =
                                 preResult == Double.POSITIVE_INFINITY -> ExBigDecimal(BigDecimalType.POSITIVE_INFINITY)
                                 preResult == Double.NEGATIVE_INFINITY -> ExBigDecimal(BigDecimalType.NEGATIVE_INFINITY)
                                 preResult.isNaN() -> ExBigDecimal(BigDecimalType.NAN)
-                                else -> ExBigDecimal(BigDecimalType.NORMAL, BigDecimalMath.log2(a, mathContext))
+                                else -> ExBigDecimal(
+                                    BigDecimalType.NORMAL,
+                                    BigDecimalMath.log2(a, mathContext)
+                                )
                             }
                         )
                     }

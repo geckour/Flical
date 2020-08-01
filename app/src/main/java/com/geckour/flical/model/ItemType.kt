@@ -34,5 +34,10 @@ enum class ItemType(val weight: Int? = null, val defaultText: String? = null) {
     AC(defaultText = "AC"),
     LEFT(defaultText = "◀"),
     RIGHT(defaultText = "▶"),
-    CALC(defaultText = "=")
+    CALC(defaultText = "=");
+
+    companion object {
+
+        fun from(text: String): ItemType? = ItemType.values().find { it.defaultText == text }
+    }
 }

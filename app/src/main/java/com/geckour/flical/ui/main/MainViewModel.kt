@@ -9,7 +9,7 @@ import com.geckour.flical.util.*
 
 class MainViewModel : ViewModel() {
 
-    private val commandList: MutableList<Command> = mutableListOf()
+    private var commandList: List<Command> = mutableListOf()
     internal var memory: List<Command> = emptyList()
 
     private val _formulaCursorPosition = MutableLiveData(0)
@@ -21,10 +21,10 @@ class MainViewModel : ViewModel() {
     private val _resultCommands = MutableLiveData<List<Command>>(emptyList())
     internal val resultCommands: LiveData<List<Command>> = _resultCommands
 
-    private val onPositionToMoveChanged: (Int) -> Unit = {
-        refreshFormula()
-        if (it > -1 && it <= _formulaText.value?.length ?: 0) {
-            _formulaCursorPosition.value = it
+    private val onFormulaTextChanged: (String, Int) -> Unit = { formulaText, cursorPosition ->
+        if (cursorPosition > -1 && cursorPosition <= formulaText.length) {
+            _formulaText.value = formulaText
+            _formulaCursorPosition.value = cursorPosition
         }
     }
 
@@ -32,11 +32,11 @@ class MainViewModel : ViewModel() {
         toInsert: List<Command>,
         position: Int = _formulaCursorPosition.value ?: 0
     ) {
-        commandList.insert(toInsert, position, onPositionToMoveChanged)
+        commandList = commandList.inserted(toInsert, position, onFormulaTextChanged)
     }
 
     private fun removeCommandAt(index: Int) {
-        commandList.remove(index, onPositionToMoveChanged)
+        commandList = commandList.removed(index, onFormulaTextChanged)
     }
 
     internal fun delete() {
@@ -44,27 +44,33 @@ class MainViewModel : ViewModel() {
     }
 
     internal fun moveCursorRight() {
-        onPositionToMoveChanged(_formulaCursorPosition.value?.plus(1) ?: return)
+        onFormulaTextChanged(
+            _formulaText.value ?: return,
+            _formulaCursorPosition.value?.plus(1) ?: return
+        )
     }
 
     internal fun moveCursorLeft() {
-        onPositionToMoveChanged(_formulaCursorPosition.value?.minus(1) ?: return)
+        onFormulaTextChanged(
+            _formulaText.value ?: return,
+            _formulaCursorPosition.value?.minus(1) ?: return
+        )
     }
 
     internal fun updateMemory() {
         memory = commandList.subList(0, commandList.size)
-        onPositionToMoveChanged(_formulaCursorPosition.value ?: return)
+        onFormulaTextChanged(_formulaText.value ?: return, _formulaCursorPosition.value ?: return)
     }
 
     internal fun processCommand(toProcess: Command) {
         if (toProcess.isAffectOnInvoke) {
-            commandList.invoke(toProcess, onPositionToMoveChanged)
-            onPositionToMoveChanged(_formulaCursorPosition.value ?: 0)
+            commandList = commandList.invoke(toProcess, onFormulaTextChanged)
+            onFormulaTextChanged(_formulaText.value ?: "", _formulaCursorPosition.value ?: 0)
         } else {
-            commandList.insert(
+            commandList = commandList.inserted(
                 listOf(toProcess),
                 _formulaCursorPosition.value ?: 0,
-                onPositionToMoveChanged
+                onFormulaTextChanged
             )
         }
 
@@ -73,13 +79,9 @@ class MainViewModel : ViewModel() {
         else refreshResult()
     }
 
-    private fun refreshFormula() {
-        _formulaText.value = commandList.getDisplayString()
-    }
-
     internal fun refreshResult() {
         val commandInputMoreThan2 = commandList.normalize().size > 1
-        val result = commandList.toList().invoke(Command(ItemType.CALC))
+        val result = commandList.invoke(Command(ItemType.CALC))
 
         _resultCommands.value =
             if (commandInputMoreThan2 && result.lastOrNull()?.type == ItemType.NUMBER)

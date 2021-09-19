@@ -80,7 +80,7 @@ class MainViewModel : ViewModel() {
     }
 
     internal fun refreshResult() {
-        val commandInputMoreThan2 = commandList.normalize().size > 1
+        val commandInputMoreThan2 = commandList.normalized().size > 1
         val result = commandList.invoke(Command(ItemType.CALC))
 
         _resultCommands.value =

@@ -22,8 +22,8 @@ import com.geckour.flical.model.ItemType
 import com.geckour.flical.ui.settings.SettingsActivity
 import com.geckour.flical.ui.widget.buttons
 import com.geckour.flical.util.deserialize
+import com.geckour.flical.util.PRECISION
 import com.geckour.flical.util.getBgImageUri
-import com.geckour.flical.util.precision
 import timber.log.Timber
 
 class MainActivity : ComponentActivity() {
@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
             if (it.isNullOrEmpty()) {
                 binding.resultPreview.redisplay()
             } else {
-                binding.resultPreview.onEvaluate(it, precision)
+                binding.resultPreview.onEvaluate(it, PRECISION)
             }
         }
     }

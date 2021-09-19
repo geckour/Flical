@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Deps.GradlePlugin.compileSdkVersion)
+    compileSdk = Deps.GradlePlugin.compileSdkVersion
     defaultConfig {
         applicationId = "com.geckour.flical"
         minSdk = Deps.GradlePlugin.minSdkVersion
@@ -48,9 +48,15 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-
     kotlinOptions {
         jvmTarget = "11"
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Deps.Compose.version
     }
 }
 
@@ -95,6 +101,16 @@ dependencies {
     // Test
     testImplementation(Deps.Truth.truth)
     testImplementation(Deps.MockK.mockK)
+
+    // Compose
+    implementation(Deps.Compose.ui)
+    implementation(Deps.Compose.activity)
+    implementation(Deps.Compose.material)
+    implementation(Deps.Compose.uiTooling)
+    androidTestImplementation(Deps.Compose.uiTest)
+
+    // Image Processing
+    implementation(Deps.Image.coilCompose)
 }
 
 apply(plugin = "com.google.gms.google-services")

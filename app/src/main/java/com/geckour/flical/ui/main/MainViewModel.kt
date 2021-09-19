@@ -1,5 +1,7 @@
 package com.geckour.flical.ui.main
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,11 +17,11 @@ class MainViewModel : ViewModel() {
     private val _formulaCursorPosition = MutableLiveData(0)
     internal val formulaCursorPosition: LiveData<Int> = _formulaCursorPosition
 
-    private val _formulaText = MutableLiveData("")
-    internal val formulaText: LiveData<String> = _formulaText
+    private val _formulaText = mutableStateOf("")
+    internal val formulaText: State<String> = _formulaText
 
-    private val _resultCommands = MutableLiveData<List<Command>>(emptyList())
-    internal val resultCommands: LiveData<List<Command>> = _resultCommands
+    private val _resultCommands = mutableStateOf<List<Command>>(emptyList())
+    internal val resultCommands: State<List<Command>> = _resultCommands
 
     private val onFormulaTextChanged: (String, Int) -> Unit = { formulaText, cursorPosition ->
         if (cursorPosition > -1 && cursorPosition <= formulaText.length) {
@@ -27,6 +29,8 @@ class MainViewModel : ViewModel() {
             _formulaCursorPosition.value = cursorPosition
         }
     }
+
+    internal val backgroundImagePath = mutableStateOf<String?>(null)
 
     internal fun insertCommands(
         toInsert: List<Command>,
@@ -45,27 +49,27 @@ class MainViewModel : ViewModel() {
 
     internal fun moveCursorRight() {
         onFormulaTextChanged(
-            _formulaText.value ?: return,
+            _formulaText.value,
             _formulaCursorPosition.value?.plus(1) ?: return
         )
     }
 
     internal fun moveCursorLeft() {
         onFormulaTextChanged(
-            _formulaText.value ?: return,
+            _formulaText.value,
             _formulaCursorPosition.value?.minus(1) ?: return
         )
     }
 
     internal fun updateMemory() {
         memory = commandList.subList(0, commandList.size)
-        onFormulaTextChanged(_formulaText.value ?: return, _formulaCursorPosition.value ?: return)
+        onFormulaTextChanged(_formulaText.value, _formulaCursorPosition.value ?: return)
     }
 
     internal fun processCommand(toProcess: Command) {
         if (toProcess.isAffectOnInvoke) {
             commandList = commandList.invoke(toProcess, onFormulaTextChanged)
-            onFormulaTextChanged(_formulaText.value ?: "", _formulaCursorPosition.value ?: 0)
+            onFormulaTextChanged(_formulaText.value, _formulaCursorPosition.value ?: 0)
         } else {
             commandList = commandList.inserted(
                 listOf(toProcess),
@@ -79,7 +83,7 @@ class MainViewModel : ViewModel() {
         else refreshResult()
     }
 
-    internal fun refreshResult() {
+    private fun refreshResult() {
         val commandInputMoreThan2 = commandList.normalized().size > 1
         val result = commandList.invoke(Command(ItemType.CALC))
 
@@ -87,9 +91,5 @@ class MainViewModel : ViewModel() {
             if (commandInputMoreThan2 && result.lastOrNull()?.type == ItemType.NUMBER)
                 result
             else emptyList()
-    }
-
-    internal fun onSelectionChangedByUser(start: Int, end: Int) {
-        _formulaCursorPosition.value = start
     }
 }

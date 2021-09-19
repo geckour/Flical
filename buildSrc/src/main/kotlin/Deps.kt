@@ -72,4 +72,17 @@ object Deps {
     object MockK {
         const val mockK = "io.mockk:mockk:1.12.0"
     }
+
+    object Compose {
+        const val version = "1.0.2"
+        const val ui = "androidx.compose.ui:ui:$version"
+        const val activity = "androidx.activity:activity-compose:1.3.1"
+        const val material = "androidx.compose.material:material:$version"
+        const val uiTooling = "androidx.compose.ui:ui-tooling:$version"
+        const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
+    }
+
+    object Image {
+        const val coilCompose = "io.coil-kt:coil-compose:1.3.2"
+    }
 }

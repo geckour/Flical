@@ -1,163 +1,74 @@
 package com.geckour.flical.ui.main
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.RectF
-import android.net.Uri
 import android.os.Bundle
 import android.view.MotionEvent
-import android.view.View
-import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.IdRes
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment.Companion.BottomCenter
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterEnd
+import androidx.compose.ui.Alignment.Companion.CenterStart
+import androidx.compose.ui.Alignment.Companion.TopCenter
+import androidx.compose.ui.Alignment.Companion.TopStart
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.geckour.flical.R
-import com.geckour.flical.databinding.ActivityMainBinding
 import com.geckour.flical.model.Buttons
+import com.geckour.flical.model.Command
 import com.geckour.flical.model.ItemType
 import com.geckour.flical.ui.settings.SettingsActivity
 import com.geckour.flical.ui.widget.buttons
-import com.geckour.flical.util.deserialize
-import com.geckour.flical.util.PRECISION
 import com.geckour.flical.util.getBgImageUri
-import timber.log.Timber
+import com.geckour.flical.util.getDisplayString
+import java.io.File
+
+private var montserrat: FontFamily? = null
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
-
-    private val mainBounds = RectF()
-    private val bgBounds = Rect()
-
-    private val onButtonTouch: (View, MotionEvent) -> Boolean = { view, event ->
-        val area = when {
-            event.action == MotionEvent.ACTION_UP ||
-                    event.action == MotionEvent.ACTION_POINTER_UP -> {
-                Buttons.Button.Area.UNDEFINED
-            }
-            mainBounds.contains(event.x, event.y) ||
-                    event.action == MotionEvent.ACTION_DOWN ||
-                    event.action == MotionEvent.ACTION_POINTER_DOWN -> {
-                Buttons.Button.Area.MAIN
-            }
-            else -> {
-                val x = event.x - bgBounds.centerX()
-                val y = (bgBounds.width() - event.y) - bgBounds.centerY()
-
-                if (y > x) {
-                    if (y > -x) Buttons.Button.Area.TOP
-                    else Buttons.Button.Area.LEFT
-                } else {
-                    if (y > -x) Buttons.Button.Area.RIGHT
-                    else Buttons.Button.Area.BOTTOM
-                }
-            }
-        }
-
-        val indices = getButtonIndicesById(view.id)
-        buttons.list[indices.first][indices.second]
-            .reflectState(event)
-            .tapped = area
-
-        binding.buttons = buttons
-
-        true
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        montserrat = ResourcesCompat.getFont(this, R.font.montserrat)
+            ?.let { FontFamily(it) }
 
-        injectButtons()
-        binding.buttonSetting.setOnClickListener {
-            startActivity(SettingsActivity.getIntent(this))
-        }
-        binding.formula.apply {
-            onTextPasted = { if (it != null) onTextPasted(it) }
-            onSelectionChanged = { start, end -> viewModel.onSelectionChangedByUser(start, end) }
-            requestFocus()
-            showSoftInputOnFocus = false
-        }
-
-        binding.resultPreview.setOnLongClickListener { onLongClickResult() }
-
-        observeEvents()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        injectBackgroundImage(PreferenceManager.getDefaultSharedPreferences(this).getBgImageUri())
-    }
-
-    private fun observeEvents() {
-        viewModel.formulaCursorPosition.observe(this) {
-            it ?: return@observe
-
-            binding.formula.setSelection(it)
-        }
-
-        viewModel.formulaText.observe(this) {
-            binding.formula.setText(it)
-        }
-
-        viewModel.resultCommands.observe(this) {
-            if (it.isNullOrEmpty()) {
-                binding.resultPreview.redisplay()
-            } else {
-                binding.resultPreview.onEvaluate(it, PRECISION)
-            }
-        }
-    }
-
-    private fun getButtonIndicesById(@IdRes buttonId: Int): Pair<Int, Int> =
-        resources.getResourceName(buttonId).let {
-            val matcher = Regex(".*bg(\\d)(\\d)")
-            val row = it.replace(matcher, "$1").toInt()
-            val col = it.replace(matcher, "$2").toInt()
-
-            row to col
-        }
-
-    private fun injectButtons() {
-        binding.buttons = buttons
-        binding.bg00.addOnLayoutChangeListener { _, left, top, right, bottom, _, _, _, _ ->
-            bgBounds.set(0, 0, right - left, bottom - top)
-            mainBounds.set(
-                bgBounds.width() * 0.2f,
-                bgBounds.height() * 0.2f,
-                bgBounds.width() * 0.8f,
-                bgBounds.height() * 0.8f
-            )
-        }
-
-        repeat(buttons.list.size) { column ->
-            repeat(buttons.list[0].size) { row ->
-                val id = resources.getIdentifier("bg$column$row", "id", packageName)
-                findViewById<View>(id).setOnTouchListener(onButtonTouch)
-            }
-        }
-    }
-
-    private fun Buttons.Button.reflectState(event: MotionEvent): Buttons.Button {
-        when (event.action) {
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
-                val command = when (this.tapped) {
-                    Buttons.Button.Area.MAIN -> this.main
-                    Buttons.Button.Area.LEFT -> this.left
-                    Buttons.Button.Area.TOP -> this.top
-                    Buttons.Button.Area.RIGHT -> this.right
-                    Buttons.Button.Area.BOTTOM -> this.bottom
-                    Buttons.Button.Area.UNDEFINED -> null
-                } ?: return this
-
-                if (command.type == ItemType.NONE) return this
+        setContent {
+            Calculator(
+                formulaText = viewModel.formulaText.value,
+                resultText = viewModel.resultCommands.value.getDisplayString(),
+                backgroundImagePath = viewModel.backgroundImagePath.value,
+                onOpenSettings = ::openSettings
+            ) { command ->
+                if (command.type == ItemType.NONE) return@Calculator
 
                 when (command.type) {
                     ItemType.RIGHT -> {
@@ -181,43 +92,267 @@ class MainActivity : ComponentActivity() {
                 viewModel.processCommand(command)
             }
         }
-
-        return this
     }
 
-    private fun onTextPasted(text: String) {
-        if (text.isBlank()) return
+    override fun onResume() {
+        super.onResume()
 
-        val deserialized = text.deserialize()
-        if (deserialized.isEmpty()) {
-            Toast.makeText(binding.root.context, R.string.toast_failed_paste, Toast.LENGTH_SHORT)
-                .show()
-            return
+        viewModel.backgroundImagePath.value =
+            PreferenceManager.getDefaultSharedPreferences(this).getBgImageUri()?.path
+    }
+
+    private fun openSettings() {
+        startActivity(SettingsActivity.getIntent(this))
+    }
+}
+
+@OptIn(ExperimentalCoilApi::class)
+@Composable
+fun Calculator(
+    formulaText: String,
+    resultText: String,
+    backgroundImagePath: String? = null,
+    onOpenSettings: () -> Unit,
+    onCommand: (Command) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundImagePath?.let { Color.Transparent }
+                ?: colorResource(id = R.color.backgroundColor))
+    ) {
+        backgroundImagePath?.let {
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                painter = rememberImagePainter(File(it)),
+                contentDescription = null,
+                contentScale = ContentScale.Crop
+            )
         }
-        viewModel.insertCommands(deserialized)
-        viewModel.refreshResult()
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
+            Formula(this, formulaText)
+            ResultPreview(resultText)
+            Buttons(onCommand)
+        }
+        Image(
+            modifier = Modifier
+                .padding(4.dp)
+                .align(TopStart)
+                .size(36.dp)
+                .clickable { onOpenSettings() },
+            painter = painterResource(id = R.drawable.ic_baseline_settings_20px),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(colorResource(id = R.color.buttonTintColor))
+        )
     }
+}
 
-    private fun injectBackgroundImage(uri: Uri?) {
-        binding.background = uri?.let {
-            try {
-                BitmapFactory.decodeFile(it.path)
-            } catch (t: Throwable) {
-                Timber.e(t)
-                null
+@Composable
+fun Formula(scope: ColumnScope, text: String) {
+    val maxFontSize = 64.sp
+    var fontSize by remember { mutableStateOf(maxFontSize) }
+    if (text.isEmpty()) fontSize = maxFontSize
+    with(scope) {
+        Box(
+            modifier = Modifier
+                .background(colorResource(id = R.color.inputBackgroundColor))
+                .padding(horizontal = 8.dp)
+                .fillMaxSize()
+                .weight(1f)
+        ) {
+            SelectionContainer(
+                modifier = Modifier
+                    .align(Center)
+                    .fillMaxWidth()
+            ) {
+                Text(
+                    text = text,
+                    onTextLayout = { result ->
+                        if (result.didOverflowWidth) fontSize =
+                            (fontSize.value - 1).coerceAtLeast(1f).sp
+                    },
+                    textAlign = TextAlign.End,
+                    softWrap = false,
+                    maxLines = 1,
+                    fontSize = fontSize,
+                    fontFamily = montserrat,
+                    color = colorResource(id = R.color.primaryTextColor)
+                )
             }
         }
     }
+}
 
-    private fun onLongClickResult(): Boolean {
-        val text = viewModel.resultCommands.value?.last()?.text
-        if (text.isNullOrBlank()) return false
+@Composable
+fun ResultPreview(text: String) {
+    val maxFontSize = 48.sp
+    var fontSize by remember { mutableStateOf(maxFontSize) }
+    if (text.isEmpty()) fontSize = maxFontSize
+    Text(
+        modifier = Modifier
+            .background(colorResource(id = R.color.inputBackgroundColor))
+            .padding(vertical = 12.dp, horizontal = 8.dp)
+            .fillMaxWidth(),
+        text = text,
+        onTextLayout = { result ->
+            if (result.didOverflowWidth) fontSize =
+                (fontSize.value - 1).coerceAtLeast(1f).sp
+        },
+        textAlign = TextAlign.End,
+        softWrap = false,
+        maxLines = 1,
+        fontSize = fontSize,
+        fontFamily = montserrat,
+        color = colorResource(id = R.color.primaryTextColor)
+    )
+}
 
-        getSystemService(ClipboardManager::class.java)?.setPrimaryClip(
-            ClipData.newPlainText(null, text)
-        )
-        Toast.makeText(this, R.string.toast_completed_copy, Toast.LENGTH_SHORT).show()
-
-        return true
+@Composable
+fun Buttons(onCommand: (Command) -> Unit) {
+    val buttons by remember { mutableStateOf(buttons) }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorResource(id = R.color.backgroundMaskColor))
+    ) {
+        buttons.list.forEach { rows ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                rows.forEach { button ->
+                    Button(this, button, onCommand)
+                }
+            }
+        }
     }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun Button(
+    scope: RowScope,
+    button: Buttons.Button,
+    onCommand: (Command) -> Unit
+) {
+    var area by remember { mutableStateOf(Buttons.Button.Area.UNDEFINED) }
+    val bgBounds by remember { mutableStateOf(Rect()) }
+    var height by remember { mutableStateOf(0) }
+    var buttonCache by remember { mutableStateOf(button) }
+
+    with(scope) {
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f)
+            .height(with(LocalDensity.current) { height.toDp() })
+            .pointerInteropFilter { event ->
+                val mainBounds = RectF(
+                    bgBounds.width() * 0.2f,
+                    bgBounds.height() * 0.2f,
+                    bgBounds.width() * 0.8f,
+                    bgBounds.height() * 0.8f
+                )
+                buttonCache = buttonCache.reflectState(event, area, onCommand)
+                area = when {
+                    event.action == MotionEvent.ACTION_UP ||
+                            event.action == MotionEvent.ACTION_POINTER_UP -> {
+                        Buttons.Button.Area.UNDEFINED
+                    }
+                    mainBounds.contains(event.x, event.y) ||
+                            event.action == MotionEvent.ACTION_DOWN ||
+                            event.action == MotionEvent.ACTION_POINTER_DOWN -> {
+                        Buttons.Button.Area.MAIN
+                    }
+                    else -> {
+                        val x = event.x - bgBounds.centerX()
+                        val y = (bgBounds.width() - event.y) - bgBounds.centerY()
+
+                        if (y > x) {
+                            if (y > -x) Buttons.Button.Area.TOP
+                            else Buttons.Button.Area.LEFT
+                        } else {
+                            if (y > -x) Buttons.Button.Area.RIGHT
+                            else Buttons.Button.Area.BOTTOM
+                        }
+                    }
+                }
+
+                true
+            }
+            .onGloballyPositioned {
+                height = it.size.width
+                bgBounds.set(0, 0, it.size.width, it.size.height)
+            }) {
+            area.bgResId?.let { bgResId ->
+                Image(
+                    modifier = Modifier.fillMaxSize(),
+                    painter = painterResource(id = bgResId),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Text(
+                    modifier = Modifier.align(TopCenter),
+                    text = buttonCache.top.text.orEmpty(),
+                    fontSize = 12.sp,
+                    fontFamily = montserrat,
+                    color = colorResource(id = R.color.primaryTextInvertColor)
+                )
+                Text(
+                    modifier = Modifier.align(CenterStart),
+                    text = buttonCache.left.text.orEmpty(),
+                    fontSize = 12.sp,
+                    fontFamily = montserrat,
+                    color = colorResource(id = R.color.primaryTextInvertColor)
+                )
+                Text(
+                    modifier = Modifier.align(Center),
+                    text = buttonCache.main.text.orEmpty(),
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = montserrat,
+                    color = colorResource(id = R.color.primaryTextInvertColor)
+                )
+                Text(
+                    modifier = Modifier.align(CenterEnd),
+                    text = buttonCache.right.text.orEmpty(),
+                    fontSize = 12.sp,
+                    fontFamily = montserrat,
+                    color = colorResource(id = R.color.primaryTextInvertColor)
+                )
+                Text(
+                    modifier = Modifier.align(BottomCenter),
+                    text = buttonCache.bottom.text.orEmpty(),
+                    fontSize = 12.sp,
+                    fontFamily = montserrat,
+                    color = colorResource(id = R.color.primaryTextInvertColor)
+                )
+            }
+        }
+    }
+}
+
+fun Buttons.Button.reflectState(
+    event: MotionEvent,
+    area: Buttons.Button.Area,
+    onCommand: (Command) -> Unit
+): Buttons.Button {
+    when (event.action) {
+        MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_UP -> {
+            val command = when (area) {
+                Buttons.Button.Area.MAIN -> this.main
+                Buttons.Button.Area.LEFT -> this.left
+                Buttons.Button.Area.TOP -> this.top
+                Buttons.Button.Area.RIGHT -> this.right
+                Buttons.Button.Area.BOTTOM -> this.bottom
+                Buttons.Button.Area.UNDEFINED -> null
+            } ?: return this
+
+            onCommand(command)
+        }
+    }
+
+    return this
 }

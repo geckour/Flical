@@ -14,49 +14,36 @@ internal val buttons =
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
                     Command(ItemType.MR),
-                    Buttons.Button.Area.UNDEFINED
                 ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "7"),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "4"),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "1"),
-                    Command(ItemType.A_COS),
-                    Command(ItemType.A_SIN),
-                    Command(ItemType.A_TAN),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "."),
-                    Command(ItemType.NONE),
-                    Command(ItemType.PI),
-                    Command(ItemType.E),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                )
-            ),
-            listOf(
                 Buttons.Button(
                     Command(ItemType.LEFT),
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
+                ),
+                Buttons.Button(
+                    Command(ItemType.RIGHT),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                ),
+                Buttons.Button(
+                    Command(ItemType.DEL),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.AC),
+                ),
+            ),
+            listOf(
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "7"),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
                 ),
                 Buttons.Button(
                     Command(ItemType.NUMBER, "8"),
@@ -64,41 +51,6 @@ internal val buttons =
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "5"),
-                    Command(ItemType.LEFT_BRA),
-                    Command(ItemType.NONE),
-                    Command(ItemType.RIGHT_BRA),
-                    Command(ItemType.ABS),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "2"),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "0"),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NUMBER, "00"),
-                    Command(ItemType.NUMBER, "1.08"),
-                    Command(ItemType.NUMBER, "1.1"),
-                    Buttons.Button.Area.UNDEFINED
-                )
-            ),
-            listOf(
-                Buttons.Button(
-                    Command(ItemType.RIGHT),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
                 ),
                 Buttons.Button(
                     Command(ItemType.NUMBER, "9"),
@@ -106,41 +58,6 @@ internal val buttons =
                     Command(ItemType.NONE),
                     Command(ItemType.LOG2),
                     Command(ItemType.LN),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "6"),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.NUMBER, "3"),
-                    Command(ItemType.COS),
-                    Command(ItemType.SIN),
-                    Command(ItemType.TAN),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                ),
-                Buttons.Button(
-                    Command(ItemType.CALC),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                )
-            ),
-            listOf(
-                Buttons.Button(
-                    Command(ItemType.DEL),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.NONE),
-                    Command(ItemType.AC),
-                    Buttons.Button.Area.UNDEFINED
                 ),
                 Buttons.Button(
                     Command(ItemType.DIV),
@@ -148,7 +65,29 @@ internal val buttons =
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
+                ),
+            ),
+            listOf(
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "4"),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                ),
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "5"),
+                    Command(ItemType.LEFT_BRA),
+                    Command(ItemType.NONE),
+                    Command(ItemType.RIGHT_BRA),
+                    Command(ItemType.ABS),
+                ),
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "6"),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
                 ),
                 Buttons.Button(
                     Command(ItemType.MULTI),
@@ -156,7 +95,29 @@ internal val buttons =
                     Command(ItemType.FACTOR),
                     Command(ItemType.NONE),
                     Command(ItemType.SQRT),
-                    Buttons.Button.Area.UNDEFINED
+                ),
+            ),
+            listOf(
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "1"),
+                    Command(ItemType.A_COS),
+                    Command(ItemType.A_SIN),
+                    Command(ItemType.A_TAN),
+                    Command(ItemType.NONE),
+                ),
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "2"),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                ),
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "3"),
+                    Command(ItemType.COS),
+                    Command(ItemType.SIN),
+                    Command(ItemType.TAN),
+                    Command(ItemType.NONE),
                 ),
                 Buttons.Button(
                     Command(ItemType.MINUS),
@@ -164,7 +125,29 @@ internal val buttons =
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
+                ),
+            ),
+            listOf(
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "."),
+                    Command(ItemType.NONE),
+                    Command(ItemType.PI),
+                    Command(ItemType.E),
+                    Command(ItemType.NONE),
+                ),
+                Buttons.Button(
+                    Command(ItemType.NUMBER, "0"),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NUMBER, "00"),
+                    Command(ItemType.NUMBER, "1.08"),
+                    Command(ItemType.NUMBER, "1.1"),
+                ),
+                Buttons.Button(
+                    Command(ItemType.CALC),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
+                    Command(ItemType.NONE),
                 ),
                 Buttons.Button(
                     Command(ItemType.PLUS),
@@ -172,8 +155,7 @@ internal val buttons =
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
                     Command(ItemType.NONE),
-                    Buttons.Button.Area.UNDEFINED
-                )
-            )
+                ),
+            ),
         )
     )

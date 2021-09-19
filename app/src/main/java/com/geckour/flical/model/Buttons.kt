@@ -3,15 +3,14 @@ package com.geckour.flical.model
 import com.geckour.flical.R
 
 data class Buttons(
-        val list: List<List<Button>>
+    val list: List<List<Button>>
 ) {
     data class Button(
-            val main: Command,
-            val left: Command,
-            val top: Command,
-            val right: Command,
-            val bottom: Command,
-            var tapped: Area
+        val main: Command,
+        val left: Command,
+        val top: Command,
+        val right: Command,
+        val bottom: Command
     ) {
         enum class Area {
             UNDEFINED,
@@ -20,15 +19,16 @@ data class Buttons(
             TOP,
             RIGHT,
             BOTTOM;
-        }
 
-        fun getBgResId(): Int = when (tapped) {
-            Area.MAIN -> R.drawable.bg_button_highlight_main
-            Area.LEFT -> R.drawable.bg_button_highlight_left
-            Area.TOP -> R.drawable.bg_button_highlight_top
-            Area.RIGHT -> R.drawable.bg_button_highlight_right
-            Area.BOTTOM -> R.drawable.bg_button_highlight_bottom
-            else -> 0
+            val bgResId
+                get(): Int? = when (this) {
+                    MAIN -> R.drawable.bg_button_highlight_main
+                    LEFT -> R.drawable.bg_button_highlight_left
+                    TOP -> R.drawable.bg_button_highlight_top
+                    RIGHT -> R.drawable.bg_button_highlight_right
+                    BOTTOM -> R.drawable.bg_button_highlight_bottom
+                    else -> null
+                }
         }
     }
 }

@@ -33,7 +33,7 @@ fun List<Command>.getDisplayString(): String =
 private fun String.clean(): String =
         replace(Regex("^(.*\\.\\d+?)0+$"), "$1")
 
-fun String.deserialize(): List<Command> =
+fun String.deserialized(): List<Command> =
         split(" ")
                 .filter { it.isNotBlank() }
                 .map { it.trim().replace(",", "") }

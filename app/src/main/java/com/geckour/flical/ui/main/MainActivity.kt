@@ -2,8 +2,10 @@ package com.geckour.flical.ui.main
 
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.MotionEvent
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.PreferenceManager
 import coil.annotation.ExperimentalCoilApi
@@ -44,12 +47,15 @@ import com.geckour.flical.model.Buttons
 import com.geckour.flical.model.Command
 import com.geckour.flical.model.ItemType
 import com.geckour.flical.ui.settings.SettingsActivity
+import com.geckour.flical.ui.widget.CalculatorFormula
 import com.geckour.flical.ui.widget.buttons
+import com.geckour.flical.util.deserialized
 import com.geckour.flical.util.getBgImageUri
 import com.geckour.flical.util.getDisplayString
 import java.io.File
 
-private var montserrat: FontFamily? = null
+private var montserrat: Typeface? = null
+private val fontFamily get() = montserrat?.let { FontFamily(it) }
 
 class MainActivity : ComponentActivity() {
 
@@ -59,14 +65,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         montserrat = ResourcesCompat.getFont(this, R.font.montserrat)
-            ?.let { FontFamily(it) }
 
         setContent {
             Calculator(
                 formulaText = viewModel.formulaText.value,
                 resultText = viewModel.resultCommands.value.getDisplayString(),
                 backgroundImagePath = viewModel.backgroundImagePath.value,
-                onOpenSettings = ::openSettings
+                cursorPosition = viewModel.formulaCursorPosition.value,
+                onOpenSettings = ::openSettings,
+                onTextPasted = ::onTextPasted,
+                onCursorPositionRequested = viewModel::onCursorPositionChangedByUser
             ) { command ->
                 if (command.type == ItemType.NONE) return@Calculator
 
@@ -104,6 +112,19 @@ class MainActivity : ComponentActivity() {
     private fun openSettings() {
         startActivity(SettingsActivity.getIntent(this))
     }
+
+    private fun onTextPasted(text: String?) {
+        if (text.isNullOrBlank()) return
+
+        val deserialized = text.deserialized()
+        if (deserialized.isEmpty()) {
+            Toast.makeText(this, R.string.toast_failed_paste, Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        viewModel.insertCommands(deserialized)
+        viewModel.refreshResult()
+    }
 }
 
 @OptIn(ExperimentalCoilApi::class)
@@ -112,7 +133,10 @@ fun Calculator(
     formulaText: String,
     resultText: String,
     backgroundImagePath: String? = null,
+    cursorPosition: Int,
     onOpenSettings: () -> Unit,
+    onTextPasted: (text: String?) -> Unit,
+    onCursorPositionRequested: (Int) -> Unit,
     onCommand: (Command) -> Unit
 ) {
     Box(
@@ -130,7 +154,7 @@ fun Calculator(
             )
         }
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
-            Formula(this, formulaText)
+            Formula(this, formulaText, cursorPosition, onTextPasted, onCursorPositionRequested)
             ResultPreview(resultText)
             Buttons(onCommand)
         }
@@ -148,10 +172,13 @@ fun Calculator(
 }
 
 @Composable
-fun Formula(scope: ColumnScope, text: String) {
-    val maxFontSize = 64.sp
-    var fontSize by remember { mutableStateOf(maxFontSize) }
-    if (text.isEmpty()) fontSize = maxFontSize
+fun Formula(
+    scope: ColumnScope,
+    text: String,
+    cursorPosition: Int,
+    onTextPasted: (text: String?) -> Unit,
+    onCursorPositionRequested: (Int) -> Unit
+) {
     with(scope) {
         Box(
             modifier = Modifier
@@ -160,27 +187,42 @@ fun Formula(scope: ColumnScope, text: String) {
                 .fillMaxSize()
                 .weight(1f)
         ) {
-            SelectionContainer(
+            FormulaTextField(
                 modifier = Modifier
                     .align(Center)
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    text = text,
-                    onTextLayout = { result ->
-                        if (result.didOverflowWidth) fontSize =
-                            (fontSize.value - 1).coerceAtLeast(1f).sp
-                    },
-                    textAlign = TextAlign.End,
-                    softWrap = false,
-                    maxLines = 1,
-                    fontSize = fontSize,
-                    fontFamily = montserrat,
-                    color = colorResource(id = R.color.primaryTextColor)
-                )
-            }
+                    .fillMaxSize(),
+                text = text,
+                cursorPosition = cursorPosition,
+                onTextPasted = onTextPasted,
+                onSelectionChanged = { position, _ -> onCursorPositionRequested(position) }
+            )
         }
     }
+}
+
+@Composable
+fun FormulaTextField(
+    modifier: Modifier,
+    text: String,
+    cursorPosition: Int,
+    onTextPasted: (text: String?) -> Unit,
+    onSelectionChanged: (start: Int, end: Int) -> Unit
+) {
+    AndroidView(
+        modifier = modifier,
+        factory = {
+            CalculatorFormula(it).apply {
+                typeface = montserrat
+
+                this.onTextPasted = onTextPasted
+                this.onSelectionChanged = onSelectionChanged
+            }
+        },
+        update = {
+            it.setText(text)
+            it.setSelection(cursorPosition)
+        }
+    )
 }
 
 @Composable
@@ -188,23 +230,26 @@ fun ResultPreview(text: String) {
     val maxFontSize = 48.sp
     var fontSize by remember { mutableStateOf(maxFontSize) }
     if (text.isEmpty()) fontSize = maxFontSize
-    Text(
+    SelectionContainer(
         modifier = Modifier
             .background(colorResource(id = R.color.inputBackgroundColor))
             .padding(vertical = 12.dp, horizontal = 8.dp)
-            .fillMaxWidth(),
-        text = text,
-        onTextLayout = { result ->
-            if (result.didOverflowWidth) fontSize =
-                (fontSize.value - 1).coerceAtLeast(1f).sp
-        },
-        textAlign = TextAlign.End,
-        softWrap = false,
-        maxLines = 1,
-        fontSize = fontSize,
-        fontFamily = montserrat,
-        color = colorResource(id = R.color.primaryTextColor)
-    )
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = text,
+            onTextLayout = { result ->
+                if (result.didOverflowWidth) fontSize =
+                    (fontSize.value - 1).coerceAtLeast(1f).sp
+            },
+            textAlign = TextAlign.End,
+            softWrap = false,
+            maxLines = 1,
+            fontSize = fontSize,
+            fontFamily = fontFamily,
+            color = colorResource(id = R.color.primaryTextColor)
+        )
+    }
 }
 
 @Composable
@@ -297,14 +342,14 @@ fun Button(
                     modifier = Modifier.align(TopCenter),
                     text = buttonCache.top.text.orEmpty(),
                     fontSize = 12.sp,
-                    fontFamily = montserrat,
+                    fontFamily = fontFamily,
                     color = colorResource(id = R.color.primaryTextInvertColor)
                 )
                 Text(
                     modifier = Modifier.align(CenterStart),
                     text = buttonCache.left.text.orEmpty(),
                     fontSize = 12.sp,
-                    fontFamily = montserrat,
+                    fontFamily = fontFamily,
                     color = colorResource(id = R.color.primaryTextInvertColor)
                 )
                 Text(
@@ -312,21 +357,21 @@ fun Button(
                     text = buttonCache.main.text.orEmpty(),
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = montserrat,
+                    fontFamily = fontFamily,
                     color = colorResource(id = R.color.primaryTextInvertColor)
                 )
                 Text(
                     modifier = Modifier.align(CenterEnd),
                     text = buttonCache.right.text.orEmpty(),
                     fontSize = 12.sp,
-                    fontFamily = montserrat,
+                    fontFamily = fontFamily,
                     color = colorResource(id = R.color.primaryTextInvertColor)
                 )
                 Text(
                     modifier = Modifier.align(BottomCenter),
                     text = buttonCache.bottom.text.orEmpty(),
                     fontSize = 12.sp,
-                    fontFamily = montserrat,
+                    fontFamily = fontFamily,
                     color = colorResource(id = R.color.primaryTextInvertColor)
                 )
             }

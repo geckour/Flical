@@ -6,7 +6,7 @@ import android.text.Layout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.View
+import android.view.Gravity
 import com.geckour.flical.R
 import kotlin.math.min
 
@@ -35,22 +35,18 @@ class CalculatorFormula @JvmOverloads constructor(
         }
 
     init {
-        val typedArray = context.obtainStyledAttributes(
-            attrs, R.styleable.CalculatorFormula, defStyleAttr, 0
-        )
-        maximumTextSize = typedArray.getDimension(
-            R.styleable.CalculatorFormula_maxTextSize, textSize
-        )
-        minimumTextSize = typedArray.getDimension(
-            R.styleable.CalculatorFormula_minTextSize, textSize
-        )
-        stepTextSize = typedArray.getDimension(
-            R.styleable.CalculatorFormula_stepTextSize,
-            (maximumTextSize - minimumTextSize) / 3
-        )
-        typedArray.recycle()
-
+        isSingleLine = true
         setTextIsSelectable(true)
+
+        maximumTextSize = context.resources.getDimension(R.dimen.formula_max_textsize)
+        minimumTextSize = context.resources.getDimension(R.dimen.formula_min_textsize)
+        stepTextSize = context.resources.getDimension(R.dimen.formula_step_textsize)
+
+        gravity = Gravity.CENTER_VERTICAL or Gravity.END
+        setTextColor(context.getColor(R.color.primaryTextColor))
+
+        showSoftInputOnFocus = false
+        requestFocus()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -61,13 +57,13 @@ class CalculatorFormula @JvmOverloads constructor(
         }
 
         // Ensure we are at least as big as our parent.
-        val width = View.MeasureSpec.getSize(widthMeasureSpec)
+        val width = MeasureSpec.getSize(widthMeasureSpec)
         if (minimumWidth != width) {
             minimumWidth = width
         }
 
         // Re-calculate our textSize based on new width.
-        widthConstraint = (View.MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight)
+        widthConstraint = (MeasureSpec.getSize(widthMeasureSpec) - paddingLeft - paddingRight)
         val textSize = getVariableTextSize(text ?: "")
         if (getTextSize() != textSize) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
@@ -85,8 +81,7 @@ class CalculatorFormula @JvmOverloads constructor(
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
 
         setTextSize(TypedValue.COMPLEX_UNIT_PX, getVariableTextSize(text.toString()))
-
-        cursorPosition = cursorPosition // Validate with get() method
+        cursorPosition = cursorPosition // Refresh
         setSelection(cursorPosition)
     }
 

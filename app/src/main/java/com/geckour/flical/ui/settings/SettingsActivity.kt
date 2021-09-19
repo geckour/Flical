@@ -1,39 +1,44 @@
 package com.geckour.flical.ui.settings
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivitySettingsBinding
 import com.geckour.flical.model.SettingsItem
-import com.geckour.flical.ui.CrashlyticsEnabledActivity
-import com.geckour.flical.util.setBgImageUri
 import com.geckour.flical.util.clearBgImageUri
+import com.geckour.flical.util.setBgImageUri
 import kotlinx.coroutines.launch
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 @RuntimePermissions
-class SettingsActivity : CrashlyticsEnabledActivity() {
-
-    private enum class RequestCode {
-        REQUEST_CODE_PICK_MEDIA
-    }
+class SettingsActivity : AppCompatActivity() {
 
     companion object {
+
         fun getIntent(context: Context): Intent =
             Intent(context, SettingsActivity::class.java)
     }
 
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var sharedPreferences: SharedPreferences
+
+    private val launcher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            lifecycleScope.launch {
+                sharedPreferences.setBgImageUri(this@SettingsActivity, it)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,22 +65,6 @@ class SettingsActivity : CrashlyticsEnabledActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (resultCode != Activity.RESULT_OK) return
-
-        when (requestCode) {
-            RequestCode.REQUEST_CODE_PICK_MEDIA.ordinal -> {
-                data?.data?.let {
-                    lifecycleScope.launch {
-                        sharedPreferences.setBgImageUri(this@SettingsActivity, it)
-                    }
-                }
-            }
-        }
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -88,11 +77,7 @@ class SettingsActivity : CrashlyticsEnabledActivity() {
 
     @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
     fun pickBgImage() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)
-        }
-        startActivityForResult(intent, RequestCode.REQUEST_CODE_PICK_MEDIA.ordinal)
+        launcher.launch("image/*")
     }
 
     @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)

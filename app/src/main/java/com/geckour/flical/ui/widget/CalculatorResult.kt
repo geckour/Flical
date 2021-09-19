@@ -31,7 +31,7 @@ class CalculatorResult(context: Context, attrs: AttributeSet) : AlignedTextView(
             val widths = FloatArray(allDigits.length).apply {
                 paint.getTextWidths(allDigits, this)
             }
-            return widths.max() ?: 0f
+            return widths.maxOrNull() ?: 0f
         }
     }
 

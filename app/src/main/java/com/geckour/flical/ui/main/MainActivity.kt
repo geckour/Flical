@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.databinding.DataBindingUtil
@@ -18,16 +19,14 @@ import com.geckour.flical.R
 import com.geckour.flical.databinding.ActivityMainBinding
 import com.geckour.flical.model.Buttons
 import com.geckour.flical.model.ItemType
-import com.geckour.flical.ui.CrashlyticsEnabledActivity
 import com.geckour.flical.ui.settings.SettingsActivity
 import com.geckour.flical.ui.widget.buttons
 import com.geckour.flical.util.deserialize
 import com.geckour.flical.util.getBgImageUri
-import com.geckour.flical.util.observe
 import com.geckour.flical.util.precision
 import timber.log.Timber
 
-class MainActivity : CrashlyticsEnabledActivity() {
+class MainActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
@@ -176,6 +175,7 @@ class MainActivity : CrashlyticsEnabledActivity() {
                     ItemType.DEL -> {
                         viewModel.delete()
                     }
+                    else -> Unit
                 }
 
                 viewModel.processCommand(command)

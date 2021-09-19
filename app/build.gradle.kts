@@ -5,7 +5,7 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    id("io.fabric")
+    id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services") apply false
 }
 
@@ -13,8 +13,8 @@ android {
     compileSdkVersion(Deps.GradlePlugin.compileSdkVersion)
     defaultConfig {
         applicationId = "com.geckour.flical"
-        minSdkVersion(Deps.GradlePlugin.minSdkVersion)
-        targetSdkVersion(Deps.GradlePlugin.targetSdkVersion)
+        minSdk = Deps.GradlePlugin.minSdkVersion
+        targetSdk = Deps.GradlePlugin.targetSdkVersion
         versionCode = 8
         versionName = "1.0.7"
         testInstrumentationRunner = Deps.Test.instrumentTestRunner
@@ -22,13 +22,10 @@ android {
         dataBinding.isEnabled = true
 
         val filesAuthorityValue = "$applicationId.files"
-        manifestPlaceholders = mapOf("filesAuthority" to filesAuthorityValue)
+        manifestPlaceholders["filesAuthority"] = filesAuthorityValue
         buildConfigField("String", "FILES_AUTHORITY", "\"$filesAuthorityValue\"")
     }
     signingConfigs {
-        getByName("debug") {
-            storeFile = getDefaultDebugKeystoreLocation()
-        }
         create("release") {
             val releaseSettingGradleFile = File("${project.rootDir}/app/signing/release.gradle")
             if (releaseSettingGradleFile.exists())
@@ -48,16 +45,18 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
 dependencies {
+    implementation(platform(Deps.Firebase.bom))
+
     implementation(Deps.Kotlin.stdlib)
     implementation(Deps.AndroidX.appCompat)
     implementation(Deps.AndroidX.coreKtx)
@@ -72,14 +71,12 @@ dependencies {
     implementation(Deps.Kotlin.Coroutines.android)
 
     // Firebase
-    implementation(Deps.Firebase.core)
     implementation(Deps.Firebase.crashlytics) { isTransitive = true }
 
     // Logging
     implementation(Deps.Timber.timber)
 
     // ViewModel
-    implementation(Deps.AndroidX.Lifecycle.extensions)
     implementation(Deps.AndroidX.Lifecycle.viewModelKtx)
     kapt(Deps.AndroidX.Lifecycle.compiler)
 

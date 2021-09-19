@@ -5,12 +5,14 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
+import androidx.core.content.edit
 import androidx.exifinterface.media.ExifInterface
 import java.io.File
 import java.io.FileOutputStream
 
-enum class SettingsKey(val default: Any? = null) {
-    BG_IMAGE_URI
+enum class SettingsKey {
+    BG_IMAGE_URI,
+    FLICK_SENSITIVITY
 }
 
 fun SharedPreferences.getBgImageUri(): Uri? =
@@ -37,7 +39,18 @@ fun SharedPreferences.setBgImageUri(context: Context, uri: Uri) {
 
         bitmap.recycle()
 
-        edit().putString(SettingsKey.BG_IMAGE_URI.name, Uri.fromFile(file).toString()).apply()
+        edit {
+            putString(SettingsKey.BG_IMAGE_URI.name, Uri.fromFile(file).toString())
+        }
+    }
+}
+
+fun SharedPreferences.getFlickSensitivity(): Float =
+    getSettingsValue<Float>(SettingsKey.FLICK_SENSITIVITY) ?: 0.4f
+
+fun SharedPreferences.setFlickSensitivity(sensitivity: Float) {
+    edit {
+        putFloat(SettingsKey.FLICK_SENSITIVITY.name, sensitivity)
     }
 }
 
@@ -71,7 +84,4 @@ fun SharedPreferences.clearBgImageUri() {
     edit().putString(SettingsKey.BG_IMAGE_URI.name, null).apply()
 }
 
-fun <T> SharedPreferences.getSettingsValue(key: SettingsKey): T? =
-    if (contains(key.name))
-        (all[key.name] as? T) ?: (key.default as? T)
-    else key.default as? T
+fun <T> SharedPreferences.getSettingsValue(key: SettingsKey): T? = all[key.name] as? T?

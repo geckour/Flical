@@ -29,6 +29,7 @@ class MainViewModel : ViewModel() {
     }
 
     internal val backgroundImagePath = mutableStateOf<String?>(null)
+    internal val flickSensitivity = mutableStateOf(0.4f)
 
     internal fun insertCommands(
         toInsert: List<Command>,

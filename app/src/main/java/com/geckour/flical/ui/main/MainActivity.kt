@@ -12,9 +12,11 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
@@ -52,6 +54,7 @@ import com.geckour.flical.ui.widget.buttons
 import com.geckour.flical.util.deserialized
 import com.geckour.flical.util.getBgImageUri
 import com.geckour.flical.util.getDisplayString
+import com.geckour.flical.util.getFlickSensitivity
 import java.io.File
 
 private var montserrat: Typeface? = null
@@ -72,6 +75,7 @@ class MainActivity : ComponentActivity() {
                 resultText = viewModel.resultCommands.value.getDisplayString(),
                 backgroundImagePath = viewModel.backgroundImagePath.value,
                 cursorPosition = viewModel.formulaCursorPosition.value,
+                flickSensitivity = viewModel.flickSensitivity.value,
                 onOpenSettings = ::openSettings,
                 onTextPasted = ::onTextPasted,
                 onCursorPositionRequested = viewModel::onCursorPositionChangedByUser
@@ -105,8 +109,10 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
 
-        viewModel.backgroundImagePath.value =
-            PreferenceManager.getDefaultSharedPreferences(this).getBgImageUri()?.path
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+
+        viewModel.backgroundImagePath.value = sharedPreferences.getBgImageUri()?.path
+        viewModel.flickSensitivity.value = sharedPreferences.getFlickSensitivity()
     }
 
     private fun openSettings() {
@@ -134,6 +140,7 @@ fun Calculator(
     resultText: String,
     backgroundImagePath: String? = null,
     cursorPosition: Int,
+    flickSensitivity: Float,
     onOpenSettings: () -> Unit,
     onTextPasted: (text: String?) -> Unit,
     onCursorPositionRequested: (Int) -> Unit,
@@ -156,14 +163,17 @@ fun Calculator(
         Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
             Formula(this, formulaText, cursorPosition, onTextPasted, onCursorPositionRequested)
             ResultPreview(resultText)
-            Buttons(onCommand)
+            Buttons(flickSensitivity, onCommand)
         }
         Image(
             modifier = Modifier
                 .padding(4.dp)
                 .align(TopStart)
                 .size(36.dp)
-                .clickable { onOpenSettings() },
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false)
+                ) { onOpenSettings() },
             painter = painterResource(id = R.drawable.ic_baseline_settings_20px),
             contentDescription = null,
             colorFilter = ColorFilter.tint(colorResource(id = R.color.buttonTintColor))
@@ -253,7 +263,7 @@ fun ResultPreview(text: String) {
 }
 
 @Composable
-fun Buttons(onCommand: (Command) -> Unit) {
+fun Buttons(flickSensitivity: Float, onCommand: (Command) -> Unit) {
     val buttons by remember { mutableStateOf(buttons) }
     Column(
         modifier = Modifier
@@ -263,7 +273,7 @@ fun Buttons(onCommand: (Command) -> Unit) {
         buttons.list.forEach { rows ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 rows.forEach { button ->
-                    Button(this, button, onCommand)
+                    Button(this, button, flickSensitivity, onCommand)
                 }
             }
         }
@@ -275,6 +285,7 @@ fun Buttons(onCommand: (Command) -> Unit) {
 fun Button(
     scope: RowScope,
     button: Buttons.Button,
+    flickSensitivity: Float,
     onCommand: (Command) -> Unit
 ) {
     var area by remember { mutableStateOf(Buttons.Button.Area.UNDEFINED) }
@@ -289,10 +300,10 @@ fun Button(
             .height(with(LocalDensity.current) { height.toDp() })
             .pointerInteropFilter { event ->
                 val mainBounds = RectF(
-                    bgBounds.width() * 0.2f,
-                    bgBounds.height() * 0.2f,
-                    bgBounds.width() * 0.8f,
-                    bgBounds.height() * 0.8f
+                    bgBounds.width() * (0.5f * flickSensitivity),
+                    bgBounds.height() * (0.5f * flickSensitivity),
+                    bgBounds.width() * (0.5f * (2 - flickSensitivity)),
+                    bgBounds.height() * (0.5f * (2 - flickSensitivity))
                 )
                 buttonCache = buttonCache.reflectState(event, area, onCommand)
                 area = when {

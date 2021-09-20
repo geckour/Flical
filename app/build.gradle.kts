@@ -5,30 +5,27 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    id("io.fabric")
     id("com.google.gms.google-services") apply false
+    id("com.google.firebase.crashlytics") apply false
 }
 
 android {
-    compileSdkVersion(Deps.GradlePlugin.compileSdkVersion)
+    compileSdk = Deps.GradlePlugin.compileSdkVersion
     defaultConfig {
         applicationId = "com.geckour.flical"
-        minSdkVersion(Deps.GradlePlugin.minSdkVersion)
-        targetSdkVersion(Deps.GradlePlugin.targetSdkVersion)
-        versionCode = 8
-        versionName = "1.0.7"
+        minSdk = Deps.GradlePlugin.minSdkVersion
+        targetSdk = Deps.GradlePlugin.targetSdkVersion
+        versionCode = 9
+        versionName = "1.1.0"
         testInstrumentationRunner = Deps.Test.instrumentTestRunner
 
         dataBinding.isEnabled = true
 
         val filesAuthorityValue = "$applicationId.files"
-        manifestPlaceholders = mapOf("filesAuthority" to filesAuthorityValue)
+        manifestPlaceholders["filesAuthority"] = filesAuthorityValue
         buildConfigField("String", "FILES_AUTHORITY", "\"$filesAuthorityValue\"")
     }
     signingConfigs {
-        getByName("debug") {
-            storeFile = getDefaultDebugKeystoreLocation()
-        }
         create("release") {
             val releaseSettingGradleFile = File("${project.rootDir}/app/signing/release.gradle")
             if (releaseSettingGradleFile.exists())
@@ -48,12 +45,24 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Deps.Compose.version
     }
 }
 
 dependencies {
+    implementation(platform(Deps.Firebase.bom))
+
     implementation(Deps.Kotlin.stdlib)
     implementation(Deps.AndroidX.appCompat)
     implementation(Deps.AndroidX.coreKtx)
@@ -68,14 +77,12 @@ dependencies {
     implementation(Deps.Kotlin.Coroutines.android)
 
     // Firebase
-    implementation(Deps.Firebase.core)
     implementation(Deps.Firebase.crashlytics) { isTransitive = true }
 
     // Logging
     implementation(Deps.Timber.timber)
 
     // ViewModel
-    implementation(Deps.AndroidX.Lifecycle.extensions)
     implementation(Deps.AndroidX.Lifecycle.viewModelKtx)
     kapt(Deps.AndroidX.Lifecycle.compiler)
 
@@ -83,11 +90,28 @@ dependencies {
     implementation(Deps.PermissionDispatcher.permissionDispatcher)
     kapt(Deps.PermissionDispatcher.processor)
 
+    implementation(Deps.AndroidX.preference)
+
     // BigDecimal Math
     implementation(Deps.BigDecimalMath.bigDecimalMath)
 
     // Exif
     implementation(Deps.Exif.exifInterface)
+
+    // Test
+    testImplementation(Deps.Truth.truth)
+    testImplementation(Deps.MockK.mockK)
+
+    // Compose
+    implementation(Deps.Compose.ui)
+    implementation(Deps.Compose.activity)
+    implementation(Deps.Compose.material)
+    implementation(Deps.Compose.uiTooling)
+    androidTestImplementation(Deps.Compose.uiTest)
+
+    // Image Processing
+    implementation(Deps.Image.coilCompose)
 }
 
 apply(plugin = "com.google.gms.google-services")
+apply(plugin = "com.google.firebase.crashlytics")

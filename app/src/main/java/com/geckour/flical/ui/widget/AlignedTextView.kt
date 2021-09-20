@@ -2,19 +2,19 @@ package com.geckour.flical.ui.widget
 
 import android.content.Context
 import android.graphics.Rect
-import androidx.appcompat.widget.AppCompatEditText
 import android.util.AttributeSet
+import androidx.appcompat.widget.AppCompatEditText
 import kotlin.math.ceil
 import kotlin.math.min
 
 /**
  * Extended [AppCompatEditText] that supports ascent/baseline alignment.
  */
-open class AlignedTextView
-@JvmOverloads constructor(context: Context,
-                          attrs: AttributeSet? = null,
-                          defStyleAttr: Int = android.R.attr.textViewStyle)
-    : AppCompatEditText(context, attrs, defStyleAttr) {
+open class AlignedTextView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.textViewStyle
+) : AppCompatEditText(context, attrs, defStyleAttr) {
 
     companion object {
         private const val LATIN_CAPITAL_LETTER = "H"

@@ -3,14 +3,13 @@
 buildscript {
     repositories {
         google()
-        jcenter()
-        maven("https://maven.fabric.io/public")
+        mavenCentral()
     }
     dependencies {
         classpath(Deps.GradlePlugin.android)
         classpath(Deps.GradlePlugin.kotlin)
         classpath(Deps.GradlePlugin.googleService)
-        classpath(Deps.GradlePlugin.fabric)
+        classpath(Deps.GradlePlugin.firebaseCrashlytics)
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -20,8 +19,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
-        maven("https://maven.fabric.io/public")
+        mavenCentral()
     }
 }
 

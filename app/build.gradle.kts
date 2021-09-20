@@ -5,8 +5,8 @@ plugins {
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
-    id("com.google.firebase.crashlytics")
     id("com.google.gms.google-services") apply false
+    id("com.google.firebase.crashlytics") apply false
 }
 
 android {
@@ -15,8 +15,8 @@ android {
         applicationId = "com.geckour.flical"
         minSdk = Deps.GradlePlugin.minSdkVersion
         targetSdk = Deps.GradlePlugin.targetSdkVersion
-        versionCode = 8
-        versionName = "1.0.7"
+        versionCode = 9
+        versionName = "1.1.0"
         testInstrumentationRunner = Deps.Test.instrumentTestRunner
 
         dataBinding.isEnabled = true
@@ -114,3 +114,4 @@ dependencies {
 }
 
 apply(plugin = "com.google.gms.google-services")
+apply(plugin = "com.google.firebase.crashlytics")

@@ -1,5 +1,6 @@
 package com.geckour.flical.ui.main
 
+import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Typeface
@@ -56,6 +57,9 @@ import com.geckour.flical.util.getBgImageUri
 import com.geckour.flical.util.getDisplayString
 import com.geckour.flical.util.getFlickSensitivity
 import java.io.File
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 private var montserrat: Typeface? = null
 private val fontFamily get() = montserrat?.let { FontFamily(it) }
@@ -299,19 +303,16 @@ fun Button(
             .weight(1f)
             .height(with(LocalDensity.current) { height.toDp() })
             .pointerInteropFilter { event ->
-                val mainBounds = RectF(
-                    bgBounds.width() * (0.5f * flickSensitivity),
-                    bgBounds.height() * (0.5f * flickSensitivity),
-                    bgBounds.width() * (0.5f * (2 - flickSensitivity)),
-                    bgBounds.height() * (0.5f * (2 - flickSensitivity))
-                )
+                val center = PointF(bgBounds.exactCenterX(), bgBounds.exactCenterY())
+                val dist = sqrt((event.x - center.x).pow(2) + (event.y - center.y).pow(2))
+                val mainR = min(bgBounds.width(), bgBounds.height()) * 0.5 * (1 - flickSensitivity)
                 buttonCache = buttonCache.reflectState(event, area, onCommand)
                 area = when {
                     event.action == MotionEvent.ACTION_UP ||
                             event.action == MotionEvent.ACTION_POINTER_UP -> {
                         Buttons.Button.Area.UNDEFINED
                     }
-                    mainBounds.contains(event.x, event.y) ||
+                    dist <= mainR ||
                             event.action == MotionEvent.ACTION_DOWN ||
                             event.action == MotionEvent.ACTION_POINTER_DOWN -> {
                         Buttons.Button.Area.MAIN

@@ -105,6 +105,7 @@ dependencies {
     // Compose
     implementation(Deps.Compose.ui)
     implementation(Deps.Compose.activity)
+    implementation(Deps.Compose.navigation)
     implementation(Deps.Compose.material)
     implementation(Deps.Compose.uiTooling)
     androidTestImplementation(Deps.Compose.uiTest)

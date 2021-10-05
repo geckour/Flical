@@ -38,6 +38,7 @@ import com.geckour.flical.ui.main.montserrat
 import com.geckour.flical.ui.widget.CalculatorFormula
 import com.geckour.flical.ui.widget.buttons
 import java.io.File
+import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -50,11 +51,14 @@ fun Calculator(
     backgroundImagePath: String? = null,
     cursorPosition: Int,
     flickSensitivity: Float,
+    uiBias: Float,
     onOpenSettings: () -> Unit,
     onTextPasted: (text: String?) -> Unit,
     onCursorPositionRequested: (Int) -> Unit,
     onCommand: (Command) -> Unit
 ) {
+    var width by remember { mutableStateOf(0) }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -62,6 +66,7 @@ fun Calculator(
                 backgroundImagePath?.let { Color.Transparent }
                     ?: colorResource(id = R.color.backgroundColor)
             )
+            .onGloballyPositioned { width = it.size.width }
     ) {
         backgroundImagePath?.let {
             Image(
@@ -73,30 +78,34 @@ fun Calculator(
         }
         Box(
             modifier = Modifier.padding(
-                start = 0.dp,
-                top = 0.dp,
-                end = 0.dp
+                start = if (uiBias > 0) {
+                    with(LocalDensity.current) { (width * uiBias).toDp() }
+                } else 0.dp,
+                top = with(LocalDensity.current) { (width * abs(uiBias)).toDp() },
+                end = if (uiBias < 0) {
+                    with(LocalDensity.current) { (width * abs(uiBias)).toDp() }
+                } else 0.dp
             )
-        ) { // TODO: Link with settings for single-handed mode
+        ) {
             Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
                 Formula(this, formulaText, cursorPosition, onTextPasted, onCursorPositionRequested)
                 ResultPreview(resultText)
                 Buttons(flickSensitivity, onCommand)
             }
-            Image(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .align(Alignment.TopStart)
-                    .size(36.dp)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = rememberRipple(bounded = false)
-                    ) { onOpenSettings() },
-                painter = painterResource(id = R.drawable.ic_baseline_settings_20px),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(colorResource(id = R.color.buttonTintColor))
-            )
         }
+        Image(
+            modifier = Modifier
+                .padding(4.dp)
+                .align(Alignment.TopStart)
+                .size(36.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(bounded = false)
+                ) { onOpenSettings() },
+            painter = painterResource(id = R.drawable.ic_baseline_settings_20px),
+            contentDescription = null,
+            colorFilter = ColorFilter.tint(colorResource(id = R.color.buttonTintColor))
+        )
     }
 }
 

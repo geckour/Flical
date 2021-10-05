@@ -2,19 +2,14 @@ package com.geckour.flical.ui.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Slider
-import androidx.compose.material.SliderDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,8 +20,12 @@ import com.geckour.flical.ui.main.fontFamily
 @Composable
 fun Settings(
     generalSettings: List<SettingsItem>,
-    defaultFlickSensitivity: Float,
-    onFlickSensitivityValueChanged: (Float) -> Unit
+    presetFlickSensitivity: Float,
+    presetUIBias: Float,
+    onResetFlickSensitivity: (Float) -> Unit,
+    onResetUIBias: (Float) -> Unit,
+    onFlickSensitivityValueChanged: (Float) -> Unit,
+    onUIBiasValueChanged: (Float) -> Unit
 ) {
     Column(modifier = Modifier
         .fillMaxSize()
@@ -49,8 +48,18 @@ fun Settings(
             generalSettings.forEach { GeneralSetting(it) }
             SliderSetting(
                 title = stringResource(id = R.string.settings_item_title_flick_sensitivity),
-                defaultValue = defaultFlickSensitivity,
-                onValueChanged = onFlickSensitivityValueChanged
+                defaultValue = 0.4f,
+                presetValue = presetFlickSensitivity,
+                onClickReset = onResetFlickSensitivity,
+                onValueChangeFinished = onFlickSensitivityValueChanged
+            )
+            SliderSetting(
+                title = stringResource(id = R.string.settings_item_title_ui_bias),
+                defaultValue = 0.5f,
+                presetValue = presetUIBias,
+                onClickReset = onResetUIBias,
+                onValueChangeFinished = onUIBiasValueChanged,
+                onValueChange = onUIBiasValueChanged
             )
         }
     }
@@ -94,8 +103,15 @@ fun GeneralSetting(data: SettingsItem) {
 }
 
 @Composable
-fun SliderSetting(title: String, defaultValue: Float, onValueChanged: (Float) -> Unit) {
-    var sliderValue by remember { mutableStateOf(defaultValue) }
+fun SliderSetting(
+    title: String,
+    defaultValue: Float,
+    presetValue: Float,
+    onClickReset: (Float) -> Unit,
+    onValueChangeFinished: (Float) -> Unit,
+    onValueChange: (Float) -> Unit = {}
+) {
+    var sliderValue by remember { mutableStateOf(presetValue) }
     Column(
         modifier = Modifier
             .padding(start = 16.dp, top = 12.dp, end = 4.dp, bottom = 4.dp)
@@ -114,22 +130,40 @@ fun SliderSetting(title: String, defaultValue: Float, onValueChanged: (Float) ->
             value = sliderValue,
             onValueChange = {
                 sliderValue = it
+                onValueChange(it)
             },
             onValueChangeFinished = {
-                onValueChanged(sliderValue)
+                onValueChangeFinished(sliderValue)
             },
             colors = SliderDefaults.colors(
                 thumbColor = colorResource(id = R.color.primaryColor),
                 activeTrackColor = colorResource(id = R.color.primaryColor)
             )
         )
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = sliderValue.toString(),
-            fontSize = 12.sp,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            fontFamily = fontFamily
-        )
+        Row {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                text = sliderValue.toString(),
+                fontSize = 12.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                fontFamily = fontFamily
+            )
+            TextButton(
+                onClick = {
+                    sliderValue = defaultValue
+                    onClickReset(defaultValue)
+                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.button_initialize),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = colorResource(id = R.color.secondaryColor)
+                )
+            }
+        }
     }
 }

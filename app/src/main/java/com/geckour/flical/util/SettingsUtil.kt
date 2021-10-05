@@ -12,7 +12,8 @@ import java.io.FileOutputStream
 
 enum class SettingsKey {
     BG_IMAGE_URI,
-    FLICK_SENSITIVITY
+    FLICK_SENSITIVITY,
+    UI_BIAS
 }
 
 fun SharedPreferences.getBgImageUri(): Uri? =
@@ -53,6 +54,15 @@ fun SharedPreferences.getFlickSensitivity(): Float =
 fun SharedPreferences.setFlickSensitivity(sensitivity: Float) {
     edit {
         putFloat(SettingsKey.FLICK_SENSITIVITY.name, sensitivity)
+    }
+}
+
+fun SharedPreferences.getUIBias(): Float =
+    getSettingsValue<Float>(SettingsKey.UI_BIAS) ?: 0.5f
+
+fun SharedPreferences.setUIBias(sensitivity: Float) {
+    edit {
+        putFloat(SettingsKey.UI_BIAS.name, sensitivity)
     }
 }
 

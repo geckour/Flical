@@ -8,6 +8,9 @@
     <string name="settings_item_title_clear_bg_image">Remove Background image</string>
     <string name="settings_item_desc_clear_bg_image">Remove background image if already set</string>
     <string name="settings_item_title_flick_sensitivity">Set sensitivity of flick</string>
+    <string name="settings_item_title_ui_bias">Set bias of UI</string>
+
+    <string name="button_initialize">Initialize</string>
 
     <string name="toast_completed_copy">Copied</string>
     <string name="toast_failed_paste">Failed to paste</string>

@@ -58,6 +58,7 @@ class MainActivity : ComponentActivity() {
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         viewModel.backgroundImagePath.value = sharedPreferences.getBgImageUri()?.path
+        viewModel.uiBias.value = sharedPreferences.getUIBias()
 
         setContent {
             Box(modifier = Modifier.fillMaxSize()) {
@@ -67,6 +68,7 @@ class MainActivity : ComponentActivity() {
                     backgroundImagePath = viewModel.backgroundImagePath.value,
                     cursorPosition = viewModel.formulaCursorPosition.value,
                     flickSensitivity = viewModel.flickSensitivity.value,
+                    uiBias = viewModel.uiBias.value * 2 - 1,
                     onOpenSettings = ::openSettings,
                     onTextPasted = ::onTextPasted,
                     onCursorPositionRequested = viewModel::onCursorPositionChangedByUser
@@ -111,8 +113,21 @@ class MainActivity : ComponentActivity() {
                                 }
                             ),
                         ),
-                        defaultFlickSensitivity = sharedPreferences.getFlickSensitivity(),
-                        onFlickSensitivityValueChanged = sharedPreferences::setFlickSensitivity
+                        presetFlickSensitivity = sharedPreferences.getFlickSensitivity(),
+                        presetUIBias = sharedPreferences.getUIBias(),
+                        onResetFlickSensitivity = {
+                            sharedPreferences.setFlickSensitivity(it)
+                            viewModel.flickSensitivity.value = it
+                        },
+                        onResetUIBias = {
+                            sharedPreferences.setUIBias(it)
+                            viewModel.uiBias.value = it
+                        },
+                        onFlickSensitivityValueChanged = sharedPreferences::setFlickSensitivity,
+                        onUIBiasValueChanged = {
+                            sharedPreferences.setUIBias(it)
+                            viewModel.uiBias.value = it
+                        }
                     )
                 }
             }
@@ -133,8 +148,7 @@ class MainActivity : ComponentActivity() {
         if (showSettings.value) {
             viewModel.flickSensitivity.value = sharedPreferences.getFlickSensitivity()
             showSettings.value = false
-        }
-        else super.onBackPressed()
+        } else super.onBackPressed()
     }
 
     private fun openSettings() {

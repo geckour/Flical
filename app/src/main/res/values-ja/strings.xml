@@ -6,6 +6,9 @@
     <string name="settings_item_title_clear_bg_image">背景画像を除去</string>
     <string name="settings_item_desc_clear_bg_image">設定した背景画像を除去</string>
     <string name="settings_item_title_flick_sensitivity">フリックの感度を設定</string>
+    <string name="settings_item_title_ui_bias">UI の偏りを設定</string>
+
+    <string name="button_initialize">初期化</string>
 
     <string name="toast_completed_copy">コピーしました</string>
     <string name="toast_failed_paste">貼り付けに失敗しました</string>

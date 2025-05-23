@@ -30,7 +30,7 @@ class CalculatorFormula @JvmOverloads constructor(
 
     private var cursorPosition: Int = 0
         get() = when {
-            field < 0 || field > text?.length ?: 0 -> text?.length ?: 0
+            field < 0 || field > (text?.length ?: 0) -> text?.length ?: 0
             else -> field
         }
 

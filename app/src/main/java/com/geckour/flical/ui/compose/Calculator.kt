@@ -7,11 +7,29 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -57,7 +75,7 @@ fun Calculator(
     onCursorPositionRequested: (Int) -> Unit,
     onCommand: (Command) -> Unit
 ) {
-    var width by remember { mutableStateOf(0) }
+    var width by remember { mutableIntStateOf(0) }
 
     Box(
         modifier = Modifier
@@ -77,15 +95,17 @@ fun Calculator(
             )
         }
         Box(
-            modifier = Modifier.padding(
-                start = if (uiBias > 0) {
-                    with(LocalDensity.current) { (width * uiBias).toDp() }
-                } else 0.dp,
-                top = with(LocalDensity.current) { (width * abs(uiBias)).toDp() },
-                end = if (uiBias < 0) {
-                    with(LocalDensity.current) { (width * abs(uiBias)).toDp() }
-                } else 0.dp
-            )
+            modifier = Modifier
+                .padding(
+                    start = if (uiBias > 0) {
+                        with(LocalDensity.current) { (width * uiBias).toDp() }
+                    } else 0.dp,
+                    top = with(LocalDensity.current) { (width * abs(uiBias)).toDp() },
+                    end = if (uiBias < 0) {
+                        with(LocalDensity.current) { (width * abs(uiBias)).toDp() }
+                    } else 0.dp
+                )
+                .statusBarsPadding()
         ) {
             Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Bottom) {
                 Formula(this, formulaText, cursorPosition, onTextPasted, onCursorPositionRequested)
@@ -96,6 +116,7 @@ fun Calculator(
         Image(
             modifier = Modifier
                 .padding(4.dp)
+                .safeDrawingPadding()
                 .align(Alignment.TopStart)
                 .size(36.dp)
                 .clickable(
@@ -197,11 +218,12 @@ fun Buttons(flickSensitivity: Float, onCommand: (Command) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .background(colorResource(id = R.color.backgroundMaskColor))
+            .navigationBarsPadding()
     ) {
         buttons.list.forEach { rows ->
             Row(modifier = Modifier.fillMaxWidth()) {
                 rows.forEach { button ->
-                    Button(this, button, flickSensitivity, onCommand)
+                    CalculatorButton(this, button, flickSensitivity, onCommand)
                 }
             }
         }
@@ -210,7 +232,7 @@ fun Buttons(flickSensitivity: Float, onCommand: (Command) -> Unit) {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Button(
+fun CalculatorButton(
     scope: RowScope,
     button: Buttons.Button,
     flickSensitivity: Float,
@@ -218,7 +240,7 @@ fun Button(
 ) {
     var area by remember { mutableStateOf(Buttons.Button.Area.UNDEFINED) }
     val bgBounds by remember { mutableStateOf(Rect()) }
-    var height by remember { mutableStateOf(0) }
+    var height by remember { mutableIntStateOf(0) }
     var buttonCache by remember { mutableStateOf(button) }
 
     with(scope) {
@@ -236,11 +258,13 @@ fun Button(
                             event.action == MotionEvent.ACTION_POINTER_UP -> {
                         Buttons.Button.Area.UNDEFINED
                     }
+
                     dist <= mainR ||
                             event.action == MotionEvent.ACTION_DOWN ||
                             event.action == MotionEvent.ACTION_POINTER_DOWN -> {
                         Buttons.Button.Area.MAIN
                     }
+
                     else -> {
                         val x = event.x - bgBounds.centerX()
                         val y = (bgBounds.width() - event.y) - bgBounds.centerY()

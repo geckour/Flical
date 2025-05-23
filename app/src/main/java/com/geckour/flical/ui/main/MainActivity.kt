@@ -1,16 +1,18 @@
 package com.geckour.flical.ui.main
 
-import android.Manifest
 import android.content.SharedPreferences
 import android.graphics.Typeface
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
+import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.res.ResourcesCompat
@@ -21,32 +23,42 @@ import com.geckour.flical.model.ItemType
 import com.geckour.flical.model.SettingsItem
 import com.geckour.flical.ui.compose.Calculator
 import com.geckour.flical.ui.compose.Settings
-import com.geckour.flical.util.*
+import com.geckour.flical.util.clearBgImageUri
+import com.geckour.flical.util.deserialized
+import com.geckour.flical.util.getBgImageUri
+import com.geckour.flical.util.getDisplayString
+import com.geckour.flical.util.getFlickSensitivity
+import com.geckour.flical.util.getUIBias
+import com.geckour.flical.util.setBgImageUri
+import com.geckour.flical.util.setFlickSensitivity
+import com.geckour.flical.util.setUIBias
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 
 var montserrat: Typeface? = null
 val fontFamily get() = montserrat?.let { FontFamily(it) }
 
 @RuntimePermissions
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
     private lateinit var sharedPreferences: SharedPreferences
 
-    private var showSettings = mutableStateOf(false)
+    private var showingSettings = mutableStateOf(false)
+
+    private val backgroundImagePath = mutableStateOf<String?>(null)
+    private val flickSensitivity = mutableFloatStateOf(0.4f)
+    private val uiBias = mutableFloatStateOf(0.5f)
 
     private val launcher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let {
             lifecycleScope.launch {
                 sharedPreferences.setBgImageUri(this@MainActivity, it)
-                viewModel.backgroundImagePath.value = null
+                backgroundImagePath.value = null
                 delay(50)
-                viewModel.backgroundImagePath.value = sharedPreferences.getBgImageUri()?.path
+                backgroundImagePath.value = sharedPreferences.getBgImageUri()?.path
             }
         }
     }
@@ -54,21 +66,28 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        onBackPressedDispatcher.addCallback {
+            if (showingSettings.value) {
+                flickSensitivity.floatValue = sharedPreferences.getFlickSensitivity()
+                showingSettings.value = false
+            }
+        }
+
         montserrat = ResourcesCompat.getFont(this, R.font.montserrat)
 
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        viewModel.backgroundImagePath.value = sharedPreferences.getBgImageUri()?.path
-        viewModel.uiBias.value = sharedPreferences.getUIBias()
+        backgroundImagePath.value = sharedPreferences.getBgImageUri()?.path
+        uiBias.floatValue = sharedPreferences.getUIBias()
 
         setContent {
             Box(modifier = Modifier.fillMaxSize()) {
                 Calculator(
                     formulaText = viewModel.formulaText.value,
                     resultText = viewModel.resultCommands.value.getDisplayString(),
-                    backgroundImagePath = viewModel.backgroundImagePath.value,
+                    backgroundImagePath = backgroundImagePath.value,
                     cursorPosition = viewModel.formulaCursorPosition.value,
-                    flickSensitivity = viewModel.flickSensitivity.value,
-                    uiBias = viewModel.uiBias.value * 2 - 1,
+                    flickSensitivity = flickSensitivity.floatValue,
+                    uiBias = uiBias.floatValue * 2 - 1,
                     onOpenSettings = ::openSettings,
                     onTextPasted = ::onTextPasted,
                     onCursorPositionRequested = viewModel::onCursorPositionChangedByUser
@@ -79,37 +98,44 @@ class MainActivity : ComponentActivity() {
                         ItemType.RIGHT -> {
                             viewModel.moveCursorRight()
                         }
+
                         ItemType.LEFT -> {
                             viewModel.moveCursorLeft()
                         }
+
                         ItemType.M -> {
                             viewModel.updateMemory()
                         }
+
                         ItemType.MR -> {
                             viewModel.insertCommands(viewModel.memory)
                         }
+
                         ItemType.DEL -> {
                             viewModel.delete()
                         }
+
                         else -> Unit
                     }
 
                     viewModel.processCommand(command)
                 }
-                if (showSettings.value) {
+                if (showingSettings.value) {
                     Settings(
                         generalSettings = listOf(
                             SettingsItem(
                                 getString(R.string.settings_item_title_set_bg_image),
                                 getString(R.string.settings_item_desc_set_bg_image),
-                                onClick = ::pickBgImageWithPermissionCheck
+                                onClick = {
+                                    launcher.launch("image/*")
+                                }
                             ),
                             SettingsItem(
                                 getString(R.string.settings_item_title_clear_bg_image),
                                 getString(R.string.settings_item_desc_clear_bg_image),
                                 onClick = {
                                     sharedPreferences.clearBgImageUri()
-                                    viewModel.backgroundImagePath.value = null
+                                    backgroundImagePath.value = null
                                 }
                             ),
                         ),
@@ -117,16 +143,16 @@ class MainActivity : ComponentActivity() {
                         presetUIBias = sharedPreferences.getUIBias(),
                         onResetFlickSensitivity = {
                             sharedPreferences.setFlickSensitivity(it)
-                            viewModel.flickSensitivity.value = it
+                            flickSensitivity.floatValue = it
                         },
                         onResetUIBias = {
                             sharedPreferences.setUIBias(it)
-                            viewModel.uiBias.value = it
+                            uiBias.floatValue = it
                         },
                         onFlickSensitivityValueChanged = sharedPreferences::setFlickSensitivity,
                         onUIBiasValueChanged = {
                             sharedPreferences.setUIBias(it)
-                            viewModel.uiBias.value = it
+                            uiBias.floatValue = it
                         }
                     )
                 }
@@ -134,25 +160,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        onRequestPermissionsResult(requestCode, grantResults)
-    }
-
-    override fun onBackPressed() {
-        if (showSettings.value) {
-            viewModel.flickSensitivity.value = sharedPreferences.getFlickSensitivity()
-            showSettings.value = false
-        } else super.onBackPressed()
-    }
-
     private fun openSettings() {
-        showSettings.value = true
+        showingSettings.value = true
     }
 
     private fun onTextPasted(text: String?) {
@@ -166,15 +175,5 @@ class MainActivity : ComponentActivity() {
 
         viewModel.insertCommands(deserialized)
         viewModel.refreshResult()
-    }
-
-    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun pickBgImage() {
-        launcher.launch("image/*")
-    }
-
-    @OnPermissionDenied(Manifest.permission.READ_EXTERNAL_STORAGE)
-    fun onStoragePermissionError() {
-        pickBgImageWithPermissionCheck()
     }
 }

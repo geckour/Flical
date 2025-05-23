@@ -3,14 +3,14 @@ import com.android.build.gradle.internal.packaging.getDefaultDebugKeystoreLocati
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("android.extensions")
-    kotlin("kapt")
     id("com.google.gms.google-services") apply false
     id("com.google.firebase.crashlytics") apply false
+    id("org.jetbrains.kotlin.plugin.compose") version Deps.Kotlin.version
 }
 
 android {
     compileSdk = Deps.GradlePlugin.compileSdkVersion
+    namespace = "com.geckour.flical"
     defaultConfig {
         applicationId = "com.geckour.flical"
         minSdk = Deps.GradlePlugin.minSdkVersion
@@ -54,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = Deps.Compose.version
@@ -84,11 +85,9 @@ dependencies {
 
     // ViewModel
     implementation(Deps.AndroidX.Lifecycle.viewModelKtx)
-    kapt(Deps.AndroidX.Lifecycle.compiler)
 
     // Permission
     implementation(Deps.PermissionDispatcher.permissionDispatcher)
-    kapt(Deps.PermissionDispatcher.processor)
 
     implementation(Deps.AndroidX.preference)
 

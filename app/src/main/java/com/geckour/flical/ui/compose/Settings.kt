@@ -2,9 +2,27 @@ package com.geckour.flical.ui.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Slider
+import androidx.compose.material.SliderDefaults
+import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -32,7 +50,10 @@ fun Settings(
         .clickable(enabled = false) {}
         .background(Color.White.copy(alpha = 0.75f))
     ) {
-        TopAppBar(backgroundColor = colorResource(id = R.color.primaryColor)) {
+        TopAppBar(
+            backgroundColor = colorResource(id = R.color.primaryColor),
+            contentPadding = WindowInsets.statusBars.asPaddingValues(),
+        ) {
             Text(
                 modifier = Modifier.padding(start = 8.dp),
                 text = stringResource(id = R.string.title_settings),
@@ -45,7 +66,12 @@ fun Settings(
                 .fillMaxSize()
                 .weight(1f)
         ) {
-            generalSettings.forEach { GeneralSetting(it) }
+            generalSettings.forEachIndexed { index, settingsItem ->
+                GeneralSetting(
+                    index,
+                    settingsItem
+                )
+            }
             SliderSetting(
                 title = stringResource(id = R.string.settings_item_title_flick_sensitivity),
                 defaultValue = 0.4f,
@@ -66,12 +92,16 @@ fun Settings(
 }
 
 @Composable
-fun GeneralSetting(data: SettingsItem) {
+fun GeneralSetting(index: Int, data: SettingsItem) {
     Column(
         modifier = Modifier
-            .padding(start = 16.dp, top = 12.dp, end = 4.dp, bottom = 4.dp)
             .fillMaxWidth()
-            .clickable(onClick = data.onClick)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(),
+                onClick = data.onClick
+            )
+            .padding(start = 16.dp, top = (if (index == 0) 12 else 8).dp, end = 4.dp, bottom = 8.dp)
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -151,11 +181,12 @@ fun SliderSetting(
                 overflow = TextOverflow.Ellipsis,
                 fontFamily = fontFamily
             )
-            TextButton(
+            Button(
                 onClick = {
                     sliderValue = defaultValue
                     onClickReset(defaultValue)
-                }
+                },
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)
             ) {
                 Text(
                     text = stringResource(id = R.string.button_initialize),

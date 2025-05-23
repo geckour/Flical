@@ -1,24 +1,24 @@
 object Deps {
     object Kotlin {
-        const val version = "1.5.21"
+        const val version = "2.0.21"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$version"
 
         object Coroutines {
-            private const val version = "1.5.2"
+            private const val version = "1.10.1"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version"
             const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version"
         }
     }
 
     object GradlePlugin {
-        const val android = "com.android.tools.build:gradle:7.0.2"
+        const val android = "com.android.tools.build:gradle:8.6.0"
         const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
         const val googleService = "com.google.gms:google-services:4.3.10"
         const val firebaseCrashlytics = "com.google.firebase:firebase-crashlytics-gradle:2.7.1"
 
-        const val compileSdkVersion = 31
+        const val compileSdkVersion = 35
         const val minSdkVersion = 26
-        const val targetSdkVersion = 31
+        const val targetSdkVersion = 35
     }
 
     object Test {
@@ -36,9 +36,8 @@ object Deps {
         const val preference = "androidx.preference:preference-ktx:1.1.1"
 
         object Lifecycle {
-            private const val version = "2.3.1"
+            private const val version = "2.8.7"
             const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
-            const val compiler = "androidx.lifecycle:lifecycle-compiler:$version"
         }
     }
 
@@ -47,9 +46,7 @@ object Deps {
     }
 
     object PermissionDispatcher {
-        private const val version = "4.9.1"
-        const val permissionDispatcher = "com.github.permissions-dispatcher:permissionsdispatcher:$version"
-        const val processor = "com.github.permissions-dispatcher:permissionsdispatcher-processor:$version"
+        const val permissionDispatcher = "com.github.permissions-dispatcher:ktx:1.1.4"
     }
 
     object BigDecimalMath {

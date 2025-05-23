@@ -12,13 +12,14 @@ import java.io.FileOutputStream
 
 enum class SettingsKey {
     BG_IMAGE_URI,
-    FLICK_SENSITIVITY
+    FLICK_SENSITIVITY,
+    UI_BIAS
 }
 
 fun SharedPreferences.getBgImageUri(): Uri? =
     getSettingsValue<String>(SettingsKey.BG_IMAGE_URI)?.toUri()
 
-fun SharedPreferences.setBgImageUri(context: Context, uri: Uri) {
+fun SharedPreferences.setBgImageUri(context: Context, uri: Uri): String? {
     val dirName = "images"
     val fileName = "bg_image"
     val dir = File(context.filesDir, dirName)
@@ -29,7 +30,7 @@ fun SharedPreferences.setBgImageUri(context: Context, uri: Uri) {
 
     val bitmap = uri.extractMediaBitmap(context)
         ?.rotate(uri.getRotation(context))
-        ?: return
+        ?: return null
 
     FileOutputStream(file).use {
         val type = context.contentResolver.getType(uri)?.parseMimeType()
@@ -39,9 +40,11 @@ fun SharedPreferences.setBgImageUri(context: Context, uri: Uri) {
 
         bitmap.recycle()
 
-        edit {
-            putString(SettingsKey.BG_IMAGE_URI.name, Uri.fromFile(file).toString())
+        val result = Uri.fromFile(file).toString()
+        edit(commit = true) {
+            putString(SettingsKey.BG_IMAGE_URI.name, result)
         }
+        return result
     }
 }
 
@@ -51,6 +54,15 @@ fun SharedPreferences.getFlickSensitivity(): Float =
 fun SharedPreferences.setFlickSensitivity(sensitivity: Float) {
     edit {
         putFloat(SettingsKey.FLICK_SENSITIVITY.name, sensitivity)
+    }
+}
+
+fun SharedPreferences.getUIBias(): Float =
+    getSettingsValue<Float>(SettingsKey.UI_BIAS) ?: 0.5f
+
+fun SharedPreferences.setUIBias(sensitivity: Float) {
+    edit {
+        putFloat(SettingsKey.UI_BIAS.name, sensitivity)
     }
 }
 

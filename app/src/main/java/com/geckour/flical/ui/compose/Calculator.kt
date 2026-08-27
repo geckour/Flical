@@ -23,7 +23,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.geckour.flical.R
 import com.geckour.flical.model.Buttons
 import com.geckour.flical.model.Command
@@ -89,7 +89,7 @@ fun Calculator(
         backgroundImagePath?.let {
             Image(
                 modifier = Modifier.fillMaxSize(),
-                painter = rememberImagePainter(File(it)),
+                painter = rememberAsyncImagePainter(File(it)),
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
@@ -121,7 +121,7 @@ fun Calculator(
                 .size(36.dp)
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(bounded = false)
+                    indication = ripple(bounded = false)
                 ) { onOpenSettings() },
             painter = painterResource(id = R.drawable.ic_baseline_settings_20px),
             contentDescription = null,
@@ -244,47 +244,49 @@ fun CalculatorButton(
     var buttonCache by remember { mutableStateOf(button) }
 
     with(scope) {
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f)
-            .height(with(LocalDensity.current) { height.toDp() })
-            .pointerInteropFilter { event ->
-                val center = PointF(bgBounds.exactCenterX(), bgBounds.exactCenterY())
-                val dist = sqrt((event.x - center.x).pow(2) + (event.y - center.y).pow(2))
-                val mainR = min(bgBounds.width(), bgBounds.height()) * 0.5 * (1 - flickSensitivity)
-                buttonCache = buttonCache.reflectState(event, area, onCommand)
-                area = when {
-                    event.action == MotionEvent.ACTION_UP ||
-                            event.action == MotionEvent.ACTION_POINTER_UP -> {
-                        Buttons.Button.Area.UNDEFINED
-                    }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .height(with(LocalDensity.current) { height.toDp() })
+                .pointerInteropFilter { event ->
+                    val center = PointF(bgBounds.exactCenterX(), bgBounds.exactCenterY())
+                    val dist = sqrt((event.x - center.x).pow(2) + (event.y - center.y).pow(2))
+                    val mainR =
+                        min(bgBounds.width(), bgBounds.height()) * 0.5 * (1 - flickSensitivity)
+                    buttonCache = buttonCache.reflectState(event, area, onCommand)
+                    area = when {
+                        event.action == MotionEvent.ACTION_UP ||
+                                event.action == MotionEvent.ACTION_POINTER_UP -> {
+                            Buttons.Button.Area.UNDEFINED
+                        }
 
-                    dist <= mainR ||
-                            event.action == MotionEvent.ACTION_DOWN ||
-                            event.action == MotionEvent.ACTION_POINTER_DOWN -> {
-                        Buttons.Button.Area.MAIN
-                    }
+                        dist <= mainR ||
+                                event.action == MotionEvent.ACTION_DOWN ||
+                                event.action == MotionEvent.ACTION_POINTER_DOWN -> {
+                            Buttons.Button.Area.MAIN
+                        }
 
-                    else -> {
-                        val x = event.x - bgBounds.centerX()
-                        val y = (bgBounds.width() - event.y) - bgBounds.centerY()
+                        else -> {
+                            val x = event.x - bgBounds.centerX()
+                            val y = (bgBounds.width() - event.y) - bgBounds.centerY()
 
-                        if (y > x) {
-                            if (y > -x) Buttons.Button.Area.TOP
-                            else Buttons.Button.Area.LEFT
-                        } else {
-                            if (y > -x) Buttons.Button.Area.RIGHT
-                            else Buttons.Button.Area.BOTTOM
+                            if (y > x) {
+                                if (y > -x) Buttons.Button.Area.TOP
+                                else Buttons.Button.Area.LEFT
+                            } else {
+                                if (y > -x) Buttons.Button.Area.RIGHT
+                                else Buttons.Button.Area.BOTTOM
+                            }
                         }
                     }
-                }
 
-                true
-            }
-            .onGloballyPositioned {
-                height = it.size.width
-                bgBounds.set(0, 0, it.size.width, it.size.height)
-            }) {
+                    true
+                }
+                .onGloballyPositioned {
+                    height = it.size.width
+                    bgBounds.set(0, 0, it.size.width, it.size.height)
+                }) {
             area.bgResId?.let { bgResId ->
                 Image(
                     modifier = Modifier.fillMaxSize(),

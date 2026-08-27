@@ -35,6 +35,7 @@ import com.geckour.flical.util.setUIBias
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import permissions.dispatcher.RuntimePermissions
+import kotlin.time.Duration.Companion.milliseconds
 
 var montserrat: Typeface? = null
 val fontFamily get() = montserrat?.let { FontFamily(it) }
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 sharedPreferences.setBgImageUri(this@MainActivity, it)
                 backgroundImagePath.value = null
-                delay(50)
+                delay(50.milliseconds)
                 backgroundImagePath.value = sharedPreferences.getBgImageUri()?.path
             }
         }

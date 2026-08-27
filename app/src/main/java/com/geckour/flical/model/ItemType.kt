@@ -1,9 +1,9 @@
 package com.geckour.flical.model
 
 enum class ItemType(
-        val weight: Int? = null,
-        val defaultText: String? = null,
-        val isDeserializable: Boolean = false
+    val weight: Int? = null,
+    val defaultText: String? = null,
+    val isDeserializable: Boolean = false
 ) {
     NONE,
     POSITIVE_INFINITY,
@@ -43,6 +43,6 @@ enum class ItemType(
     companion object {
 
         fun from(text: String): ItemType? =
-                values().find { it.defaultText == text && it.isDeserializable }
+            entries.find { it.defaultText == text && it.isDeserializable }
     }
 }

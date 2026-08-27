@@ -126,6 +126,7 @@ class CalculatorFormula @JvmOverloads constructor(
                 onTextPasted?.invoke(pasted)
                 true
             }
+
             else -> super.onTextContextMenuItem(id)
         }
     }

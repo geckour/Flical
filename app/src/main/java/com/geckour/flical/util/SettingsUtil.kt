@@ -93,7 +93,7 @@ private fun Bitmap.rotate(orientation: Int): Bitmap =
     )
 
 fun SharedPreferences.clearBgImageUri() {
-    edit().putString(SettingsKey.BG_IMAGE_URI.name, null).apply()
+    edit(commit = true) { putString(SettingsKey.BG_IMAGE_URI.name, null) }
 }
 
 fun <T> SharedPreferences.getSettingsValue(key: SettingsKey): T? = all[key.name] as? T?

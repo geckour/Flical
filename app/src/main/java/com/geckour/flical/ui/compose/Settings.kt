@@ -17,7 +17,7 @@ import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,10 +45,11 @@ fun Settings(
     onFlickSensitivityValueChanged: (Float) -> Unit,
     onUIBiasValueChanged: (Float) -> Unit
 ) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .clickable(enabled = false) {}
-        .background(Color.White.copy(alpha = 0.75f))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(enabled = false) {}
+            .background(Color.White.copy(alpha = 0.75f))
     ) {
         TopAppBar(
             backgroundColor = colorResource(id = R.color.primaryColor),
@@ -98,7 +99,7 @@ fun GeneralSetting(index: Int, data: SettingsItem) {
             .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(),
+                indication = ripple(),
                 onClick = data.onClick
             )
             .padding(start = 16.dp, top = (if (index == 0) 12 else 8).dp, end = 4.dp, bottom = 8.dp)

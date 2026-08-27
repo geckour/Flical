@@ -1,42 +1,46 @@
-import com.android.build.gradle.internal.packaging.getDefaultDebugKeystoreLocation
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    id("com.google.gms.google-services") apply false
-    id("com.google.firebase.crashlytics") apply false
-    id("org.jetbrains.kotlin.plugin.compose") version Deps.Kotlin.version
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
-    compileSdk = Deps.GradlePlugin.compileSdkVersion
     namespace = "com.geckour.flical"
+    compileSdk = libs.versions.compileSdk.get().toInt()
+
     defaultConfig {
         applicationId = "com.geckour.flical"
-        minSdk = Deps.GradlePlugin.minSdkVersion
-        targetSdk = Deps.GradlePlugin.targetSdkVersion
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 10
         versionName = "1.1.1"
-        testInstrumentationRunner = Deps.Test.instrumentTestRunner
-
-        dataBinding.isEnabled = true
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val filesAuthorityValue = "$applicationId.files"
         manifestPlaceholders["filesAuthority"] = filesAuthorityValue
         buildConfigField("String", "FILES_AUTHORITY", "\"$filesAuthorityValue\"")
     }
+
     signingConfigs {
         create("release") {
-            val releaseSettingGradleFile = File("${project.rootDir}/app/signing/release.gradle")
-            if (releaseSettingGradleFile.exists())
-                apply(from = releaseSettingGradleFile, to = android)
-            else
-                throw GradleException("Missing ${releaseSettingGradleFile.absolutePath} . Generate the file by copying and modifying ${project.rootDir}/app/signing/release.gradle.sample .")
+            val releaseSigningFile = rootProject.file("app/signing/release.gradle")
+            if (releaseSigningFile.exists().not()) {
+                throw GradleException(
+                    "Missing ${releaseSigningFile.absolutePath} ." +
+                            " Generate the file by copying and modifying ${releaseSigningFile.absolutePath}.example ."
+                )
+            }
+            apply(from = releaseSigningFile, to = android)
         }
     }
+
     buildTypes {
-        getByName("release") {
+        release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -44,74 +48,67 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
-    }
+
     buildFeatures {
-        compose = true
         buildConfig = true
+        compose = true
+        dataBinding = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Deps.Compose.version
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
 dependencies {
-    implementation(platform(Deps.Firebase.bom))
-
-    implementation(Deps.Kotlin.stdlib)
-    implementation(Deps.AndroidX.appCompat)
-    implementation(Deps.AndroidX.coreKtx)
-    implementation(Deps.AndroidX.design)
-    implementation(Deps.AndroidX.constraint)
-    testImplementation(Deps.Test.junit)
-    androidTestImplementation(Deps.Test.testRunner)
-    androidTestImplementation(Deps.Test.espressoCore)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.android.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.preference.ktx)
 
     // Coroutines
-    implementation(Deps.Kotlin.Coroutines.core)
-    implementation(Deps.Kotlin.Coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Firebase
-    implementation(Deps.Firebase.crashlytics) { isTransitive = true }
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     // Logging
-    implementation(Deps.Timber.timber)
+    implementation(libs.timber)
 
     // ViewModel
-    implementation(Deps.AndroidX.Lifecycle.viewModelKtx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // Permission
-    implementation(Deps.PermissionDispatcher.permissionDispatcher)
-
-    implementation(Deps.AndroidX.preference)
+    implementation(libs.permissionsdispatcher.ktx)
 
     // BigDecimal Math
-    implementation(Deps.BigDecimalMath.bigDecimalMath)
+    implementation(libs.bigmath)
 
     // Exif
-    implementation(Deps.Exif.exifInterface)
-
-    // Test
-    testImplementation(Deps.Truth.truth)
-    testImplementation(Deps.MockK.mockK)
+    implementation(libs.androidx.exifinterface)
 
     // Compose
-    implementation(Deps.Compose.ui)
-    implementation(Deps.Compose.activity)
-    implementation(Deps.Compose.navigation)
-    implementation(Deps.Compose.material)
-    implementation(Deps.Compose.uiTooling)
-    androidTestImplementation(Deps.Compose.uiTest)
+    implementation(libs.bundles.compose)
 
     // Image Processing
-    implementation(Deps.Image.coilCompose)
-}
+    implementation(libs.coil.compose)
 
-apply(plugin = "com.google.gms.google-services")
-apply(plugin = "com.google.firebase.crashlytics")
+    // Test
+    testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+}

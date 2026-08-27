@@ -5,7 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.geckour.flical.model.Command
 import com.geckour.flical.model.ItemType
-import com.geckour.flical.util.*
+import com.geckour.flical.util.inserted
+import com.geckour.flical.util.invoke
+import com.geckour.flical.util.isAffectOnInvoke
+import com.geckour.flical.util.normalized
+import com.geckour.flical.util.removed
 
 class MainViewModel : ViewModel() {
 
